@@ -1207,6 +1207,7 @@ const categoryPage = ({ routePath, title, description, image, intro, relatedSlug
     { href: routePath, label: title }
   ];
   const relatedProducts = relatedSlugs.map((slug) => productsBySlug.get(slug)).filter(Boolean);
+  const faqs = categoryFaqs(title);
   const relatedLinks = relatedProducts
     .slice(0, 4)
     .map((product) => `<a href="/${product.slug}/">${product.name.toLowerCase()}</a>`)
@@ -1227,17 +1228,52 @@ const categoryPage = ({ routePath, title, description, image, intro, relatedSlug
         <div class="content-card content-flow">
           ${intro}
           <p>Buyers comparing this category also review ${relatedLinks} when planning <a href="/bubble-mailer-bags/">bubble mailer bags</a>, <a href="/white-bubble-mailers/">white bubble mailers</a>, or <a href="/custom-bubble-mailers/">custom bubble mailer packaging</a> for broader shipping programs.</p>
+          <p>These pages are structured for buyers researching <a href="/products/">bulk bubble mailers</a>, <a href="/bubble-mailer-packaging/">padded mailers for shipping</a>, and <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> with clearer sizing, material, and quote information.</p>
         </div>
         ${renderQuoteForm(title)}
+      </div>
+    </section>
+    <section class="section section-muted">
+      <div class="container split-grid">
+        <div class="content-card content-flow">
+          <h2>${title} for business shipping programs</h2>
+          <p>${title} are regularly sourced by eCommerce brands, retail businesses, warehouse teams, and subscription programs that need a more reliable padded mailer setup. Buyers usually compare appearance, protection, packout speed, and bulk supply support before narrowing the best category for their shipping routine.</p>
+          <p>For many businesses, the right category choice helps improve both workflow and presentation. A more suitable padded mailer can reduce packing friction, support cleaner labeling, and make repeat shipments easier to manage across standard stock or custom bubble mailer packaging programs.</p>
+          <p>It also helps to compare nearby options such as <a href="/kraft-bubble-mailers/">kraft bubble mailers</a>, <a href="/white-bubble-mailers/">white bubble mailers</a>, <a href="/bubble-mailer-bags/">bubble mailer bags</a>, and <a href="/bubble-mailer-packaging/">bubble mailer packaging</a> when you are balancing shipping appearance, material preference, and size planning.</p>
+        </div>
+        <div class="content-card content-flow content-soft">
+          <h2>Why buyers review this category</h2>
+          <div class="benefit-rows">
+            ${[
+              "Padded protection for repeat shipping and retail-facing deliveries.",
+              "Bulk bubble mailers support for businesses with ongoing order flow.",
+              "Custom printed bubble mailers and branding discussions where needed.",
+              "Mixed-size planning for businesses shipping different product types.",
+              "USA-focused quote support for practical lead times and stock planning."
+            ]
+              .map((item) => `<div class="benefit-row">${iconSvg("package", "row-icon")}<span>${item}</span></div>`)
+              .join("")}
+          </div>
+        </div>
       </div>
     </section>
     <section class="section section-muted">
       <div class="container">
         <div class="section-copy">
           <span class="eyebrow">Related Products</span>
-          <h2>Product pages in this category</h2>
+          <h2>Explore More Bubble Mailer Options</h2>
+          <p>Browse related bubble mailer products including different sizes, materials, and custom packaging options designed for retail, eCommerce, and shipping use.</p>
         </div>
         ${renderProductCards(relatedProducts)}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="section-copy">
+          <span class="eyebrow">FAQ</span>
+          <h2>${title} FAQs</h2>
+        </div>
+        ${renderFaqList(faqs)}
       </div>
     </section>
   `;
@@ -1249,12 +1285,21 @@ const categoryPage = ({ routePath, title, description, image, intro, relatedSlug
     metaDescription: description,
     heroImage: image.url,
     body,
-    breadcrumbs
+    breadcrumbs,
+    schemas: [faqSchema(faqs)]
   });
 };
 
 const paragraph = (text) => `<p>${text}</p>`;
 const iconHeading = (icon, text) => `<h2 class="icon-heading">${iconSvg(icon, "section-heading-icon")}<span>${text}</span></h2>`;
+const categoryFaqs = (title) => [
+  [`What types of ${title.toLowerCase()} do you supply?`, `${title} are available for business buyers who need standard stock, mixed-size planning, and quote support for repeat shipping programs.`],
+  [`Can I request bulk pricing for ${title.toLowerCase()}?`, `Yes. We support bulk pricing for ${title.toLowerCase()} based on size, quantity, print needs, and shipping destination.`],
+  [`Do you offer custom printing on ${title.toLowerCase()}?`, `Yes. Many buyers discuss custom bubble mailer packaging, logo print, and branded layouts when they need a more retail-facing shipping format.`],
+  [`Which industries use ${title.toLowerCase()} most often?`, `${title} are commonly used by eCommerce brands, retail businesses, subscription programs, warehouse teams, and fulfillment operations across the USA.`],
+  [`Can I order multiple sizes in one project?`, `Yes. Mixed-size programs are common for buyers who ship different product formats and want a more practical padded mailer lineup.`],
+  [`How quickly can I get a quote?`, `Quote requests are reviewed as quickly as possible so buyers can move forward with bulk bubble mailers, padded mailers for shipping, or custom printed bubble mailers without delay.`]
+];
 
 const renderKraftProductPage = (product) => {
   const relatedProducts = (relatedMap[product.slug] || []).map((slug) => productsBySlug.get(slug)).filter(Boolean);
@@ -1604,12 +1649,6 @@ const renderKraftProductPage = (product) => {
         ratingValue: "4.8",
         reviewCount: "127"
       },
-      offers: {
-        "@type": "Offer",
-        priceCurrency: "USD",
-        availability: "https://schema.org/InStock",
-        url: absoluteUrl(`/${product.slug}/`)
-      },
       additionalProperty: [{ "@type": "PropertyValue", name: "Available Sizes", value: [...sizeExamples, ...sizeGrid].join(", ") }],
       url: absoluteUrl(`/${product.slug}/`)
     },
@@ -1790,12 +1829,6 @@ const productSections = (product) => {
         "@type": "AggregateRating",
         ratingValue: "4.8",
         reviewCount: "127"
-      },
-      offers: {
-        "@type": "Offer",
-        priceCurrency: "USD",
-        availability: "https://schema.org/InStock",
-        url: absoluteUrl(`/${product.slug}/`)
       },
       additionalProperty: [
         {
