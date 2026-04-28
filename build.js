@@ -865,6 +865,7 @@ const buildPage = ({
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${metaTitle}</title>
   <meta name="description" content="${metaDescription}">
+  <meta name="google-site-verification" content="Yye2yzfBZUck9eU_lSGfv6b8-vShEzolCHPJprQ_HJo">
   <meta name="theme-color" content="#1f2c3b">
   <link rel="canonical" href="${canonical}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
