@@ -90,6 +90,24 @@ const pickAsset = (group, index = 0) => {
   return source[index % source.length] || assetCatalog[index % assetCatalog.length];
 };
 
+const singleContextLink = (product) => `<a href="/${product.slug}/">${product.name.toLowerCase()}</a>`;
+
+const preferredCategoryComparison = (routePath) => {
+  if (routePath === "/kraft-bubble-mailers/") {
+    return { href: "/white-bubble-mailers/", label: "white bubble mailers" };
+  }
+  if (routePath === "/white-bubble-mailers/") {
+    return { href: "/kraft-bubble-mailers/", label: "kraft bubble mailers" };
+  }
+  if (routePath === "/bubble-mailer-bags/") {
+    return { href: "/bubble-mailer-packaging/", label: "bubble mailer packaging" };
+  }
+  if (routePath === "/custom-bubble-mailers/") {
+    return { href: "/bubble-mailer-packaging/", label: "custom bubble mailer packaging" };
+  }
+  return { href: "/kraft-bubble-mailers/", label: "kraft bubble mailers" };
+};
+
 const sizeGuide = [
   { size: "4x6", use: "Small parts, jewelry cards, samples", strength: "Compact padded mailer for low-profile items" },
   { size: "4x7", use: "Small accessories, cosmetics, cables", strength: "Easy fit for lightweight branded shipments" },
@@ -1221,10 +1239,8 @@ const categoryPage = ({ routePath, title, description, image, intro, relatedSlug
   ];
   const relatedProducts = relatedSlugs.map((slug) => productsBySlug.get(slug)).filter(Boolean);
   const faqs = categoryFaqs(title);
-  const relatedLinks = relatedProducts
-    .slice(0, 4)
-    .map((product) => `<a href="/${product.slug}/">${product.name.toLowerCase()}</a>`)
-    .join(", ");
+  const comparisonProduct = relatedProducts[0];
+  const comparisonCategory = preferredCategoryComparison(routePath);
   const body = `
     ${renderStandardPageHero({
       eyebrow: title,
@@ -1240,7 +1256,7 @@ const categoryPage = ({ routePath, title, description, image, intro, relatedSlug
       <div class="container split-grid">
         <div class="content-card content-flow">
           ${intro}
-          <p>Buyers comparing this category also review ${relatedLinks} when planning broader padded mailer supply for repeat shipping programs.</p>
+          <p>Buyers comparing this category often review ${comparisonProduct ? singleContextLink(comparisonProduct) : "nearby size options"} when planning broader padded mailer supply for repeat shipping programs.</p>
           <p>These pages are structured for buyers researching <a href="/bubble-mailer-packaging/">padded mailers for shipping</a> with clearer sizing, material, and quote information.</p>
         </div>
         ${renderQuoteForm(title)}
@@ -1252,7 +1268,7 @@ const categoryPage = ({ routePath, title, description, image, intro, relatedSlug
           <h2>${title} for business shipping programs</h2>
           <p>${title} are regularly sourced by eCommerce brands, retail businesses, warehouse teams, and subscription programs that need a more reliable padded mailer setup. Buyers usually compare appearance, protection, packout speed, and bulk supply support before narrowing the best category for their shipping routine.</p>
           <p>For many businesses, the right category choice helps improve both workflow and presentation. A more suitable padded mailer can reduce packing friction, support cleaner labeling, and make repeat shipments easier to manage across standard stock or custom bubble mailer packaging programs.</p>
-          <p>It also helps to compare nearby options such as <a href="/kraft-bubble-mailers/">kraft bubble mailers</a>, <a href="/white-bubble-mailers/">white bubble mailers</a>, <a href="/bubble-mailer-bags/">bubble mailer bags</a>, and <a href="/bubble-mailer-packaging/">bubble mailer packaging</a> when you are balancing shipping appearance, material preference, and size planning.</p>
+          <p>Many buyers also compare <a href="${comparisonCategory.href}">${comparisonCategory.label}</a> when they are balancing shipping appearance, material preference, and size planning.</p>
         </div>
         <div class="content-card content-flow content-soft">
           <h2>Why buyers review this category</h2>
@@ -1690,10 +1706,7 @@ const productSections = (product) => {
     return renderKraftProductPage(product);
   }
   const relatedProducts = (relatedMap[product.slug] || []).map((slug) => productsBySlug.get(slug)).filter(Boolean);
-  const contextualLinks = relatedProducts
-    .slice(0, 4)
-    .map((item) => `<a href="/${item.slug}/">${item.name.toLowerCase()}</a>`)
-    .join(", ");
+  const comparisonProduct = relatedProducts[0];
   const faqs = productFaqTemplates(product);
   const benefits = [
     `Padded protection for ${product.idealFor.join(", ").toLowerCase()} when the shipment needs more care than a plain paper envelope can offer.`,
@@ -1746,7 +1759,8 @@ const productSections = (product) => {
           <p>${product.name} is available in ${product.sizes.join(", ")} sizing references, depending on the program you are building. Businesses often request a single core size for repeat shipments or a multi-size setup that covers a wider product mix.</p>
           <p><strong>Material:</strong> ${product.material}. The padded interior helps absorb everyday shipping impact while the outer layer keeps the mailer easier to label, stack, and seal on the packing line.</p>
           <p>If the exact size needs to be adjusted, custom size requests can be discussed as part of a quote. That is especially helpful for products that have unusual dimensions, fold lines, inserts, or printed pieces that need more exact fit control.</p>
-          <p>Businesses also compare ${contextualLinks} when they are reviewing <a href="/white-bubble-mailers/">white bubble mailers</a> for related shipping needs.</p>
+          <p>Businesses that want a cleaner presentation often compare <a href="/white-bubble-mailers/">white bubble mailers</a> while reviewing size, finish, and shipping fit.</p>
+          ${comparisonProduct ? `<p>Buyers who need a nearby size reference also review ${singleContextLink(comparisonProduct)} before finalizing a repeat-order setup.</p>` : ""}
         </div>
         <div class="content-card">
           ${renderProductFeatureImage(product)}
