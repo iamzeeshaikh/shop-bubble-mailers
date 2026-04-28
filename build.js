@@ -784,6 +784,19 @@ const renderGallery = (items, className = "") => `
   </div>
 `;
 
+const renderProductFeatureImage = (product) => {
+  const altText =
+    product.slug === "4-x-6-bubble-mailer"
+      ? "4 x 6 bubble mailer size and material details"
+      : `${product.name.toLowerCase()} size and material details`;
+
+  return `
+    <div class="product-feature-card">
+      <img src="${product.image.url}" alt="${altText}" loading="lazy" width="1080" height="1080">
+    </div>
+  `;
+};
+
 const buildPage = ({
   routePath,
   title,
@@ -1736,7 +1749,7 @@ const productSections = (product) => {
           <p>Businesses also compare ${contextualLinks} when they are reviewing <a href="/white-bubble-mailers/">white bubble mailers</a> for related shipping needs.</p>
         </div>
         <div class="content-card">
-          ${renderGallery([product.image, ...product.accentImages], "product-inline-gallery")}
+          ${renderProductFeatureImage(product)}
         </div>
       </div>
     </section>
