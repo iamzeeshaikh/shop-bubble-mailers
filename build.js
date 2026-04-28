@@ -770,8 +770,8 @@ const renderProductCards = (items) => `
   </div>
 `;
 
-const renderGallery = (items) => `
-  <div class="gallery-grid">
+const renderGallery = (items, className = "") => `
+  <div class="gallery-grid${className ? ` ${className}` : ""}">
     ${items
       .map(
         (asset, index) => `
@@ -1227,8 +1227,8 @@ const categoryPage = ({ routePath, title, description, image, intro, relatedSlug
       <div class="container split-grid">
         <div class="content-card content-flow">
           ${intro}
-          <p>Buyers comparing this category also review ${relatedLinks} when planning <a href="/bubble-mailer-bags/">bubble mailer bags</a>, <a href="/white-bubble-mailers/">white bubble mailers</a>, or <a href="/custom-bubble-mailers/">custom bubble mailer packaging</a> for broader shipping programs.</p>
-          <p>These pages are structured for buyers researching <a href="/products/">bulk bubble mailers</a>, <a href="/bubble-mailer-packaging/">padded mailers for shipping</a>, and <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> with clearer sizing, material, and quote information.</p>
+          <p>Buyers comparing this category also review ${relatedLinks} when planning broader padded mailer supply for repeat shipping programs.</p>
+          <p>These pages are structured for buyers researching <a href="/bubble-mailer-packaging/">padded mailers for shipping</a> with clearer sizing, material, and quote information.</p>
         </div>
         ${renderQuoteForm(title)}
       </div>
@@ -1333,7 +1333,7 @@ const renderKraftProductPage = (product) => {
   const longDescription = `
     <p>Kraft bubble mailers are padded mailers designed for businesses that need a lighter, cleaner, and more efficient way to ship products safely. They combine a kraft-style outer face with an interior bubble lining, giving orders a more organized shipping appearance while also adding cushioning against rubbing, pressure, and everyday handling. For many brands, this makes kraft bubble mailers a practical choice when a standard flat envelope does not offer enough protection and a full corrugated box would add unnecessary bulk.</p>
     <p>These mailers are widely used because they support faster packing and easier storage. Fulfillment teams often prefer padded mailers for smaller or lower-profile products because they seal quickly, stack well, and can help keep parcel weight lower. That makes them useful for repeat daily shipping where speed, protection, and presentation all matter at the same time.</p>
-    <p>Industries that regularly use kraft bubble mailers include eCommerce, apparel, accessories, beauty, publishing, and subscription packaging. They work well for shipments that need cushioned protection without a box-first packing approach. Businesses also compare them with <a href="/white-bubble-mailers/">white bubble mailers</a> when they want a cleaner presentation, or review <a href="/bubble-mailer-bags/">bubble mailer bags</a> when they need flexible packaging for faster packout.</p>
+    <p>Industries that regularly use kraft bubble mailers include eCommerce, apparel, accessories, beauty, publishing, and subscription packaging. They work well for shipments that need cushioned protection without a box-first packing approach. Businesses also compare them with <a href="/white-bubble-mailers/">white bubble mailers</a> when they want a cleaner presentation.</p>
     <p>For companies building a stronger brand presentation, custom bubble mailers can also be discussed with logo print, size planning, and branded layout support. If you are reviewing stock supply alongside more branded options, see our <a href="/custom-bubble-mailers/">custom bubble mailer packaging options</a>. Whether the need is plain stock for day-to-day shipping or a more branded format for retail-facing orders, kraft padded mailers remain a dependable choice for secure and efficient shipping across the USA.</p>
   `;
 
@@ -1733,10 +1733,10 @@ const productSections = (product) => {
           <p>${product.name} is available in ${product.sizes.join(", ")} sizing references, depending on the program you are building. Businesses often request a single core size for repeat shipments or a multi-size setup that covers a wider product mix.</p>
           <p><strong>Material:</strong> ${product.material}. The padded interior helps absorb everyday shipping impact while the outer layer keeps the mailer easier to label, stack, and seal on the packing line.</p>
           <p>If the exact size needs to be adjusted, custom size requests can be discussed as part of a quote. That is especially helpful for products that have unusual dimensions, fold lines, inserts, or printed pieces that need more exact fit control.</p>
-          <p>Businesses also compare ${contextualLinks} when they are reviewing <a href="/white-bubble-mailers/">white bubble mailers</a>, <a href="/bubble-mailer-bags/">bubble mailer bags</a>, <a href="/bubble-mailer-packaging/">bulk bubble mailers packaging options</a>, or <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> for related shipping needs.</p>
+          <p>Businesses also compare ${contextualLinks} when they are reviewing <a href="/white-bubble-mailers/">white bubble mailers</a> for related shipping needs.</p>
         </div>
         <div class="content-card">
-          ${renderGallery([product.image, ...product.accentImages])}
+          ${renderGallery([product.image, ...product.accentImages], "product-inline-gallery")}
         </div>
       </div>
     </section>
