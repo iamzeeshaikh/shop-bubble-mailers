@@ -631,7 +631,34 @@ const renderHeader = (currentPath) => `
       <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-label="Toggle navigation">Menu</button>
       <nav class="site-nav" data-nav>
         ${navLinks
-          .map((link) => `<a href="${link.href}"${currentPath === link.href ? ' aria-current="page"' : ""}>${link.label}</a>`)
+          .map((link) => {
+            if (link.label === "Products") {
+              return `
+                <div class="nav-item nav-item-dropdown">
+                  <button class="nav-dropdown-toggle" type="button" data-products-toggle aria-expanded="${currentPath === "/products/" ? "true" : "false"}" aria-haspopup="true">
+                    <span>${link.label}</span>
+                    ${iconSvg("spark", "nav-caret")}
+                  </button>
+                  <div class="nav-dropdown-menu" data-products-menu>
+                    <a class="nav-dropdown-overview" href="/products/"${currentPath === "/products/" ? ' aria-current="page"' : ""}>All bubble mailer products</a>
+                    <div class="nav-dropdown-grid">
+                      ${products
+                        .map(
+                          (product) => `
+                            <a href="/${product.slug}/"${currentPath === `/${product.slug}/` ? ' aria-current="page"' : ""}>
+                              <span class="nav-dropdown-title">${product.name}</span>
+                              <span class="nav-dropdown-meta">${product.category}</span>
+                            </a>
+                          `
+                        )
+                        .join("")}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
+            return `<a href="${link.href}"${currentPath === link.href ? ' aria-current="page"' : ""}>${link.label}</a>`;
+          })
           .join("")}
       </nav>
       <div class="header-actions">

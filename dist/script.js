@@ -1,11 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
   const navToggle = document.querySelector("[data-nav-toggle]");
   const nav = document.querySelector("[data-nav]");
+  const productsToggle = document.querySelector("[data-products-toggle]");
+  const productsMenu = document.querySelector("[data-products-menu]");
 
   if (navToggle && nav) {
     navToggle.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("is-open");
       navToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+  }
+
+  if (productsToggle && productsMenu) {
+    productsToggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = productsMenu.classList.toggle("is-open");
+      productsToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!productsMenu.contains(event.target) && !productsToggle.contains(event.target)) {
+        productsMenu.classList.remove("is-open");
+        productsToggle.setAttribute("aria-expanded", "false");
+      }
     });
   }
 
