@@ -21,6 +21,12 @@ const parseBody = (req) => {
   return req.body;
 };
 
+const envValue = (key, fallback = "") => {
+  const value = process.env[key];
+  if (typeof value !== "string") return fallback;
+  return value.trim();
+};
+
 const escapeHtml = (value = "") =>
   String(value)
     .replace(/&/g, "&amp;")
@@ -37,6 +43,7 @@ module.exports = async (req, res) => {
 
   const missing = requiredEnv.filter((key) => !process.env[key]);
   if (missing.length) {
+    console.error("SMTP config missing", { missing });
     return res.status(500).json({
       error: `SMTP is not configured. Missing environment variables: ${missing.join(", ")}`
     });
@@ -57,17 +64,22 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: "Name and email are required." });
   }
 
-  const port = Number(process.env.SMTP_PORT || 587);
+  const host = envValue("SMTP_HOST");
+  const port = Number(envValue("SMTP_PORT", "587"));
+  const smtpUser = envValue("SMTP_USER");
+  const smtpPass = envValue("SMTP_PASS");
+  const smtpFrom = envValue("SMTP_FROM");
+  const smtpTo = envValue("SMTP_TO");
   const secure =
-    String(process.env.SMTP_SECURE || "").toLowerCase() === "true" || port === 465;
+    String(envValue("SMTP_SECURE")).toLowerCase() === "true" || port === 465;
 
   const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
+    host,
     port,
     secure,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
+      user: smtpUser,
+      pass: smtpPass
     }
   });
 
@@ -110,13 +122,30 @@ module.exports = async (req, res) => {
   const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
 
   try {
+    console.log("Quote request SMTP verify start", {
+      host,
+      port,
+      secure,
+      smtpUser,
+      smtpFrom,
+      smtpTo
+    });
+
+    await transporter.verify();
+
     await transporter.sendMail({
-      from: process.env.SMTP_FROM,
-      to: process.env.SMTP_TO,
+      from: smtpFrom,
+      to: smtpTo,
       replyTo: email,
       subject,
       text,
       html
+    });
+
+    console.log("Quote request SMTP send success", {
+      smtpTo,
+      product,
+      email
     });
 
     return res.status(200).json({
@@ -124,6 +153,14 @@ module.exports = async (req, res) => {
       message: "Your quote request has been sent. We will reply shortly."
     });
   } catch (error) {
+    console.error("Quote request SMTP send failed", {
+      message: error?.message,
+      code: error?.code,
+      command: error?.command,
+      response: error?.response,
+      responseCode: error?.responseCode
+    });
+
     return res.status(500).json({
       error: "We could not send your request right now. Please try again or contact us directly."
     });
