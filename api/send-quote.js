@@ -4,9 +4,7 @@ const requiredEnv = [
   "SMTP_HOST",
   "SMTP_PORT",
   "SMTP_USER",
-  "SMTP_PASS",
-  "SMTP_FROM",
-  "SMTP_TO"
+  "SMTP_PASS"
 ];
 
 const parseBody = (req) => {
@@ -68,8 +66,8 @@ module.exports = async (req, res) => {
   const port = Number(envValue("SMTP_PORT", "587"));
   const smtpUser = envValue("SMTP_USER");
   const smtpPass = envValue("SMTP_PASS");
-  const smtpFrom = envValue("SMTP_FROM");
-  const smtpTo = envValue("SMTP_TO");
+  const smtpFrom = envValue("SMTP_FROM") || smtpUser;
+  const smtpTo = envValue("SMTP_TO") || smtpUser;
   const secure =
     String(envValue("SMTP_SECURE")).toLowerCase() === "true" || port === 465;
 
