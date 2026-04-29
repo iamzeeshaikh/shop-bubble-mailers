@@ -208,10 +208,8 @@
       <span>Bulk order support</span>
       <span>Artwork upload available</span>
     </div>
-    <form class="quote-form" action="https://formsubmit.co/Info@shopbubblemailers.com" method="POST" enctype="multipart/form-data">
-      <input type="hidden" name="_subject" value="Quote request from Shop Bubble Mailers">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
+    <form class="quote-form" action="/api/send-quote" method="POST" data-quote-form>
+      <input type="hidden" name="form_subject" value="Quote request from Shop Bubble Mailers">
       <div class="field-grid">
         <label>Name
           <input type="text" name="Name" required>
@@ -245,6 +243,8 @@
       <button type="submit"><svg class="button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3.5V8h4" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Get Quote</span></button>
       <p class="response-note">We respond within 1-2 hours.</p>
       <p class="helper-text">Prefer direct contact? Email <a href="mailto:Info@shopbubblemailers.com">Info@shopbubblemailers.com</a> or call <a href="tel:+15033580443">(503) 358-0443</a>.</p>
+      <p class="helper-text">If you attach artwork, we will include the filename in your request and you can send the file directly by email if needed.</p>
+      <p class="form-status" data-form-status aria-live="polite"></p>
     </form>
   </div>
 

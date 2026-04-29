@@ -987,6 +987,22 @@ textarea {
   color: var(--gray);
 }
 
+.form-status {
+  min-height: 1.2em;
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.form-status.is-success {
+  color: #1f7a45;
+}
+
+.form-status.is-error {
+  color: #b42318;
+}
+
 .benefit-item {
   padding: 1.3rem;
   border-radius: var(--radius-sm);

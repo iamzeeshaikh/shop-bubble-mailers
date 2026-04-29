@@ -2,6 +2,9 @@
   "name": "shop-bubble-mailers-site",
   "version": "1.0.0",
   "private": true,
+  "dependencies": {
+    "nodemailer": "^6.9.16"
+  },
   "scripts": {
     "build": "node build.js"
   }

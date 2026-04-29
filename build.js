@@ -18,7 +18,7 @@ const site = {
   state: "IL",
   postalCode: "61701",
   country: "US",
-  formAction: "https://formsubmit.co/Info@shopbubblemailers.com",
+  formAction: "/api/send-quote",
   socialImage: "/assets/images/bubble-mailers-pbee-3.png"
 };
 
@@ -732,10 +732,8 @@ const renderQuoteForm = (productName = "") => `
       <span>Bulk order support</span>
       <span>Artwork upload available</span>
     </div>
-    <form class="quote-form" action="${site.formAction}" method="POST" enctype="multipart/form-data">
-      <input type="hidden" name="_subject" value="Quote request from ${site.brand}">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
+    <form class="quote-form" action="${site.formAction}" method="POST" data-quote-form>
+      <input type="hidden" name="form_subject" value="Quote request from ${site.brand}">
       <div class="field-grid">
         <label>Name
           <input type="text" name="Name" required>
@@ -769,6 +767,8 @@ const renderQuoteForm = (productName = "") => `
       <button type="submit">${iconSvg("quote", "button-icon")}<span>Get Quote</span></button>
       <p class="response-note">We respond within 1-2 hours.</p>
       <p class="helper-text">Prefer direct contact? Email <a href="mailto:${site.email}">${site.email}</a> or call <a href="tel:${site.phoneHref}">${site.phone}</a>.</p>
+      <p class="helper-text">If you attach artwork, we will include the filename in your request and you can send the file directly by email if needed.</p>
+      <p class="form-status" data-form-status aria-live="polite"></p>
     </form>
   </div>
 `;
@@ -1480,9 +1480,8 @@ const renderKraftProductPage = (product) => {
             <span>Bulk order support</span>
             <span>Artwork upload available</span>
           </div>
-          <form class="quote-form" action="${site.formAction}" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="_subject" value="New quote request from ${site.brand}">
-            <input type="hidden" name="_template" value="table">
+          <form class="quote-form" action="${site.formAction}" method="POST" data-quote-form>
+            <input type="hidden" name="form_subject" value="New quote request from ${site.brand}">
             <label>Name
               <input type="text" name="name" required>
             </label>
@@ -1515,6 +1514,8 @@ const renderKraftProductPage = (product) => {
             </label>
             <button type="submit">${iconSvg("quote", "button-icon")}<span>Get Quote</span></button>
             <p class="response-note">We respond within 1-2 hours.</p>
+            <p class="helper-text">If you attach artwork, we will include the filename in your request and you can send the file directly by email if needed.</p>
+            <p class="form-status" data-form-status aria-live="polite"></p>
           </form>
         </div>
       </div>
