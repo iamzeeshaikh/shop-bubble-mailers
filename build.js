@@ -2758,17 +2758,35 @@ writeRoute(
 products.forEach((product) => writeRoute(`/${product.slug}/`, productSections(product)));
 writeRoute("/sitemap/", renderSitemapPage());
 
-const sitemapUrls = siteRoutes.map((route) => absoluteUrl(route));
-
 writeStaticAsset(
   "robots.txt",
   `User-agent: *\nAllow: /\nSitemap: ${site.domain}/sitemap.xml\n`
 );
 
+// Stable last-modified date for the sitemap. Bump this when content is
+// materially updated. A fixed date (rather than new Date() at build time) keeps
+// lastmod from resetting on every deploy, which Google would learn to distrust.
+const LASTMOD = "2026-07-09";
+
 writeStaticAsset(
   "sitemap.xml",
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls
-    .map((url) => `  <url><loc>${url}</loc></url>`)
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${siteRoutes
+    .map((route) => {
+      const slug = route.replace(/^\/|\/$/g, "");
+      let priority = "0.7";
+      let changefreq = "monthly";
+      if (route === "/") {
+        priority = "1.0";
+        changefreq = "weekly";
+      } else if (slug === "privacy-policy" || slug === "terms-and-conditions") {
+        priority = "0.3";
+        changefreq = "yearly";
+      } else if (productsBySlug.has(slug)) {
+        priority = "0.8";
+        changefreq = "weekly";
+      }
+      return `  <url><loc>${absoluteUrl(route)}</loc><lastmod>${LASTMOD}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
+    })
     .join("\n")}\n</urlset>\n`
 );
 
