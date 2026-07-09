@@ -131,9 +131,29 @@ const homepageFaqs = [
   ["Do you ship across the United States?", "Yes. Shop Bubble Mailers serves businesses throughout the USA and supports orders for local operations, regional distributors, and national shipping programs."]
 ];
 
+// Six standard-topic FAQs contextualized with each product's real sizes,
+// material, category, and use case so answers differ per product rather than
+// being identical boilerplate. Appended after the hand-written product FAQs to
+// give every product page at least 10 FAQs.
+const supplementaryFaqs = (product) => {
+  const material = product.material.toLowerCase();
+  const sizes = product.sizes.join(", ");
+  const primaryUse = product.idealFor[0];
+  const category = product.category.toLowerCase();
+  const nameLower = product.name.toLowerCase();
+  return [
+    [`What is the minimum order quantity for ${nameLower}?`, `The minimum for ${nameLower} depends on whether you want standard stock or custom print. We quote both small-business quantities and high-volume bulk programs — share your target quantity and we'll confirm the minimum and where price breaks fall.`],
+    [`How quickly can I get ${nameLower} after ordering?`, `We respond to ${nameLower} quote requests quickly with size, quantity, print, and lead-time details. Standard stock moves faster than custom-printed orders; tell us your deadline and we'll confirm a realistic turnaround.`],
+    [`Can I request a sample of ${nameLower} before a bulk order?`, `Yes. You can ask about sample availability for ${nameLower} before committing to a larger run, so you can check the fit and the ${material} against your own product first.`],
+    [`Can ${nameLower} be custom printed with a logo?`, `Yes. ${product.name} can be quoted plain or custom printed with a logo, brand colors, and handling marks. As ${category}, it supports the branded packout many businesses want — send artwork with your quote for review.`],
+    [`What sizes are available for ${nameLower}?`, `${product.name} is available in ${sizes} sizing. If your product needs a different fit, custom sizing can be discussed as part of a ${nameLower} quote.`],
+    [`Does ${nameLower} help lower shipping cost?`, `Yes. ${product.name} uses ${material}, which is lighter and lower-profile than a corrugated box for products like ${primaryUse}, so it can reduce parcel weight and freight cost on repeat shipments.`]
+  ];
+};
+
 const productFaqTemplates = (product) => {
   const content = productContent[product.slug];
-  if (content && content.faqs) return content.faqs;
+  if (content && content.faqs) return [...content.faqs, ...supplementaryFaqs(product)];
   return [
   [`What is ${product.name.toLowerCase()} used for?`, `${product.name} is used for shipping products that need light padded protection, a clean outer presentation, and efficient storage in packing stations.`],
   [`Is ${product.name.toLowerCase()} available in bulk?`, `Yes. ${product.name} is available for bulk quote requests with pricing based on quantity, material choice, print requirements, and shipping destination.`],
@@ -2323,7 +2343,6 @@ const productSections = (product) => {
           <p><strong>Material:</strong> ${product.material}. The padded interior helps absorb everyday shipping impact while the outer layer keeps the mailer easier to label, stack, and seal on the packing line.</p>
           <p>If the exact size needs to be adjusted, custom size requests can be discussed as part of a quote. That is especially helpful for products that have unusual dimensions, fold lines, inserts, or printed pieces that need more exact fit control.</p>
           <p>Businesses that want a cleaner presentation often compare <a href="/white-bubble-mailers/">white bubble mailers</a> while reviewing size, finish, and shipping fit.</p>
-          ${comparisonProduct ? `<p>Buyers who need a nearby size reference also review ${singleContextLink(comparisonProduct)} before finalizing a repeat-order setup.</p>` : ""}
         </div>
         <div class="content-card">
           ${renderProductFeatureImage(product)}
@@ -2336,6 +2355,7 @@ const productSections = (product) => {
         <div class="content-card content-flow content-soft">
           ${iconHeading("truck", `Use cases for ${product.name.toLowerCase()}`)}
           ${useCaseParas.map(paragraph).join("")}
+          ${comparisonProduct ? `<p>Buyers comparing a nearby size often review ${singleContextLink(comparisonProduct)} before settling on a repeat-order setup.</p>` : ""}
         </div>
         <div class="content-card content-flow">
           ${iconHeading("printer", "Customization options")}
