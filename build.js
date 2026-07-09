@@ -131,7 +131,10 @@ const homepageFaqs = [
   ["Do you ship across the United States?", "Yes. Shop Bubble Mailers serves businesses throughout the USA and supports orders for local operations, regional distributors, and national shipping programs."]
 ];
 
-const productFaqTemplates = (product) => [
+const productFaqTemplates = (product) => {
+  const content = productContent[product.slug];
+  if (content && content.faqs) return content.faqs;
+  return [
   [`What is ${product.name.toLowerCase()} used for?`, `${product.name} is used for shipping products that need light padded protection, a clean outer presentation, and efficient storage in packing stations.`],
   [`Is ${product.name.toLowerCase()} available in bulk?`, `Yes. ${product.name} is available for bulk quote requests with pricing based on quantity, material choice, print requirements, and shipping destination.`],
   [`Can ${product.name.toLowerCase()} be custom printed?`, `Yes. Many customers request logo printing, brand colors, handling marks, return details, or simple one-color layouts for ${product.name.toLowerCase()}.`],
@@ -142,7 +145,8 @@ const productFaqTemplates = (product) => [
   [`What closure is used on ${product.name.toLowerCase()}?`, `${product.name} is commonly supplied with a pressure-sensitive self-seal closure so fulfillment teams can pack quickly without added tape on every order.`],
   [`How do I request pricing for ${product.name.toLowerCase()}?`, `Use the quote form, call us, or email us with the size, quantity, print requirements, and delivery details for ${product.name.toLowerCase()}.`],
   [`Do you supply ${product.name.toLowerCase()} in the USA?`, `Yes. Shop Bubble Mailers supplies ${product.name.toLowerCase()} for businesses across the United States.`]
-];
+  ];
+};
 
 const relatedMap = {
   "kraft-bubble-mailer": ["bubble-mailer-white", "bubble-mailer-packaging", "custom-bubble-mailers", "bubble-mailer-bags"],
@@ -455,6 +459,506 @@ const products = [
     tone: "balanced repeat shipping"
   }
 ];
+
+// Unique per-product body content. Replaces the shared productSections
+// boilerplate so no two product pages share their primary prose. Anchored on
+// each product's real size and use case. Kraft has its own dedicated page, so
+// it is not included here. A slug with no entry falls back to the generic
+// template text, but the goal is full coverage of the templated products.
+const productContent = {
+  "4x6-bubble-mailer": {
+    overview: [
+      "The 4x6 bubble mailer is the smallest padded envelope most stores keep on hand, and it earns its place at the packing bench by handling the high-frequency, low-weight shipments that make up a large share of eCommerce orders. Jewelry cards, enamel pins, sample sachets, SIM cards, and single accessories all fit a 4x6 without the wasted void space that forces you to add filler.",
+      "Because it is small, a 4x6 mailer keeps parcel weight and dimensional footprint down, which is exactly where shipping costs are won on repeat orders. The interior bubble layer still cushions against the knocks and compression of automated mail sorting, so a delicate item arrives looking the way it left even though the package barely registers on the postal scale."
+    ],
+    benefits: [
+      "Right-sized for tiny items so you skip void fill and keep each parcel at its lowest practical weight.",
+      "Fits standard letter-mail and small-parcel rate bands, which is where a compact mailer saves the most per shipment.",
+      "Self-seal strip lets a packer close dozens of small orders quickly during a batch pick-and-pack run.",
+      "Stores flat in high quantity, so a full month of 4x6 stock takes up very little shelf space at the station."
+    ],
+    useCases: [
+      "The 4x6 is the default for jewelry brands, sticker shops, and accessory sellers shipping one or two small pieces per order. Its size discourages over-packing and keeps the unboxing tidy for a customer opening a small, considered parcel.",
+      "Subscription add-ons, replacement parts, trading cards, and free-sample campaigns also lean on this size because it moves in volume at the lowest freight tier. When an operation ships hundreds of small items a week, the 4x6 is usually the size that gets reordered most often."
+    ],
+    customContent: [
+      "Even at 4x6 there is enough face area for a centered logo, a handle, or a short return address block. Small-format print works best kept to one or two colors on this size — a clean mark reads better than a busy layout on a compact panel, and it keeps the branded look consistent across a high-volume small-parcel program."
+    ],
+    bulkContent: [
+      "4x6 mailers are among the most frequently reordered sizes because the shipments that use them repeat daily. When you request bulk pricing, tell us your monthly run rate and whether you want plain or printed stock — steady 4x6 demand is well suited to a standing reorder schedule that keeps the packing bench stocked without over-ordering."
+    ],
+    faqs: [
+      ["What fits in a 4x6 bubble mailer?", "A 4x6 bubble mailer suits small, low-profile items — jewelry on a card, pins, sample packs, cards, SIM or memory cards, and single small accessories. Anything thicker than roughly an inch or wider than the flat opening is better in a 4x7 or 7x9."],
+      ["Does a 4x6 bubble mailer ship at letter rates?", "Depending on total thickness and weight, a packed 4x6 can fall within small-parcel or thick-envelope rate bands. The compact size is specifically useful for keeping shipments in the lowest practical postage tier — confirm final dimensions with your carrier."],
+      ["Can I order 4x6 bubble mailers in bulk?", "Yes. The 4x6 is one of our most common bulk sizes because the orders that use it repeat daily. Share your monthly quantity and whether you need plain or printed, and we will quote a bulk or standing-order rate."],
+      ["Are 4x6 mailers available printed?", "Yes. A 4x6 has room for a centered logo or short return block. We recommend simple one or two-color print on this small size so the mark stays crisp across a high-volume run."]
+    ]
+  },
+
+  "bubble-mailer-white": {
+    overview: [
+      "White bubble mailers trade the utilitarian look of kraft or grey poly for a clean, shelf-ready exterior, and for customer-facing brands that difference matters. The smooth white face photographs well for unboxing content, takes print legibly, and signals a more considered package the moment it lands in a mailbox.",
+      "Underneath the presentation, a white mailer is still a working padded envelope: a bubble-lined interior absorbs everyday transit impact and a pressure-sensitive strip seals in one pass. Beauty, apparel-accessory, and subscription brands reach for white when they want the protection of a bubble mailer without the raw industrial appearance."
+    ],
+    benefits: [
+      "Clean white exterior gives shipments a shelf-ready, brand-forward look that kraft and grey poly can't match.",
+      "Smooth surface takes printed logos and handling notes clearly, including finer color work.",
+      "Consistent appearance across multiple fulfillment sites keeps a brand looking uniform to every customer.",
+      "Bubble-lined interior and self-seal closure keep the practical protection and packing speed intact."
+    ],
+    useCases: [
+      "White mailers are the default for beauty, cosmetics, and self-care brands where the package is part of the product experience. A clean white parcel reads as premium and photographs well when customers share their orders.",
+      "Subscription boxes, apparel accessories, and boutique retail also favor white because it holds brand consistency across every shipment. When the mailer is the first thing a customer touches, the tidier white presentation supports the brand rather than working against it."
+    ],
+    customContent: [
+      "White stock is the best canvas we offer for print — it supports crisp black logos as well as more visible brand colors and handling marks. Brands building a recognizable unboxing moment often start with a printed white mailer because the contrast makes even a simple one-color logo look intentional and clean."
+    ],
+    bulkContent: [
+      "Businesses usually buy white mailers in a small range of core sizes to cover their common shipments while keeping a uniform look. When quoting, let us know which sizes you run most and whether you want plain or printed white stock — a coordinated bulk order keeps presentation consistent across every parcel and fulfillment location."
+    ],
+    faqs: [
+      ["Why choose a white bubble mailer over kraft?", "White mailers give a cleaner, more premium presentation and take printed branding more clearly, which matters for customer-facing brands. Kraft has a natural, paper-forward look. Choose white when the package appearance is part of your brand experience."],
+      ["Do white bubble mailers show print well?", "Yes. The smooth white exterior is the best surface we offer for print — it supports crisp logos, brand colors, and handling notes with good contrast, better than kraft or grey poly."],
+      ["What sizes do white bubble mailers come in?", "White mailers are available across the common size range from small (#000) up to larger formats. Most brands stock a few core sizes that cover their typical shipments — we can help you pick the right spread."],
+      ["Are white bubble mailers good for beauty products?", "Yes. Beauty and self-care brands favor white for its clean, premium look and photogenic unboxing, combined with the padded protection cosmetics and small bottles need in transit."]
+    ]
+  },
+
+  "8-5-x-12-bubble-mailer": {
+    overview: [
+      "The 8.5 x 12 bubble mailer is the mid-size workhorse that bridges the gap between small accessory envelopes and large apparel mailers. Its face is generous enough for documents, notebooks, folded garments, and boxed beauty sets, yet it still stores and ships far more efficiently than a corrugated carton for the same flat contents.",
+      "For growing stores this size often becomes a core stocking item because it covers such a wide slice of everyday orders. A single 8.5 x 12 can take a paperback, a folded tee, or a small multi-item kit, which is why fulfillment teams frequently build a multi-size program around it as the flexible middle option."
+    ],
+    benefits: [
+      "Mid-size face fits flat and medium-profile goods that are too big for small mailers but don't need a box.",
+      "One flexible size covers a wide range of everyday orders, simplifying the packing station.",
+      "Larger print surface gives room for a logo plus campaign or handling messaging.",
+      "Still lighter and lower-profile than a carton, keeping freight cost down on flat shipments."
+    ],
+    useCases: [
+      "This size is a staple for stores shipping documents, notebooks, and printed materials that need to stay flat and protected. It gives enough room to insert without forcing a fold, while the padding guards corners and edges through sorting.",
+      "It is equally at home with folded apparel, beauty sets, and small kits. Because it handles so many order types, warehouse teams often treat the 8.5 x 12 as the default they reach for first and only step up or down when a specific product demands it."
+    ],
+    customContent: [
+      "The 8.5 x 12 face gives real room for branding — enough for a logo alongside a short campaign line, seasonal message, or clear handling instructions. Growing brands often print this core size first because it appears in so many shipments, making it the most visible mailer in their program."
+    ],
+    bulkContent: [
+      "Because the 8.5 x 12 covers such a broad range of orders, it is one of the most common sizes in a multi-size stocking plan and a frequent bulk line. Share your expected volume and whether it sits alongside smaller and larger sizes in your program, and we can help plan a balanced bulk order around your real order mix."
+    ],
+    faqs: [
+      ["What fits in an 8.5 x 12 bubble mailer?", "The 8.5 x 12 suits flat and medium-profile goods — documents, notebooks, folded garments, beauty sets, and small kits. It is the flexible middle size for orders too large for small mailers but not needing a box."],
+      ["Is 8.5 x 12 a good core stocking size?", "Yes. Because it covers such a wide range of everyday orders, many growing stores make the 8.5 x 12 a core size and build their smaller and larger stock around it."],
+      ["Can 8.5 x 12 bubble mailers be printed?", "Yes. The larger face has room for a logo plus a short campaign or handling line, which is why brands often print this high-visibility core size first."],
+      ["How does 8.5 x 12 compare to a box for flat items?", "For flat contents, the 8.5 x 12 mailer stores and ships lighter and lower-profile than a corrugated carton, which usually lowers freight cost while still cushioning the shipment."]
+    ]
+  },
+
+  "4x7-bubble-mailer": {
+    overview: [
+      "The 4x7 bubble mailer adds a bit of height over the 4x6 without stepping up into a much larger storage footprint, which makes it the natural size for small items that are just slightly too long or too deep for the smallest envelope. Phone accessories, cable coils, slim cosmetics, and trading cards all settle into a 4x7 with a snug, protected fit.",
+      "That extra inch of length is deceptively useful: it lets a packer close the flap cleanly over items that would strain a 4x6, avoiding the bulge that stresses a seal. For direct-to-consumer brands shipping compact add-ons, the 4x7 keeps the packout tight and branded while staying at a low freight weight."
+    ],
+    benefits: [
+      "Slightly taller than a 4x6, fitting items that are just too long for the smallest mailer without oversizing.",
+      "Snug fit reduces contents shifting, so small accessories arrive without rattling around.",
+      "Keeps a compact storage footprint at the packing bench while broadening what you can ship.",
+      "Low weight keeps compact accessory shipments in an economical postage band."
+    ],
+    useCases: [
+      "The 4x7 is a favorite for phone and tech accessories, slim cosmetics, and trading or collectible cards — items that need a little more length than a 4x6 but are still small and light. The tighter fit keeps them from sliding around in transit.",
+      "It is also a common choice for giftable add-ons and sample campaigns where a brand wants a neat, tight packout. Many stores keep 4x7 alongside 4x6 so they can match the mailer to the exact item without jumping to a mid-size envelope."
+    ],
+    customContent: [
+      "The taller 4x7 panel gives a touch more room than a 4x6 for a branded packout — enough for a logo and a short return or handling line. For direct-to-consumer brands that want every small parcel to look considered, a simple print program on the 4x7 keeps the compact shipment on-brand."
+    ],
+    bulkContent: [
+      "Many businesses stock 4x7 mailers in volume for sample runs, add-on products, and repeat small shipments. When requesting bulk pricing, note whether you pair it with 4x6 in your program — quoting the two compact sizes together often makes sense for operations shipping a steady stream of small items."
+    ],
+    faqs: [
+      ["What is the difference between a 4x6 and 4x7 bubble mailer?", "The 4x7 adds about an inch of length over the 4x6, which fits items that are slightly too long or deep for the smallest mailer without moving up to a mid-size envelope. Many stores stock both to match the mailer to the item."],
+      ["What items fit best in a 4x7 bubble mailer?", "Phone and tech accessories, cable coils, slim cosmetics, trading cards, and giftable add-ons — small items that need a little more height than a 4x6 but are still light and compact."],
+      ["Can I order 4x7 bubble mailers in bulk?", "Yes. The 4x7 is often stocked in volume for sample campaigns and add-on shipments. Tell us your quantity and whether you also run 4x6, and we can quote the compact sizes together."],
+      ["Is the 4x7 bubble mailer printable?", "Yes. The taller panel has room for a logo and a short return or handling line, keeping a compact direct-to-consumer packout on-brand."]
+    ]
+  },
+
+  "4-x-6-bubble-mailer": {
+    overview: [
+      "The 4 x 6 bubble mailer is a space-saving format built for the very smallest, lightest shipments a business sends — the kind where every fraction of an ounce and every inch of dimension feeds directly into freight cost. Small hardware, sample packs, cards, and compact store items fit without the void space that would otherwise pad both the parcel and the postage.",
+      "Where a larger mailer or a box would round a tiny item up into a higher rate band, the 4 x 6 keeps it in the lowest practical tier. For operations shipping consistent, small-dimension products in volume, that discipline compounds across the month into a meaningful difference on the shipping line of the P&L."
+    ],
+    benefits: [
+      "Minimal footprint keeps very small shipments in the lowest practical postage band.",
+      "No wasted void space, so contents stay put and parcels stay light.",
+      "Fast hand-packing for high-frequency small orders at the bench.",
+      "Compact stock stores densely, so a large quantity takes little shelf space."
+    ],
+    useCases: [
+      "The 4 x 6 is built for businesses that ship consistent, small-dimension products — hardware bits, sample packs, cards, and compact accessories — where keeping freight weight down is the priority. Its tight fit is the point, not a limitation.",
+      "Operations with predictable, repeating product dimensions favor this size because it can be reordered in volume with confidence that it will keep fitting the same items. That consistency is what makes it a reliable line in a lean, cost-focused packing program."
+    ],
+    customContent: [
+      "Branding still matters on small parcels, and a simple logo print fits a 4 x 6 well. Keeping the artwork to a clean one-color mark suits the size and the high-volume, cost-conscious shipments this mailer is usually used for, so the parcel stays on-brand without adding cost per unit."
+    ],
+    bulkContent: [
+      "The 4 x 6 is frequently ordered in volume because the shipments that use it repeat with consistent dimensions. When you request bulk pricing, share your monthly run rate — a predictable small-format program like this is well suited to a standing reorder that keeps freight cost and stock levels both under control."
+    ],
+    faqs: [
+      ["What is a 4 x 6 bubble mailer best for?", "It is built for the smallest, lightest shipments — small hardware, sample packs, cards, and compact store items — where keeping parcel weight and dimensions down directly lowers freight cost."],
+      ["How does the 4 x 6 help reduce shipping cost?", "By keeping tiny items in the lowest practical rate band instead of rounding them up into a larger mailer or box. For consistent small products shipped in volume, that saving compounds across the month."],
+      ["Can 4 x 6 bubble mailers be ordered in volume?", "Yes. It is a common bulk size for operations with steady, repeating small-dimension shipments. Share your monthly quantity and we will quote a bulk or standing-order rate."],
+      ["Is there room to brand a 4 x 6 mailer?", "Yes, for a simple logo. We recommend a clean one-color mark on this small size so branding stays crisp without adding cost across a high-volume run."]
+    ]
+  },
+
+  "2-bubble-mailer": {
+    overview: [
+      "The No. 2 bubble mailer follows the standard numbered sizing system that many buyers and fulfillment systems prefer over inch-based labels. As a compact numbered format, the No. 2 covers small retail products, cosmetics, and flat accessories with a padded interior and a familiar size reference that is easy to reorder against.",
+      "For teams running structured packing programs, numbered sizing removes ambiguity: a No. 2 is a No. 2 whether it is on a purchase order, a shelf label, or a supplier quote. That consistency is why operations with scheduled replenishment often build their small-item packout around numbered mailers rather than tracking a mix of inch dimensions."
+    ],
+    benefits: [
+      "Standard numbered sizing is easy to specify, reorder, and match across suppliers and systems.",
+      "Compact padded format protects small retail products and cosmetics in transit.",
+      "Predictable size reference simplifies shelf labeling and purchase orders.",
+      "Fits neatly into scheduled replenishment programs with repeated reorder patterns."
+    ],
+    useCases: [
+      "The No. 2 is used by businesses that prefer standardized mailer sizing over inch-based labels for small retail products, cosmetics, flat accessories, and parts packs. The numbered reference keeps ordering unambiguous across teams and locations.",
+      "It fits especially well into long-term packing programs where the same small items ship repeatedly. Operations that plan stock around scheduled replenishment lean on numbered sizes like the No. 2 to keep the small-item packout consistent month to month."
+    ],
+    customContent: [
+      "Numbered programs are straightforward to manage in branded packaging setups because the size is fixed and repeatable. A logo or return block prints cleanly on the No. 2 panel, and because the size recurs in scheduled reorders, a printed numbered mailer keeps branding consistent across every replenishment cycle."
+    ],
+    bulkContent: [
+      "The No. 2 is often added to long-term packing programs with scheduled replenishment, which makes it a natural bulk and standing-order line. When quoting, tell us your reorder cadence and whether the No. 2 sits alongside other numbered sizes so we can plan a coordinated program around your real usage."
+    ],
+    faqs: [
+      ["What size is a No. 2 bubble mailer?", "The No. 2 is a compact size in the standard numbered bubble mailer system, suited to small retail products, cosmetics, and flat accessories. Numbered sizing is a consistent reference used across suppliers and fulfillment systems."],
+      ["Why use numbered bubble mailers instead of inch sizes?", "Numbered sizing removes ambiguity — a No. 2 is the same on a purchase order, shelf label, and quote. Teams running structured, repeatable packing programs often prefer it over tracking a mix of inch dimensions."],
+      ["Can No. 2 bubble mailers be reordered on a schedule?", "Yes. The No. 2 fits well into scheduled replenishment programs. Share your reorder cadence and quantity and we can set up a coordinated standing order."],
+      ["Are No. 2 bubble mailers available printed?", "Yes. A logo or return block prints cleanly on the No. 2 panel, and because the size recurs in reorders, printed numbered mailers keep branding consistent across cycles."]
+    ]
+  },
+
+  "5-bubble-mailer": {
+    overview: [
+      "The No. 5 bubble mailer is a roomier numbered format for businesses that have outgrown small envelopes but do not want to move all the way into carton packaging. Folded apparel, soft goods, and multi-item kits fit a No. 5 comfortably, cushioned by the padded interior and closed in one pass with a pressure-sensitive seal.",
+      "The larger panel is part of the appeal: it gives brands more visible real estate for logos and shipping instructions while keeping the speed and low weight of a padded envelope. For apparel and subscription operations shipping high weekly volume, the No. 5 hits a practical middle ground between protection, presentation, and freight efficiency."
+    ],
+    benefits: [
+      "Roomier numbered size handles folded apparel and soft goods without stepping up to a box.",
+      "Larger panel gives better visibility for logos and shipping instructions.",
+      "Padded interior with self-seal closure keeps packing fast on high-volume runs.",
+      "Lighter than a carton for the same soft contents, helping control freight on repeat orders."
+    ],
+    useCases: [
+      "The No. 5 is a go-to for folded apparel, soft goods, and retail replenishment orders that need more room than mid-size mailers offer. Its padded interior protects soft items through sorting while the format keeps parcels light.",
+      "Apparel brands and subscription programs shipping high weekly volume favor this size for its balance of capacity and speed. When the same soft-goods orders repeat at scale, the No. 5 often becomes a core numbered line in the packing program."
+    ],
+    customContent: [
+      "The larger No. 5 panel is well suited to bolder branding — a logo with room to spare, plus clear shipping or handling instructions. Apparel and subscription brands that want their packout to feel branded at scale often print this size because it ships in high, visible volume."
+    ],
+    bulkContent: [
+      "The No. 5 is frequently quoted for apparel and subscription programs that ship high weekly volume, which makes it a natural bulk line. Share your weekly run rate and whether it sits alongside other numbered sizes so we can plan a bulk or standing order that keeps your soft-goods packout stocked."
+    ],
+    faqs: [
+      ["What fits in a No. 5 bubble mailer?", "The No. 5 is a roomier numbered size suited to folded apparel, soft goods, kits, and retail replenishment orders — items that need more room than mid-size mailers but don't require a box."],
+      ["Is the No. 5 good for apparel shipping?", "Yes. Its capacity and padded interior make it a common choice for folded garments and soft goods, and its light weight helps control freight on high-volume apparel programs."],
+      ["Can No. 5 bubble mailers be printed with a logo?", "Yes. The larger panel gives good visibility for logos and shipping instructions, which suits apparel and subscription brands wanting a branded packout at scale."],
+      ["Do you offer bulk pricing on No. 5 bubble mailers?", "Yes. The No. 5 is often quoted for high-volume apparel and subscription programs. Share your weekly quantity and we will quote a bulk or standing-order rate."]
+    ]
+  },
+
+  "bubble-mailer-bags": {
+    overview: [
+      "Bubble mailer bags are the format fulfillment operations reach for when they want padded protection without a box-first workflow. A packer grabs a bag, drops the item in, peels the self-seal flap, and the order is done — a motion measured in seconds that adds up to real throughput across a warehouse shift.",
+      "The bag construction keeps the same bubble cushioning as a rigid-feeling mailer while flexing around soft and irregular contents. Available across a wide size range, in plain, white, kraft-style, and custom-print options, bubble mailer bags are built for operations that value packout speed and storage density as much as the protection itself."
+    ],
+    benefits: [
+      "Grab-fill-seal workflow closes an order in seconds, maximizing packout speed across a shift.",
+      "Flexible bag construction conforms to soft and irregular items that a rigid envelope wastes space on.",
+      "Available across a wide size range so one bag family can cover a mixed product catalog.",
+      "Plain, white, kraft-style, and custom-print options let you match presentation to the brand."
+    ],
+    useCases: [
+      "Bubble mailer bags are built for eCommerce and warehouse packing lines shipping high daily volume. Their speed and storage density make them the default in fulfillment centers where every second and every inch of shelf space at the station matters.",
+      "They also suit subscription mailouts and retail shipping where soft or irregular items ship in quantity. Because the format flexes around contents, a single bag size can handle a broader range of products than a fixed-dimension envelope, simplifying the packout."
+    ],
+    customContent: [
+      "Because bubble mailer bags are used at high volume and are often the customer's first touchpoint, they are a strong candidate for custom print. Plain, white, and kraft-style options each take branding differently, and a printed bag turns a fast, functional packout into a branded shipping experience without slowing the line."
+    ],
+    bulkContent: [
+      "Bulk bag orders are the norm for fulfillment centers and repeat monthly shipping programs where throughput is high and consistent. Share your monthly volume, the sizes you run, and whether you want plain or printed stock, and we can plan a bulk program that keeps every packing station supplied."
+    ],
+    faqs: [
+      ["What is the difference between a bubble mailer and a bubble mailer bag?", "The terms overlap heavily — a bubble mailer bag emphasizes the flexible bag-style construction that flexes around soft or irregular contents and closes fast with a self-seal flap. Functionally both are padded mailing envelopes; bags are favored for high-throughput packout."],
+      ["What sizes do bubble mailer bags come in?", "Bubble mailer bags are available across a wide range from 4x6 up to 12x15. A single bag family can cover a mixed catalog, which is why fulfillment teams often standardize on them."],
+      ["Are bubble mailer bags good for high-volume fulfillment?", "Yes. Their grab-fill-seal workflow and storage density make them the default in warehouses and fulfillment centers shipping high daily volume."],
+      ["Can bubble mailer bags be custom printed?", "Yes. They come in plain, white, kraft-style, and custom-print options. A printed bag adds branding to a fast packout without slowing the line."]
+    ]
+  },
+
+  "6-bubble-mailer": {
+    overview: [
+      "The No. 6 bubble mailer is a large numbered format that steps in when standard mid-size mailers no longer give enough room. Larger apparel, document packs, kits, and flat boxed items fit the No. 6 comfortably, keeping the padded-envelope advantages of speed and low weight at a size that would otherwise push a business toward cartons.",
+      "In a numbered stocking program the No. 6 usually sits alongside the No. 5 and No. 7, giving operations a stepped range that covers progressively larger products without gaps. That coverage is why teams shipping a spread of larger soft goods often carry all three sizes rather than forcing everything into one."
+    ],
+    benefits: [
+      "Large numbered size handles bigger apparel and document packs without moving to a box.",
+      "Clean panel space for brand print, shipping notices, and account-specific pack labels.",
+      "Sits neatly between the No. 5 and No. 7 for stepped size coverage.",
+      "Keeps padded-envelope speed and weight advantages at a larger capacity."
+    ],
+    useCases: [
+      "The No. 6 is used for larger apparel, document packs, kits, and flat boxed items that have outgrown mid-size mailers. Its capacity handles bigger soft goods while the padded interior still protects through sorting.",
+      "Operations teams often buy the No. 6 alongside the No. 5 and No. 7 so their numbered program covers a broad product range in defined steps. When larger orders are a regular part of the mix, having this size on the shelf avoids over-boxing shipments that a mailer can handle."
+    ],
+    customContent: [
+      "The larger No. 6 panel handles brand printing, shipping notices, and account-specific pack labels cleanly, with room that smaller numbered sizes don't offer. For businesses shipping to retail or wholesale accounts, that space is useful for both branding and the practical handling information larger shipments often need."
+    ],
+    bulkContent: [
+      "The No. 6 is commonly bought in bulk alongside the No. 5 and No. 7 as part of a stepped numbered program. When quoting, tell us which numbered sizes you run together and your volumes, so we can plan a coordinated bulk order that covers your full range of larger shipments."
+    ],
+    faqs: [
+      ["What fits in a No. 6 bubble mailer?", "The No. 6 is a large numbered size suited to larger apparel, document packs, kits, and flat boxed items that have outgrown mid-size mailers but don't require a carton."],
+      ["When should I step up from a No. 5 to a No. 6?", "When standard mid-size and No. 5 mailers no longer give enough room for the product. Many operations stock No. 5, No. 6, and No. 7 together to cover progressively larger items in defined steps."],
+      ["Can No. 6 bubble mailers carry account pack labels?", "Yes. The larger panel has clean room for brand print, shipping notices, and account-specific handling labels, which is useful for retail and wholesale shipments."],
+      ["Is bulk pricing available on No. 6 bubble mailers?", "Yes. The No. 6 is often bought in bulk alongside the No. 5 and No. 7. Share the sizes and volumes you run and we will quote a coordinated program."]
+    ]
+  },
+
+  "bubble-mailer-packaging": {
+    overview: [
+      "Bubble mailer packaging is the broad, program-level category for companies that want to standardize protection, branding, and shipping speed across their whole operation rather than buying one size at a time. It spans multiple exterior finishes and padded interior formats, from a single core size to a full custom-sized, custom-printed packaging program tied to specific SKUs.",
+      "Thinking at the packaging-program level changes the questions: not just which mailer, but how a coordinated set of sizes, finishes, and print treatments can make every outbound shipment faster to pack, cheaper to ship, and more consistent to the customer. That is where a supplier relationship matters more than a one-off order."
+    ],
+    benefits: [
+      "Program-level approach standardizes protection, branding, and packout across the whole operation.",
+      "Multiple exterior finishes and padded formats coordinated into one consistent system.",
+      "Custom sizes and print planning tied to your specific repeat SKUs.",
+      "Volume support for both standard and custom packaging requirements together."
+    ],
+    useCases: [
+      "Bubble mailer packaging suits companies building a coordinated shipping system — branded shipping, retail packaging, warehouse order programs, and custom campaigns handled as one plan rather than scattered purchases. The goal is consistency across every parcel and location.",
+      "It is especially relevant for brands with repeat SKUs that want packaging designed around their actual products: the right sizes, the right finish, and a print treatment that carries the brand. A packaging program turns shipping supplies from a commodity purchase into part of the customer experience."
+    ],
+    customContent: [
+      "Custom sizes, branded print, and layout planning are the heart of a packaging program, especially for repeat SKUs where the same products ship over and over. Designing the mailer around the product — the right dimensions, finish, and print zones — is what separates a considered packaging program from ad-hoc supply buying, and it is where we can add the most value."
+    ],
+    bulkContent: [
+      "We support volume planning for both standard and custom packaging requirements as part of a program. When you request a quote, describe your product range, the finishes you want, and whether custom sizing or print is involved, so we can plan coordinated bulk supply around your real packaging needs rather than a single line item."
+    ],
+    faqs: [
+      ["What does 'bubble mailer packaging' cover?", "It is the program-level category for standardizing protection, branding, and shipping speed across an operation — spanning multiple finishes, padded formats, standard and custom sizes, and print, planned as one coordinated system rather than one-off orders."],
+      ["Can you design packaging around my specific products?", "Yes. Custom sizes, branded print, and layout planning tied to your repeat SKUs are the core of a packaging program. Designing the mailer around the product is where a program adds the most value."],
+      ["Do you support both standard and custom packaging in one program?", "Yes. We plan volume for standard stock and custom requirements together, so a business can run a coordinated program instead of separate purchases."],
+      ["How do I start a bubble mailer packaging program?", "Share your product range, the finishes you want, and whether custom sizing or print is involved. We use that to plan coordinated bulk supply around your real packaging needs."]
+    ]
+  },
+
+  "7-bubble-mailer": {
+    overview: [
+      "The No. 7 bubble mailer is one of the largest numbered formats, chosen when a business needs a big face size but still wants the speed and light weight of a padded envelope rather than a carton. Larger folded apparel, magazines, soft retail kits, and multi-item orders all fit the generous No. 7 opening.",
+      "At this size the front panel becomes prime branding space, with room for bolder print zones and clear return information. For high-volume retail replenishment and apparel distribution, the No. 7 lets an operation ship larger soft goods at scale without giving up the packout advantages that make bubble mailers efficient in the first place."
+    ],
+    benefits: [
+      "Large face size handles bigger folded apparel and multi-item orders in an envelope format.",
+      "Generous panel supports bolder print zones and clear return information.",
+      "Keeps padded-envelope speed and low weight at a large capacity.",
+      "Well suited to high-volume retail replenishment and apparel distribution."
+    ],
+    useCases: [
+      "The No. 7 is chosen for larger folded apparel, magazines, soft retail kits, and multi-item orders that need a big opening but suit an envelope rather than a box. The padded interior protects soft contents while the format keeps parcels lighter than cartons.",
+      "It is frequently used in high-volume retail replenishment and apparel distribution, where the same larger soft-goods orders ship repeatedly. Brands using large mailers at this scale often treat the No. 7 as the top of their numbered range."
+    ],
+    customContent: [
+      "Brands using large mailers like the No. 7 often include bolder print zones and prominent return information, taking advantage of the generous panel. When larger soft-goods orders ship in high volume, a well-printed No. 7 becomes a visible, repeated brand impression across a distribution program."
+    ],
+    bulkContent: [
+      "The No. 7 is frequently quoted for high-volume retail replenishment and apparel distribution, which makes it a natural bulk line at the top of a numbered range. Share your volume and the other numbered sizes you run so we can plan a coordinated bulk order for your larger shipments."
+    ],
+    faqs: [
+      ["What fits in a No. 7 bubble mailer?", "The No. 7 is one of the largest numbered sizes, suited to larger folded apparel, magazines, soft retail kits, and multi-item orders that need a big opening but suit an envelope rather than a box."],
+      ["Is the No. 7 good for apparel distribution?", "Yes. Its large capacity, padded interior, and light weight make it a common choice for high-volume retail replenishment and apparel distribution."],
+      ["Does the No. 7 have room for bold branding?", "Yes. The generous front panel supports bolder print zones and prominent return information, making it a visible brand impression at scale."],
+      ["Can I get bulk pricing on No. 7 bubble mailers?", "Yes. The No. 7 is frequently quoted for high-volume programs. Share your volume and the other numbered sizes you run for a coordinated bulk quote."]
+    ]
+  },
+
+  "10-5-x-15-bubble-mailer": {
+    overview: [
+      "The 10.5 x 15 bubble mailer is a large-format padded envelope built for products that need a generous opening and more internal face area than mid-size mailers provide. Larger garments, document packets, catalogs, and flat boxed goods slide into the 10.5 x 15 without folding or forcing, protected by the bubble lining through transit.",
+      "This size is common in apparel and catalog shipping, where order dimensions tend to be more consistent and predictable. When a business regularly ships larger flat items, the 10.5 x 15 gives the room they need while keeping the weight and packout speed advantages that make a mailer preferable to a box for flat contents."
+    ],
+    benefits: [
+      "Large face and generous opening fit bigger garments and catalogs without folding.",
+      "More internal face area than mid-size mailers for larger flat products.",
+      "Strong front-panel visibility for branding and simple handling marks.",
+      "Keeps flat large shipments lighter and lower-profile than a carton."
+    ],
+    useCases: [
+      "The 10.5 x 15 is a natural fit for larger garments, document packets, and catalogs that need a wide opening and flat protection. Its generous face area accommodates items that would have to be folded into a smaller mailer.",
+      "It is common in apparel and catalog shipping programs where order dimensions are consistent. When larger flat items ship in predictable sizes and volumes, the 10.5 x 15 becomes a dependable core size that avoids over-boxing."
+    ],
+    customContent: [
+      "The 10.5 x 15 front panel offers strong brand visibility and room for simple handling marks, taking advantage of the large flat face. For apparel and catalog brands shipping this size regularly, a printed panel turns a large, frequently-seen parcel into consistent brand exposure."
+    ],
+    bulkContent: [
+      "The 10.5 x 15 is common in apparel and catalog shipping where dimensions are consistent, which suits bulk ordering. Share your volume and whether it sits alongside other large sizes in your program so we can plan a bulk order matched to your larger flat shipments."
+    ],
+    faqs: [
+      ["What fits in a 10.5 x 15 bubble mailer?", "The 10.5 x 15 is a large-format mailer suited to larger garments, document packets, catalogs, and flat boxed goods that need a wide opening and more face area than mid-size mailers."],
+      ["Is 10.5 x 15 good for apparel shipping?", "Yes. It is common in apparel and catalog shipping, where its generous face fits larger flat items without folding, and its light weight keeps freight lower than a box."],
+      ["Can the 10.5 x 15 mailer be printed?", "Yes. The large front panel gives strong brand visibility and room for handling marks, useful for brands shipping this size regularly."],
+      ["Do you offer bulk pricing on 10.5 x 15 bubble mailers?", "Yes. It suits bulk ordering for apparel and catalog programs. Share your volume and the other sizes you run for a coordinated quote."]
+    ]
+  },
+
+  "7x9-bubble-mailer": {
+    overview: [
+      "The 7x9 bubble mailer is one of the most-used everyday sizes because it strikes a near-ideal balance between storage efficiency, protection, and product flexibility. Accessories, small books, beauty packs, and gift items all fit a 7x9 comfortably, which is why so many fulfillment teams treat it as a core packing-station size.",
+      "Its versatility is the whole point: the 7x9 is large enough for a wide slice of common orders yet small enough to stay light and store densely. For an operation that wants to minimize the number of sizes it stocks while still covering most shipments, the 7x9 is often the single most valuable size to keep on hand."
+    ],
+    benefits: [
+      "Balances storage efficiency, protection, and flexibility better than almost any other size.",
+      "Fits a wide slice of everyday orders, reducing how many sizes you need to stock.",
+      "Light and dense to store, keeping the packing station lean.",
+      "Enough print surface for brand marks without overwhelming smaller shipments."
+    ],
+    useCases: [
+      "The 7x9 is a default for accessories, small books, beauty packs, and gift items — the everyday orders that make up the bulk of many stores' shipments. Its balance of size and protection covers most of them without over- or under-sizing.",
+      "Fulfillment teams often treat the 7x9 as one of the core sizes at every packing station because it handles so much of the daily mix. When an operation wants to keep its size range tight, the 7x9 is usually the anchor it builds around."
+    ],
+    customContent: [
+      "The 7x9 supports brand print without overwhelming smaller shipments — enough face for a clean logo and short handling line while staying proportionate to the everyday orders it carries. Because this size appears in so many shipments, printing it gives a brand consistent, high-frequency exposure."
+    ],
+    bulkContent: [
+      "Many fulfillment teams treat the 7x9 as a core size, which makes it one of the most common bulk lines. Share your volume and whether it anchors a multi-size program, and we can plan a bulk or standing order around what is often a business's highest-use mailer."
+    ],
+    faqs: [
+      ["What is a 7x9 bubble mailer best for?", "The 7x9 is an everyday size suited to accessories, small books, beauty packs, and gift items. Its balance of storage efficiency, protection, and flexibility makes it a core packing-station size."],
+      ["Why is 7x9 such a popular size?", "It balances size, protection, and storage better than most — large enough for a wide range of common orders yet small enough to stay light and store densely, so it covers much of the daily mix with one size."],
+      ["Can 7x9 bubble mailers be printed?", "Yes. The 7x9 has enough face for a clean logo and short handling line without overwhelming smaller shipments, and because it ships so often, printing it gives high-frequency brand exposure."],
+      ["Is bulk pricing available for 7x9 bubble mailers?", "Yes. As a core size for many fulfillment teams, the 7x9 is one of the most common bulk lines. Share your volume for a bulk or standing-order quote."]
+    ]
+  },
+
+  "9x6-bubble-mailer": {
+    overview: [
+      "The 9x6 bubble mailer offers a wider opening relative to its length, which suits products that need more width than a small mailer but not the extra length of a catalog format. Retail accessories, beauty orders, stationery, and small books sit well in a 9x6 where product width, rather than length, is the constraint.",
+      "That width-forward proportion makes the 9x6 a useful specialist in a mixed-size program. When an item is too wide for a narrow envelope but does not justify a larger format, the 9x6 fills the gap — giving packers a size that matches the product shape instead of forcing a compromise fit."
+    ],
+    benefits: [
+      "Wider opening suits products where width, not length, is the limiting dimension.",
+      "Fits the gap between narrow small mailers and longer catalog formats.",
+      "Rectangular face gives clean room for print layouts and handling details.",
+      "Useful specialist size in a mixed-size packing program."
+    ],
+    useCases: [
+      "The 9x6 suits retail accessories, beauty orders, stationery, and small books where the product needs a wider opening than a narrow small mailer offers. Its proportion matches items that are more square or wide than long.",
+      "It is most useful in mixed-size packing programs, where having a width-forward option prevents packers from forcing a wide item into an ill-fitting narrow envelope. When product width matters more than length, the 9x6 is the size that fits."
+    ],
+    customContent: [
+      "The 9x6 front panel is a clean rectangular surface useful for print layouts and order handling details. For brands shipping wider retail and beauty items, printing this size keeps the branded look consistent even on the products that need a width-forward mailer rather than a standard narrow one."
+    ],
+    bulkContent: [
+      "The 9x6 is useful in mixed-size packing programs when product width matters more than length, which makes it a targeted bulk line rather than a universal one. Tell us the products you use it for and your volume so we can quote it as part of a balanced multi-size order."
+    ],
+    faqs: [
+      ["What is a 9x6 bubble mailer used for?", "The 9x6 suits products that need a wider opening than a narrow small mailer but not the extra length of a catalog format — retail accessories, beauty orders, stationery, and small books where width is the constraint."],
+      ["How is a 9x6 different from a 7x9 bubble mailer?", "The 9x6 is proportioned wider relative to its length, suiting more square or wide items, while the 7x9 is a balanced everyday size. In a mixed-size program the 9x6 covers width-forward products specifically."],
+      ["Can 9x6 bubble mailers be printed?", "Yes. The rectangular front panel gives clean room for print layouts and handling details, keeping branding consistent on wider retail and beauty shipments."],
+      ["Is the 9x6 a good bulk size?", "It is a targeted size best bought as part of a mixed-size program for width-forward products. Share what you ship in it and your volume for a coordinated bulk quote."]
+    ]
+  },
+
+  "12x12-bubble-mailer": {
+    overview: [
+      "The 12x12 bubble mailer solves a specific problem: square products that do not sit naturally in narrow, rectangular envelope shapes. Prints, flat gift kits, square apparel packs, and marketing packs all fit a 12x12's equal dimensions without the awkward diagonal fit or wasted corners a rectangular mailer would leave.",
+      "Its square proportion also makes it a natural fit for centered, campaign-based branding. When a business ships square-format items — especially in seasonal or promotional runs — the 12x12 matches the product shape and gives print designers a balanced canvas that a rectangular mailer cannot offer."
+    ],
+    benefits: [
+      "Square shape fits square products that sit awkwardly in rectangular mailers.",
+      "Equal dimensions eliminate the wasted corners and diagonal fit of narrow envelopes.",
+      "Balanced square panel is ideal for centered logos and campaign print.",
+      "Well suited to seasonal and promotional runs of square-format items."
+    ],
+    useCases: [
+      "The 12x12 serves prints, flat gift kits, square apparel packs, and marketing packs — products whose square footprint doesn't suit narrow envelope shapes. The matching proportions give a clean, protected fit without forcing the item.",
+      "It is especially useful for seasonal campaigns and brands shipping square-format items in volume. When the product itself is square, the 12x12 is the size that fits naturally, and its balanced panel suits centered campaign branding."
+    ],
+    customContent: [
+      "Square panels work well for centered logos and campaign-based printed packaging, giving designers a balanced canvas that rectangular mailers lack. For seasonal and promotional runs of square products, a printed 12x12 lets the packaging match both the shape of the item and the look of the campaign."
+    ],
+    bulkContent: [
+      "The 12x12 is useful for seasonal campaigns and brands shipping square-format items in volume, which makes it a campaign- and run-based bulk line. Share the campaign timing and volume, and whether you want custom print, so we can plan a bulk order sized to your square-format shipments."
+    ],
+    faqs: [
+      ["What is a 12x12 bubble mailer for?", "The 12x12 is a square mailer for square products — prints, flat gift kits, square apparel packs, and marketing packs — that sit awkwardly in narrow rectangular envelopes."],
+      ["Why use a square mailer instead of a rectangular one?", "For square products, matching square dimensions gives a clean fit without the wasted corners or diagonal placement a rectangular mailer forces, and the balanced panel suits centered campaign print."],
+      ["Is the 12x12 good for promotional campaigns?", "Yes. Its square shape and balanced panel suit seasonal and promotional runs of square-format items, where the packaging can match both the product shape and the campaign look."],
+      ["Can I order 12x12 bubble mailers in bulk with print?", "Yes. It is often bought for campaign runs. Share your timing, volume, and whether you want custom print for a coordinated bulk quote."]
+    ]
+  },
+
+  "12x15-bubble-mailer": {
+    overview: [
+      "The 12x15 bubble mailer is a large-capacity padded envelope for products that are too big for standard everyday mailers but still suit an envelope format rather than a box. Large garments, catalog packs, multi-item kits, and soft retail replenishment all fit the broad 12x15 internal area, cushioned by the bubble lining and closed with a self-sealing flap.",
+      "The large face size does double duty: it gives products the room they need and gives brands more space for print and shipping instructions than any smaller mailer. For apparel and seasonal campaign programs shipping bigger soft goods in volume, the 12x15 is often the largest practical mailer before a shipment truly needs a carton."
+    ],
+    benefits: [
+      "Large internal area handles big garments and multi-item kits in an envelope format.",
+      "Broad face gives the most room of any mailer for print and shipping instructions.",
+      "Self-sealing closure keeps packout fast even at the larger size.",
+      "Lighter than a carton for large soft goods, controlling freight on volume programs."
+    ],
+    useCases: [
+      "The 12x15 is used for large garments, catalog packs, multi-item kits, and soft retail replenishment — bigger items that suit an envelope rather than a box. Its broad internal area accommodates products that smaller mailers cannot.",
+      "It is often purchased in bulk for apparel and seasonal campaign programs where larger soft goods ship in volume. When shipments are big but still flat and soft, the 12x15 is usually the largest mailer a program needs before moving to cartons."
+    ],
+    customContent: [
+      "The large 12x15 face gives brands more room for print and shipping instructions than any smaller mailer, which suits apparel and campaign shipments where both branding and handling detail matter. A printed 12x15 makes a large, highly visible parcel work as brand exposure across a distribution or seasonal program."
+    ],
+    bulkContent: [
+      "The 12x15 is often purchased in bulk for apparel and seasonal campaign programs shipping larger soft goods in volume. Share your campaign timing and volume, and whether custom print is involved, so we can plan a bulk order matched to your largest envelope-format shipments."
+    ],
+    faqs: [
+      ["What fits in a 12x15 bubble mailer?", "The 12x15 is a large-capacity mailer for large garments, catalog packs, multi-item kits, and soft retail replenishment — bigger items that suit an envelope rather than a box."],
+      ["When should I use a 12x15 instead of a box?", "For large but flat and soft contents, the 12x15 ships lighter and lower-profile than a carton while still cushioning the shipment. It is usually the largest mailer a program needs before moving to boxes."],
+      ["Does the 12x15 have room for branding?", "Yes. Its broad face gives more room for print and shipping instructions than any smaller mailer, useful for apparel and campaign shipments."],
+      ["Is bulk pricing available for 12x15 bubble mailers?", "Yes. It is often bought in bulk for apparel and seasonal campaigns. Share your timing, volume, and print needs for a coordinated quote."]
+    ]
+  },
+
+  "3-bubble-mailer": {
+    overview: [
+      "The No. 3 bubble mailer occupies a practical middle ground in the numbered system — larger than the very small formats but more compact than the spacious daily-use sizes. Small retail products, beauty accessories, documents, and samples fit the No. 3 comfortably, making it a versatile everyday size for businesses that prefer numbered references.",
+      "That middle position is what makes it useful: the No. 3 is roomy enough for a slightly larger item than the smallest mailers handle, yet compact enough to keep freight weight and storage footprint modest. For operations with stable, repeating day-to-day shipping, it is a dependable numbered size that rarely goes unused."
+    ],
+    benefits: [
+      "Middle numbered size bridges very small formats and larger daily-use mailers.",
+      "Compact enough to keep freight weight and storage footprint modest.",
+      "Standard numbered reference is easy to reorder and match across systems.",
+      "Versatile fit for small retail products, documents, and samples alike."
+    ],
+    useCases: [
+      "The No. 3 suits small retail products, beauty accessories, documents, and samples that need a little more room than the smallest mailers but don't justify a larger size. Its middle proportions cover a broad set of everyday small shipments.",
+      "It is often reordered by businesses with stable day-to-day shipping needs, where the same small items move consistently. As a dependable numbered size, the No. 3 tends to stay in steady rotation at the packing bench rather than being a specialist format."
+    ],
+    customContent: [
+      "The No. 3 is common for simple branded shipping programs and repeat product lines, where a clean logo or return block on the panel keeps everyday small shipments on-brand. Because the size recurs in steady reorders, a printed No. 3 delivers consistent branding across a business's routine outbound orders."
+    ],
+    bulkContent: [
+      "No. 3 bubble mailers are often reordered by businesses with stable day-to-day shipping needs, which makes them well suited to bulk and standing orders. Share your reorder cadence and whether the No. 3 sits alongside other numbered sizes so we can plan a coordinated program around your routine shipments."
+    ],
+    faqs: [
+      ["What size is a No. 3 bubble mailer?", "The No. 3 is a middle size in the numbered system — larger than the smallest formats but more compact than spacious daily-use sizes. It suits small retail products, beauty accessories, documents, and samples."],
+      ["When should I choose a No. 3 bubble mailer?", "When an item needs a little more room than the smallest mailers offer but doesn't justify a larger size, and you prefer numbered sizing. It is a versatile everyday middle size."],
+      ["Can No. 3 bubble mailers be reordered on a schedule?", "Yes. They are often reordered by businesses with stable day-to-day shipping. Share your cadence and quantity for a standing or bulk order."],
+      ["Are No. 3 bubble mailers available printed?", "Yes. A clean logo or return block prints well on the panel, and because the size recurs in steady reorders, printed No. 3 mailers keep routine shipments on-brand."]
+    ]
+  }
+};
 
 const productsBySlug = new Map(products.map((product) => [product.slug, product]));
 
@@ -1736,10 +2240,14 @@ const renderKraftProductPage = (product) => {
   });
 };
 
-const productIntroParagraphs = (product) => [
-  `${product.name} is a practical option for businesses that want ${product.tone} with better protection than a standard flat envelope. It gives packing teams a faster workflow than box-first shipping while still helping reduce scuffs, compression marks, and surface wear during transit. For many eCommerce and retail operations, that balance between presentation, protection, and freight efficiency is the reason padded mailers stay in regular use.`,
-  `${product.fitNote} At Shop Bubble Mailers, we support quote requests for ${product.name.toLowerCase()} from businesses across the United States, including online stores, warehouse teams, and retail brands that need dependable stock for daily shipping. Buyers can request plain options, discuss custom printing, and plan volume around repeat orders or seasonal demand.`
-];
+const productIntroParagraphs = (product) => {
+  const content = productContent[product.slug];
+  if (content && content.overview) return content.overview;
+  return [
+    `${product.name} is a practical option for businesses that want ${product.tone} with better protection than a standard flat envelope. It gives packing teams a faster workflow than box-first shipping while still helping reduce scuffs, compression marks, and surface wear during transit. For many eCommerce and retail operations, that balance between presentation, protection, and freight efficiency is the reason padded mailers stay in regular use.`,
+    `${product.fitNote} At Shop Bubble Mailers, we support quote requests for ${product.name.toLowerCase()} from businesses across the United States, including online stores, warehouse teams, and retail brands that need dependable stock for daily shipping. Buyers can request plain options, discuss custom printing, and plan volume around repeat orders or seasonal demand.`
+  ];
+};
 
 const productSections = (product) => {
   if (product.slug === "kraft-bubble-mailer") {
@@ -1747,12 +2255,27 @@ const productSections = (product) => {
   }
   const relatedProducts = (relatedMap[product.slug] || []).map((slug) => productsBySlug.get(slug)).filter(Boolean);
   const comparisonProduct = relatedProducts[0];
+  const content = productContent[product.slug];
   const faqs = productFaqTemplates(product);
-  const benefits = [
+  const benefits = (content && content.benefits) || [
     `Padded protection for ${product.idealFor.join(", ").toLowerCase()} when the shipment needs more care than a plain paper envelope can offer.`,
     `Quick self-seal closure that helps reduce packing time during daily order fulfillment.`,
     `A cleaner shipping format for businesses that want mailers to look more organized and customer-ready.`,
     `Flexible ordering for standard stock, bulk supply, and custom print planning.`
+  ];
+  const useCaseParas = (content && content.useCases) || [
+    `${product.name} is commonly used for ${product.idealFor.join(", ").toLowerCase()}. Buyers choose it when they want a padded mailer that stores easily at the packing station, closes quickly, and helps products arrive with a more consistent appearance.`,
+    `For eCommerce brands, the mailer often becomes part of the customer experience because it is the first package the buyer sees. For warehouse teams, the focus is usually speed, storage efficiency, and keeping material use simple across many daily orders. ${product.name} can support both goals when the size is selected carefully.`,
+    `It also works well in packaging programs that need lighter outbound parcels. Bubble mailers usually weigh less than corrugated boxes, which can make a real difference for repeat shipments where parcel cost adds up across the month.`
+  ];
+  const customParas = (content && content.customContent) || [
+    `${product.customAngle} Buyers can request logo print, basic brand colors, return information, or layout planning for retail-facing shipments. When artwork is ready, the quote form on this page can be used to send the file for review.`,
+    `Custom projects are especially useful for businesses that want stronger brand consistency across packaging. A printed bubble mailer can help a shipment feel more organized without adding the material and storage demands of a full branded box program.`
+  ];
+  const bulkParas = (content && content.bulkContent) || [
+    `${product.bulkAngle} When requesting pricing, it helps to include the target size, expected quantity, whether the order is standard stock or custom print, and where the shipment will be delivered. That lets us provide more useful guidance from the first response.`,
+    `Bulk buying is often the best route for businesses that have steady order flow, want price stability on a repeat format, or need multiple sizes planned together. We can also support businesses that are preparing for seasonal traffic and need a practical padded mailer option before order volume rises.`,
+    `Shop Bubble Mailers serves buyers across the USA. You can request pricing by phone, email, or the form on this page.`
   ];
 
   const body = `
@@ -1812,14 +2335,11 @@ const productSections = (product) => {
       <div class="container split-grid">
         <div class="content-card content-flow content-soft">
           ${iconHeading("truck", `Use cases for ${product.name.toLowerCase()}`)}
-          <p>${product.name} is commonly used for ${product.idealFor.join(", ").toLowerCase()}. Buyers choose it when they want a padded mailer that stores easily at the packing station, closes quickly, and helps products arrive with a more consistent appearance.</p>
-          <p>For eCommerce brands, the mailer often becomes part of the customer experience because it is the first package the buyer sees. For warehouse teams, the focus is usually speed, storage efficiency, and keeping material use simple across many daily orders. ${product.name} can support both goals when the size is selected carefully.</p>
-          <p>It also works well in packaging programs that need lighter outbound parcels. Bubble mailers usually weigh less than corrugated boxes, which can make a real difference for repeat shipments where parcel cost adds up across the month.</p>
+          ${useCaseParas.map(paragraph).join("")}
         </div>
         <div class="content-card content-flow">
           ${iconHeading("printer", "Customization options")}
-          <p>${product.customAngle} Buyers can request logo print, basic brand colors, return information, or layout planning for retail-facing shipments. When artwork is ready, the quote form on this page can be used to send the file for review.</p>
-          <p>Custom projects are especially useful for businesses that want stronger brand consistency across packaging. A printed bubble mailer can help a shipment feel more organized without adding the material and storage demands of a full branded box program.</p>
+          ${customParas.map(paragraph).join("")}
         </div>
       </div>
     </section>
@@ -1828,9 +2348,7 @@ const productSections = (product) => {
       <div class="container split-grid">
         <div class="content-card content-flow content-soft">
           ${iconHeading("quote", "Shipping and bulk order information")}
-          <p>${product.bulkAngle} When requesting pricing, it helps to include the target size, expected quantity, whether the order is standard stock or custom print, and where the shipment will be delivered. That lets us provide more useful guidance from the first response.</p>
-          <p>Bulk buying is often the best route for businesses that have steady order flow, want price stability on a repeat format, or need multiple sizes planned together. We can also support businesses that are preparing for seasonal traffic and need a practical padded mailer option before order volume rises.</p>
-          <p>Shop Bubble Mailers serves buyers across the USA. You can request pricing by phone, email, or the form on this page.</p>
+          ${bulkParas.map(paragraph).join("")}
         </div>
         <div class="table-card">
           <table class="comparison-table">
