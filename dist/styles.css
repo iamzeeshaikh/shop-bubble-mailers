@@ -1636,6 +1636,18 @@ textarea {
   margin-top: 1rem;
 }
 
+.blog-article > h2 {
+  margin-top: 2.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(31, 44, 59, 0.08);
+}
+
+.blog-article > h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
 .text-columns {
   columns: 2;
   gap: 2rem;

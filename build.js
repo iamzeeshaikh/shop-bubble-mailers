@@ -2967,22 +2967,16 @@ const renderBlogPost = (post) => {
         { href: "/products/", label: "View Products" },
       ],
     })}
-    ${post.sections
-      .map(
-        (section, index) => `
-    <section class="section${index % 2 ? " section-muted" : ""}">
+    <section class="section">
       <div class="container">
-        <div class="content-card content-flow">
+        <div class="content-card content-flow blog-article">
+          ${post.sections
+            .map(
+              (section) => `
           <h2>${section.heading}</h2>
-          ${renderBlogSectionBody(section)}
-        </div>
-      </div>
-    </section>`
-      )
-      .join("")}
-    <section class="section section-muted">
-      <div class="container">
-        <div class="content-card content-flow">
+          ${renderBlogSectionBody(section)}`
+            )
+            .join("")}
           <h2>Frequently asked questions</h2>
           ${renderFaqList(post.faq)}
         </div>
