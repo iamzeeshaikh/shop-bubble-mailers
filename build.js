@@ -2888,7 +2888,7 @@ const blogPostingSchema = (post) => ({
 
 const renderBlogSectionBody = (section) => `
   ${section.html}
-  ${section.bullets ? `<ul class="content-list">${section.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
+  ${section.bullets ? `<ul>${section.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
 `;
 
 const renderRelatedBlog = (post) => {
@@ -2898,13 +2898,20 @@ const renderRelatedBlog = (post) => {
     <section class="section">
       <div class="container">
         <h2>Keep reading</h2>
-        <div class="card-grid">
+        <div class="product-grid">
           ${items
             .map(
-              (item) => `<a class="content-card content-card-link" href="/blog/${item.slug}/">
-            <span class="eyebrow">${item.category}</span>
-            <h3>${item.title}</h3>
-          </a>`
+              (item) => `<article class="product-card">
+            <img src="${pickAsset(item.image, 0).url}" alt="${item.title}" loading="lazy" width="1080" height="1080">
+            <div>
+              <span class="eyebrow">${item.category}</span>
+              <h3><a href="/blog/${item.slug}/">${item.title}</a></h3>
+              <p>${item.metaDescription}</p>
+            </div>
+            <div class="button-row">
+              <a class="button button-primary button-small" href="/blog/${item.slug}/">Read Guide</a>
+            </div>
+          </article>`
             )
             .join("")}
         </div>
@@ -2973,12 +2980,17 @@ const renderBlogIndex = () => {
   const cards = [...blogPosts]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map(
-      (post) => `<a class="content-card content-card-link" href="/blog/${post.slug}/">
-        <span class="eyebrow">${post.category}</span>
-        <h3>${post.title}</h3>
-        <p>${post.metaDescription}</p>
-        <span class="card-meta">${post.readTime}</span>
-      </a>`
+      (post) => `<article class="product-card">
+        <img src="${pickAsset(post.image, 0).url}" alt="${post.title}" loading="lazy" width="1080" height="1080">
+        <div>
+          <span class="eyebrow">${post.category}</span>
+          <h3><a href="/blog/${post.slug}/">${post.title}</a></h3>
+          <p>${post.metaDescription}</p>
+        </div>
+        <div class="button-row">
+          <a class="button button-primary button-small" href="/blog/${post.slug}/">Read Guide</a>
+        </div>
+      </article>`
     )
     .join("");
   const body = `
@@ -2994,7 +3006,7 @@ const renderBlogIndex = () => {
     })}
     <section class="section">
       <div class="container">
-        <div class="card-grid">${cards}</div>
+        <div class="product-grid">${cards}</div>
       </div>
     </section>
   `;
