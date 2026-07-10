@@ -1003,8 +1003,7 @@ const navLinks = [
   { href: "/custom-bubble-mailers/", label: "Custom" },
   { href: "/kraft-bubble-mailers/", label: "Kraft" },
   { href: "/white-bubble-mailers/", label: "White" },
-  { href: "/bubble-mailer-packaging/", label: "Packaging" },
-  { href: "/blog/", label: "Blog" }
+  { href: "/bubble-mailer-packaging/", label: "Packaging" }
 ];
 
 const siteRoutes = [];
@@ -1216,6 +1215,7 @@ const renderFooter = () => `
           <ul>
             <li><a href="/about-us/">About Us</a></li>
             <li><a href="/products/">Products</a></li>
+            <li><a href="/blog/">Blog</a></li>
             <li><a href="/contact-us/">Contact Us</a></li>
             <li><a href="/sitemap/">Sitemap</a></li>
           </ul>
