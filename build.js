@@ -1003,7 +1003,8 @@ const navLinks = [
   { href: "/custom-bubble-mailers/", label: "Custom" },
   { href: "/kraft-bubble-mailers/", label: "Kraft" },
   { href: "/white-bubble-mailers/", label: "White" },
-  { href: "/bubble-mailer-packaging/", label: "Packaging" }
+  { href: "/bubble-mailer-packaging/", label: "Packaging" },
+  { href: "/blog/", label: "Blog" }
 ];
 
 const siteRoutes = [];
@@ -2756,6 +2757,261 @@ writeRoute(
   })
 );
 products.forEach((product) => writeRoute(`/${product.slug}/`, productSections(product)));
+
+// ---------------------------------------------------------------------------
+// Blog: three padded-mailer guides. Each section carries exactly one
+// contextual internal link (site owner's one-link-per-heading rule).
+// ---------------------------------------------------------------------------
+const blogPosts = [
+  {
+    slug: "how-to-choose-bubble-mailer-size",
+    category: "Buying Guide",
+    image: "generic",
+    date: "2026-05-19",
+    readTime: "6 min read",
+    title: "How to Choose the Right Bubble Mailer Size",
+    metaTitle: "How to Choose the Right Bubble Mailer Size | Shop Bubble Mailers",
+    metaDescription:
+      "A practical guide to choosing bubble mailer sizes — matching the mailer to your product, common size ranges, and avoiding costly oversizing on shipping.",
+    intro:
+      "The right bubble mailer size protects your product, keeps postage down, and makes packing faster. The wrong size means damage, wasted space, or paying for air. Here is how to size a padded mailer correctly.",
+    sections: [
+      {
+        heading: "Match the mailer to the product",
+        html: `<p>Start from the item, not from a size chart. Measure the product at its widest and thickest, then add a small allowance for the padded lining and a clean seal. A mailer that hugs the product too tightly stresses the seams; one that leaves the item swimming lets it shift and get damaged. Working from our full <a href="/products/">bubble mailer range</a> makes it easier to compare formats against what you actually ship.</p>`,
+      },
+      {
+        heading: "Common sizes and what they fit",
+        html: `<p>Bubble mailer sizes are usually described by internal usable dimensions. A handful of formats cover most eCommerce needs, from small accessories to apparel and mixed kits.</p>`,
+        bullets: [
+          `Small (around <a href="/4x6-bubble-mailer/">4x6</a> and 4x7): jewelry, cards, samples, small accessories.`,
+          "Medium (7x9, 8.5x12): books, cosmetics, small apparel, electronics accessories.",
+          "Large (10.5x15 and up): folded apparel, kits, documents, and mixed retail orders.",
+        ],
+      },
+      {
+        heading: "Avoid the cost of oversizing",
+        html: `<p>An oversized mailer feels safe but quietly costs money: more void fill, higher dimensional weight, and a product that moves in transit. Size to the product plus a small clearance and you cut both damage and postage. If you are standardising a packing program across many SKUs, our guide to <a href="/blog/kraft-vs-white-bubble-mailers/">kraft vs white bubble mailers</a> helps you lock the finish once you have settled the sizes.</p>`,
+      },
+    ],
+    faq: [
+      ["What size bubble mailer do I need for a small item?", "For small items like jewelry, cards, and samples, a 4x6 or 4x7 mailer is usually ideal. Measure the item at its widest and thickest points and add a small allowance for the padded lining and a clean seal."],
+      ["Is a bigger bubble mailer always safer?", "No. An oversized mailer lets the product move in transit, which increases damage, and it raises dimensional-weight postage costs. Size to the product plus a small clearance rather than choosing the largest available."],
+    ],
+    related: ["kraft-vs-white-bubble-mailers", "custom-printed-bubble-mailers-branding"],
+  },
+  {
+    slug: "kraft-vs-white-bubble-mailers",
+    category: "Comparison",
+    image: "kraft",
+    date: "2026-06-02",
+    readTime: "6 min read",
+    title: "Kraft vs White Bubble Mailers: Which Is Right for Your Brand?",
+    metaTitle: "Kraft vs White Bubble Mailers | Which To Choose",
+    metaDescription:
+      "Compare kraft and white bubble mailers on look, branding, and cost so you can choose the padded mailer that fits your product, your brand, and your budget.",
+    intro:
+      "Kraft and white bubble mailers protect a product equally well — the difference is how they look and what they say about your brand. Here is how to choose between them.",
+    sections: [
+      {
+        heading: "The case for kraft",
+        html: `<p>Kraft mailers have a natural, paper-look finish that reads as honest, eco-conscious, and handmade. They suit artisan brands, sustainable products, and anything where a warm, understated look fits the story better than bright white. Our <a href="/kraft-bubble-mailers/">kraft bubble mailers</a> give that natural appearance while still delivering full padded protection.</p>`,
+      },
+      {
+        heading: "The case for white",
+        html: `<p>White mailers read as clean, modern, and retail-ready. They photograph well for social unboxing, they make printed logos and colours pop, and they suit cosmetics, fashion, and direct-to-consumer brands that want a crisp presentation. If that is your positioning, <a href="/white-bubble-mailers/">white bubble mailers</a> are usually the stronger fit.</p>`,
+      },
+      {
+        heading: "How to decide",
+        html: `<p>Match the mailer to the brand promise, not just to taste. Natural, wellness, and eco brands lean kraft; beauty, fashion, and premium retail lean white. Whichever you choose, the biggest lift usually comes from printing your brand on it — which is exactly what our guide to <a href="/blog/custom-printed-bubble-mailers-branding/">custom printed bubble mailers</a> covers.</p>`,
+      },
+    ],
+    faq: [
+      ["Are kraft bubble mailers as protective as white ones?", "Yes. Kraft and white bubble mailers use the same padded bubble lining and offer the same level of protection. The difference is purely in the exterior look and how it fits your brand."],
+      ["Which looks more premium, kraft or white?", "It depends on positioning. White reads as clean and modern and suits beauty and fashion, while kraft reads as natural and artisan and suits eco and wellness brands. Both can look premium when printed well."],
+    ],
+    related: ["how-to-choose-bubble-mailer-size", "custom-printed-bubble-mailers-branding"],
+  },
+  {
+    slug: "custom-printed-bubble-mailers-branding",
+    category: "Branding",
+    image: "plain",
+    date: "2026-06-18",
+    readTime: "6 min read",
+    title: "Custom Printed Bubble Mailers: Branding Your Shipping Experience",
+    metaTitle: "Custom Printed Bubble Mailers | Branded Shipping",
+    metaDescription:
+      "How custom printed bubble mailers turn shipping into a branded moment — what you can customise, when it is worth it, and how to get started on a bulk program.",
+    intro:
+      "For an online brand, the mailer is the first thing a customer touches. A custom printed bubble mailer turns a plain shipment into a branded moment that customers notice and share. Here is how to use it well.",
+    sections: [
+      {
+        heading: "Why branded mailers matter",
+        html: `<p>A logo, a brand colour, and a short message on the outside of the mailer make an order feel considered before it is even opened. It reinforces the brand at the doorstep and in unboxing photos, and it costs little over a plain mailer at volume. Our <a href="/custom-bubble-mailers/">custom bubble mailers</a> add that branding while keeping the padded protection your shipments need.</p>`,
+      },
+      {
+        heading: "What you can customise",
+        html: `<p>Customisation goes beyond a printed logo. The finish, colour, size, and even the inside of the mailer can all carry the brand.</p>`,
+        bullets: [
+          "Exterior logo and brand colours in one or more print colours.",
+          "Kraft or white base to match your brand's look.",
+          `Sizes and formats, including <a href="/bubble-mailer-bags/">bubble mailer bags</a> for fast-packing operations.`,
+        ],
+      },
+      {
+        heading: "Getting started on a bulk program",
+        html: `<p>Branded mailers make the most sense as a repeatable program rather than a one-off. Settle your sizes first, choose kraft or white, then add print. If you have not locked your formats yet, start with our guide to <a href="/blog/how-to-choose-bubble-mailer-size/">choosing the right bubble mailer size</a> before committing to a printed run.</p>`,
+      },
+    ],
+    faq: [
+      ["Is there a minimum order for custom printed bubble mailers?", "Custom printed mailers are typically produced as bulk programs, and minimums vary by size and print requirements. Request a quote with your size, quantity, and print details for exact pricing and lead times."],
+      ["Can I print on both kraft and white bubble mailers?", "Yes. Both kraft and white bubble mailers can be custom printed. White gives brighter, more accurate colour reproduction, while kraft gives a natural look that suits eco and artisan branding."],
+    ],
+    related: ["how-to-choose-bubble-mailer-size", "kraft-vs-white-bubble-mailers"],
+  },
+];
+
+const blogPostBySlug = new Map(blogPosts.map((post) => [post.slug, post]));
+
+const blogPostingSchema = (post) => ({
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.title,
+  description: post.metaDescription,
+  image: imageAbsoluteUrl(pickAsset(post.image, 0).url),
+  datePublished: post.date,
+  dateModified: post.date,
+  author: { "@type": "Organization", name: site.brand },
+  publisher: { "@type": "Organization", name: site.brand, url: site.domain },
+  mainEntityOfPage: absoluteUrl(`/blog/${post.slug}/`),
+});
+
+const renderBlogSectionBody = (section) => `
+  ${section.html}
+  ${section.bullets ? `<ul class="content-list">${section.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
+`;
+
+const renderRelatedBlog = (post) => {
+  const items = post.related.map((slug) => blogPostBySlug.get(slug)).filter(Boolean);
+  if (!items.length) return "";
+  return `
+    <section class="section">
+      <div class="container">
+        <h2>Keep reading</h2>
+        <div class="card-grid">
+          ${items
+            .map(
+              (item) => `<a class="content-card content-card-link" href="/blog/${item.slug}/">
+            <span class="eyebrow">${item.category}</span>
+            <h3>${item.title}</h3>
+          </a>`
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>
+  `;
+};
+
+const renderBlogPost = (post) => {
+  const breadcrumbs = [
+    { href: "/", label: "Home" },
+    { href: "/blog/", label: "Blog" },
+    { href: `/blog/${post.slug}/`, label: post.title },
+  ];
+  const body = `
+    ${renderStandardPageHero({
+      eyebrow: post.category,
+      title: post.title,
+      description: post.intro,
+      image: pickAsset(post.image, 0),
+      ctas: [
+        { href: "/custom-bubble-mailers/", label: "Get Free Quote", primary: true },
+        { href: "/products/", label: "View Products" },
+      ],
+    })}
+    ${post.sections
+      .map(
+        (section, index) => `
+    <section class="section${index % 2 ? " section-muted" : ""}">
+      <div class="container">
+        <div class="content-card content-flow">
+          <h2>${section.heading}</h2>
+          ${renderBlogSectionBody(section)}
+        </div>
+      </div>
+    </section>`
+      )
+      .join("")}
+    <section class="section section-muted">
+      <div class="container">
+        <div class="content-card content-flow">
+          <h2>Frequently asked questions</h2>
+          ${renderFaqList(post.faq)}
+        </div>
+      </div>
+    </section>
+    ${renderRelatedBlog(post)}
+  `;
+  return buildPage({
+    routePath: `/blog/${post.slug}/`,
+    title: post.title,
+    metaTitle: post.metaTitle,
+    metaDescription: post.metaDescription,
+    heroImage: pickAsset(post.image, 0).url,
+    body,
+    breadcrumbs,
+    schemas: [faqSchema(post.faq), blogPostingSchema(post)],
+  });
+};
+
+const renderBlogIndex = () => {
+  const breadcrumbs = [
+    { href: "/", label: "Home" },
+    { href: "/blog/", label: "Blog" },
+  ];
+  const cards = [...blogPosts]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map(
+      (post) => `<a class="content-card content-card-link" href="/blog/${post.slug}/">
+        <span class="eyebrow">${post.category}</span>
+        <h3>${post.title}</h3>
+        <p>${post.metaDescription}</p>
+        <span class="card-meta">${post.readTime}</span>
+      </a>`
+    )
+    .join("");
+  const body = `
+    ${renderStandardPageHero({
+      eyebrow: "Bubble Mailer Blog",
+      title: "Guides for packing and shipping smarter",
+      description: "Practical guides on choosing bubble mailer sizes, kraft vs white, and branding your shipping with custom printed mailers.",
+      image: pickAsset("generic", 1),
+      ctas: [
+        { href: "/products/", label: "View Products", primary: true },
+        { href: "/custom-bubble-mailers/", label: "Custom Mailers" },
+      ],
+    })}
+    <section class="section">
+      <div class="container">
+        <div class="card-grid">${cards}</div>
+      </div>
+    </section>
+  `;
+  return buildPage({
+    routePath: "/blog/",
+    title: "Bubble Mailer Blog",
+    metaTitle: "Bubble Mailer Blog | Guides on Sizes, Kraft vs White & Branding",
+    metaDescription: "Practical bubble mailer guides — how to choose sizes, kraft vs white mailers, and custom printed mailers for branded shipping.",
+    heroImage: pickAsset("generic", 1).url,
+    body,
+    breadcrumbs,
+  });
+};
+
+writeRoute("/blog/", renderBlogIndex());
+blogPosts.forEach((post) => writeRoute(`/blog/${post.slug}/`, renderBlogPost(post)));
+
 writeRoute("/sitemap/", renderSitemapPage());
 
 writeStaticAsset(
