@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { locationStates } = require("./locations-data.js");
 
 const rootDir = __dirname;
 const srcDir = path.join(rootDir, "src");
@@ -1003,7 +1004,7 @@ const navLinks = [
   { href: "/custom-bubble-mailers/", label: "Custom" },
   { href: "/kraft-bubble-mailers/", label: "Kraft" },
   { href: "/white-bubble-mailers/", label: "White" },
-  { href: "/bubble-mailer-packaging/", label: "Packaging" }
+  { href: "/locations/", label: "Locations" }
 ];
 
 const siteRoutes = [];
@@ -1181,6 +1182,31 @@ const renderHeader = (currentPath) => `
                 </div>
               `;
             }
+            if (link.label === "Locations") {
+              return `
+                <div class="nav-item nav-item-dropdown">
+                  <button class="nav-dropdown-toggle" type="button" data-products-toggle aria-expanded="${currentPath === "/locations/" ? "true" : "false"}" aria-haspopup="true">
+                    <span>${link.label}</span>
+                    ${iconSvg("spark", "nav-caret")}
+                  </button>
+                  <div class="nav-dropdown-menu" data-products-menu>
+                    <a class="nav-dropdown-overview" href="/locations/"${currentPath === "/locations/" ? ' aria-current="page"' : ""}>All USA locations</a>
+                    <div class="nav-dropdown-grid">
+                      ${locationStates
+                        .map(
+                          (state) => `
+                            <a href="/locations/${state.slug}/"${currentPath === `/locations/${state.slug}/` ? ' aria-current="page"' : ""}>
+                              <span class="nav-dropdown-title">${state.name}</span>
+                              <span class="nav-dropdown-meta">${state.cities.length} cities</span>
+                            </a>
+                          `
+                        )
+                        .join("")}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
             return `<a href="${link.href}"${currentPath === link.href ? ' aria-current="page"' : ""}>${link.label}</a>`;
           })
           .join("")}
@@ -1216,6 +1242,7 @@ const renderFooter = () => `
             <li><a href="/about-us/">About Us</a></li>
             <li><a href="/products/">Products</a></li>
             <li><a href="/blog/">Blog</a></li>
+            <li><a href="/locations/">USA Locations</a></li>
             <li><a href="/contact-us/">Contact Us</a></li>
             <li><a href="/sitemap/">Sitemap</a></li>
           </ul>
@@ -2551,7 +2578,12 @@ const renderSitemapPage = () => {
 
   const contentLinks = [
     ...mainPages.filter((page) => page.slug && page.slug !== "sitemap").map((page) => ({ label: page.title, href: `/${page.slug}/` })),
-    ...products.map((product) => ({ label: product.name, href: `/${product.slug}/` }))
+    ...products.map((product) => ({ label: product.name, href: `/${product.slug}/` })),
+    { label: "USA Locations", href: "/locations/" },
+    ...locationStates.flatMap((state) => [
+      { label: `Bubble Mailers in ${state.name}`, href: `/locations/${state.slug}/` },
+      ...state.cities.map((city) => ({ label: `Bubble Mailers in ${city.name}, ${state.abbr}`, href: `/locations/${state.slug}/${city.slug}/` }))
+    ])
   ];
 
   const body = `
@@ -3047,6 +3079,379 @@ const renderBlogIndex = () => {
 
 writeRoute("/blog/", renderBlogIndex());
 blogPosts.forEach((post) => writeRoute(`/blog/${post.slug}/`, renderBlogPost(post)));
+
+// ── USA STATE + CITY LOCATION PAGES ──
+const resolveFeatured = (slugs) => slugs.map((s) => productsBySlug.get(s)).filter(Boolean);
+const productLink = (slug, textOverride) => {
+  const product = productsBySlug.get(slug);
+  if (!product) return textOverride || slug;
+  return `<a href="/${product.slug}/">${textOverride || product.name.toLowerCase()}</a>`;
+};
+const locationPick = (seedText, arr, offset = 0) => {
+  const seed = seedText.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  return arr[(seed + offset) % arr.length];
+};
+const locationCardGrid = (cards) => `
+  <div class="product-grid">
+    ${cards
+      .map(
+        (card) => `
+      <article class="product-card">
+        <img src="${card.image.url}" alt="${card.alt}" loading="lazy" width="1080" height="1080">
+        <div>
+          <h3><a href="${card.href}">${card.title}</a></h3>
+          <p>${card.desc}</p>
+        </div>
+        <div class="button-row">
+          <a class="button button-primary button-small" href="${card.href}">${card.cta}</a>
+        </div>
+      </article>
+    `
+      )
+      .join("")}
+  </div>
+`;
+const districtTags = (districts) => `
+  <div class="button-row" style="flex-wrap:wrap;gap:8px">
+    ${districts.map((d) => `<span class="button button-outline button-small" style="cursor:default">${d}</span>`).join("")}
+  </div>
+`;
+const industryList = (industries) => `
+  <ul class="text-columns">
+    ${industries.map((item) => `<li>${item}</li>`).join("")}
+  </ul>
+`;
+
+const renderCityPage = (state, city) => {
+  const routePath = `/locations/${state.slug}/${city.slug}/`;
+  const featured = resolveFeatured(city.featuredProducts);
+  const heroImage = pickAsset("generic", city.slug.length);
+  const breadcrumbs = [
+    { href: "/", label: "Home" },
+    { href: "/locations/", label: "Locations" },
+    { href: `/locations/${state.slug}/`, label: state.name },
+    { href: routePath, label: city.name }
+  ];
+  const siblingCities = state.cities.filter((c) => c.slug !== city.slug);
+
+  const answerHeading = locationPick(city.slug, [
+    `Bubble Mailers in ${city.name}`,
+    `Bulk & Custom Bubble Mailers for ${city.name}`,
+    `${city.name} Bubble Mailer Supply`
+  ]);
+  const whyHeading = locationPick(city.slug, [
+    `Delivery & Supply to ${city.name}`,
+    `Getting Bubble Mailers to ${city.name}`,
+    `Supplying ${city.name} Businesses`
+  ], 1);
+
+  const cityFaqs = [
+    [`Do you supply bubble mailers to ${city.name}?`, city.faqCityAnswer],
+    [`What is the minimum order for ${city.name} businesses?`, `Our minimums stay low so small ${city.name} sellers can order without committing to huge volumes, and bulk pricing kicks in as your quantities grow. Tell us your target quantity and we will confirm pricing.`],
+    [`Can I get custom printed bubble mailers in ${city.name}?`, `Yes. Alongside plain stock, we offer <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> with your logo, colors, and return details for a branded unboxing experience.`],
+    [`What sizes of bubble mailers do you offer?`, `We stock the full range of standard sizes, from compact 4x6 mailers up to large formats, plus numbered mailers. If you are unsure which size suits your product, our team can advise.`],
+    [`How fast can I get a quote?`, `We typically respond to quote requests within 1-2 hours during business hours with pricing and supply guidance for your ${city.name} shipping program.`]
+  ];
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `Bubble Mailer Supply — ${city.name}, ${state.abbr}`,
+    serviceType: "Bulk and custom bubble mailer supply",
+    description: city.metaDescription,
+    url: absoluteUrl(routePath),
+    provider: { "@type": "Organization", name: site.brand, url: site.domain },
+    areaServed: {
+      "@type": "City",
+      name: city.name,
+      containedInPlace: { "@type": "State", name: `${state.name}, USA` }
+    }
+  };
+
+  const body = `
+    ${renderStandardPageHero({
+      eyebrow: `${state.name} · USA`,
+      title: city.h1,
+      description: city.intro,
+      image: heroImage,
+      ctas: [
+        { href: "#quote-form", label: "Get Free Quote", primary: true },
+        { href: `/locations/${state.slug}/`, label: `All ${state.name} Locations` }
+      ]
+    })}
+    <section class="section">
+      <div class="container content-card content-flow">
+        <h2>${answerHeading}</h2>
+        <p>Shop Bubble Mailers supplies bulk and custom padded bubble mailers to businesses across ${city.name} and the wider ${state.name} market. Every order can be printed to your brand or shipped plain, protecting compact goods without adding freight weight. A popular choice for ${city.name} ${city.signatureSector} sellers is our ${productLink(city.featuredProducts[0])}, kept in stock for fast bulk supply.</p>
+        <p><strong>Why ${city.name} sellers order from us:</strong> low minimums, bulk pricing, custom print options, fast quote turnaround, and reliable supply for repeat orders.</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container split-grid">
+        <div class="content-card content-flow">
+          <h2>${city.sceneHeading}</h2>
+          <p>${city.localScene}</p>
+          <p>Whatever you ship across ${city.name}, the right padded mailer keeps it protected and presentable. Our ${productLink(city.featuredProducts[1])} suits the way ${city.name} businesses pack and ship.</p>
+          <h3>Areas We Serve in ${city.name}</h3>
+          ${districtTags(city.districts)}
+        </div>
+        ${renderQuoteForm(`Bubble Mailers — ${city.name}, ${state.abbr}`)}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Popular in ${city.name}</span>
+          <h2>Bubble Mailers ${city.name} Businesses Order Most</h2>
+        </div>
+        ${renderProductCards(featured)}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container content-card content-flow">
+        <h2>${whyHeading}</h2>
+        <p>${city.deliveryNote}</p>
+        <p>Businesses right across ${state.name} rely on us for consistent supply — see our full ${`<a href="/locations/${state.slug}/">${state.name} bubble mailer page</a>`} for statewide coverage and other cities we serve.</p>
+      </div>
+    </section>
+    ${
+      siblingCities.length > 0
+        ? `<section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Also Serving</span>
+          <h2>Other ${state.name} Cities We Supply</h2>
+        </div>
+        ${locationCardGrid(
+          siblingCities.map((c, i) => ({
+            href: `/locations/${state.slug}/${c.slug}/`,
+            title: `${c.name}, ${state.abbr}`,
+            desc: c.intro.slice(0, 90) + "…",
+            cta: `Bubble mailers in ${c.name}`,
+            alt: `${c.name} bubble mailers`,
+            image: pickAsset("plain", i + 1)
+          }))
+        )}
+      </div>
+    </section>`
+        : ""
+    }
+    <section class="section">
+      <div class="container content-card content-flow">
+        <div class="section-heading">
+          <span class="eyebrow">FAQs</span>
+          <h2>${city.name} Bubble Mailers — FAQs</h2>
+        </div>
+        ${renderFaqList(cityFaqs)}
+      </div>
+    </section>
+  `;
+
+  return buildPage({
+    routePath,
+    title: city.h1,
+    metaTitle: city.metaTitle,
+    metaDescription: city.metaDescription,
+    heroImage: heroImage.url,
+    body,
+    breadcrumbs,
+    schemas: [serviceSchema, faqSchema(cityFaqs)]
+  });
+};
+
+const renderStatePage = (state) => {
+  const routePath = `/locations/${state.slug}/`;
+  const featured = resolveFeatured(state.featuredProducts);
+  const heroImage = pickAsset("bulk500", state.slug.length % 3);
+  const breadcrumbs = [
+    { href: "/", label: "Home" },
+    { href: "/locations/", label: "Locations" },
+    { href: routePath, label: state.name }
+  ];
+
+  const stateFaqs = [
+    [`Do you supply bubble mailers across ${state.name}?`, `Yes. We supply bulk and custom bubble mailers to businesses across ${state.name}, including ${state.cities.map((c) => c.name).join(", ")}. Request a quote with your size and quantity for pricing.`],
+    [`What is the minimum order?`, `Minimums stay low so smaller ${state.name} businesses can order comfortably, with bulk pricing as volumes grow. Share your target quantity for a tailored quote.`],
+    [`Do you offer custom printed bubble mailers?`, `Yes — we offer <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> with your logo and colors, as well as plain stock in kraft and white.`],
+    [`How fast is your quote response?`, `We typically reply within 1-2 hours during business hours with pricing and supply guidance for your ${state.name} program.`]
+  ];
+
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `Bubble Mailers in ${state.name}`,
+    url: absoluteUrl(routePath),
+    description: state.metaDescription,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: state.cities.map((c, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: `Bubble Mailers in ${c.name}`,
+        url: absoluteUrl(`/locations/${state.slug}/${c.slug}/`)
+      }))
+    }
+  };
+
+  const body = `
+    ${renderStandardPageHero({
+      eyebrow: `USA · ${state.abbr}`,
+      title: state.h1,
+      description: state.intro,
+      image: heroImage,
+      ctas: [
+        { href: "#quote-form", label: "Get Free Quote", primary: true },
+        { href: "/locations/", label: "All USA Locations" }
+      ]
+    })}
+    <section class="section">
+      <div class="container split-grid">
+        <div class="content-card content-flow">
+          <h2>${state.sceneHeading}</h2>
+          <p>${state.marketScene}</p>
+          <p>Across every industry here, a padded mailer that ships light keeps costs down — our ${productLink(state.featuredProducts[0])} is a popular choice for ${state.name} shippers.</p>
+        </div>
+        ${renderQuoteForm(`Bubble Mailers — ${state.name}`)}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container content-card content-flow">
+        <div class="section-heading">
+          <span class="eyebrow">Who We Supply</span>
+          <h2>${state.name} Businesses We Print For</h2>
+        </div>
+        ${industryList(state.industries)}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Cities</span>
+          <h2>Bubble Mailers by City in ${state.name}</h2>
+        </div>
+        ${locationCardGrid(
+          state.cities.map((c, i) => ({
+            href: `/locations/${state.slug}/${c.slug}/`,
+            title: `${c.name}, ${state.abbr}`,
+            desc: c.intro.slice(0, 90) + "…",
+            cta: `Bubble mailers in ${c.name}`,
+            alt: `${c.name} bubble mailers`,
+            image: pickAsset("generic", i + 2)
+          }))
+        )}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Popular Products</span>
+          <h2>Bubble Mailers ${state.name} Businesses Order Most</h2>
+        </div>
+        ${renderProductCards(featured)}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container content-card content-flow">
+        <div class="section-heading">
+          <span class="eyebrow">FAQs</span>
+          <h2>${state.name} Bubble Mailers — FAQs</h2>
+        </div>
+        ${renderFaqList(stateFaqs)}
+      </div>
+    </section>
+  `;
+
+  return buildPage({
+    routePath,
+    title: state.h1,
+    metaTitle: state.metaTitle,
+    metaDescription: state.metaDescription,
+    heroImage: heroImage.url,
+    body,
+    breadcrumbs,
+    schemas: [collectionSchema, faqSchema(stateFaqs)]
+  });
+};
+
+const renderLocationsHub = () => {
+  const routePath = "/locations/";
+  const heroImage = pickAsset("bulk500", 0);
+  const breadcrumbs = [
+    { href: "/", label: "Home" },
+    { href: "/locations/", label: "Locations" }
+  ];
+  const totalCities = locationStates.reduce((sum, s) => sum + s.cities.length, 0);
+
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "USA Delivery Locations — Shop Bubble Mailers",
+    itemListElement: locationStates.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: `Bubble Mailers in ${s.name}`,
+      url: absoluteUrl(`/locations/${s.slug}/`)
+    }))
+  };
+
+  const body = `
+    ${renderStandardPageHero({
+      eyebrow: "USA Delivery",
+      title: "Bubble Mailers Supplied Across the USA",
+      description: `We supply bulk and custom bubble mailers to businesses in every corner of the country — from California DTC brands to New York resellers. Browse ${locationStates.length} states and ${totalCities} cities, or request a free quote to get started.`,
+      image: heroImage,
+      ctas: [
+        { href: "#quote-form", label: "Get Free Quote", primary: true },
+        { href: "/products/", label: "Browse Products" }
+      ]
+    })}
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">By State</span>
+          <h2>Find Bubble Mailers in Your State</h2>
+        </div>
+        ${locationCardGrid(
+          locationStates.map((s, i) => ({
+            href: `/locations/${s.slug}/`,
+            title: `${s.name} (${s.abbr})`,
+            desc: `${s.stat}. Serving ${s.cities.map((c) => c.name).join(", ")}.`,
+            cta: `Bubble mailers in ${s.name}`,
+            alt: `${s.name} bubble mailers`,
+            image: pickAsset("generic", i)
+          }))
+        )}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container split-grid">
+        <div class="content-card content-flow">
+          <h2>Nationwide Bubble Mailer Supply</h2>
+          <p>Wherever your business ships from, Shop Bubble Mailers keeps you stocked with padded mailers that seal fast, protect compact goods, and ship light. We supply plain kraft and white stock as well as ${`<a href="/custom-bubble-mailers/">custom printed bubble mailers</a>`} with your branding, all at bulk pricing.</p>
+          <p>Don't see your city listed yet? We ship nationwide — tell us where you are and what you send, and we'll get you a quote.</p>
+        </div>
+        ${renderQuoteForm("Bubble Mailers — USA")}
+      </div>
+    </section>
+  `;
+
+  return buildPage({
+    routePath,
+    title: "USA Delivery Locations",
+    metaTitle: "Bubble Mailers Across the USA | State & City Supply | Shop Bubble Mailers",
+    metaDescription: "Shop Bubble Mailers supplies bulk and custom bubble mailers to businesses across the USA — browse locations by state and city, or request a free quote.",
+    heroImage: heroImage.url,
+    body,
+    breadcrumbs,
+    schemas: [itemListSchema]
+  });
+};
+
+writeRoute("/locations/", renderLocationsHub());
+locationStates.forEach((state) => {
+  writeRoute(`/locations/${state.slug}/`, renderStatePage(state));
+  state.cities.forEach((city) => writeRoute(`/locations/${state.slug}/${city.slug}/`, renderCityPage(state, city)));
+});
 
 writeRoute("/sitemap/", renderSitemapPage());
 
