@@ -3082,6 +3082,36 @@ blogPosts.forEach((post) => writeRoute(`/blog/${post.slug}/`, renderBlogPost(pos
 
 // ── USA STATE + CITY LOCATION PAGES ──
 const resolveFeatured = (slugs) => slugs.map((s) => productsBySlug.get(s)).filter(Boolean);
+
+// ── Varied internal linking: unique target + anchor + sentence per page ──
+const MAILER_LINKS = [
+  { slug: "kraft-bubble-mailer", a: ["kraft bubble mailers", "natural kraft mailers", "recyclable kraft mailers"] },
+  { slug: "bubble-mailer-white", a: ["white bubble mailers", "clean white mailers", "white padded mailers"] },
+  { slug: "4x6-bubble-mailer", a: ["4x6 bubble mailers", "compact 4x6 mailers"] },
+  { slug: "8-5-x-12-bubble-mailer", a: ["8.5 x 12 bubble mailers", "mid-size 8.5x12 mailers"] },
+  { slug: "7x9-bubble-mailer", a: ["7x9 bubble mailers", "7x9 padded mailers"] },
+  { slug: "12x15-bubble-mailer", a: ["12x15 bubble mailers", "large 12x15 mailers"] },
+  { slug: "bubble-mailer-bags", a: ["bubble mailer bags", "padded mailer bags"] },
+  { slug: "bubble-mailer-packaging", a: ["bubble mailer packaging", "padded mailer packaging"] },
+  { slug: "custom-bubble-mailers", a: ["custom printed bubble mailers", "branded bubble mailers", "logo-printed mailers"] },
+  { slug: "kraft-bubble-mailers", a: ["our kraft bubble mailer range", "kraft mailer options"] },
+  { slug: "white-bubble-mailers", a: ["our white bubble mailer range", "white mailer options"] },
+];
+const seedNum = (t) => { let h = 2166136261; for (let i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619); } return Math.abs(h | 0); };
+const shufflePool = (pool, seedText) => {
+  const arr = [...pool]; let a = seedNum(seedText) || 1;
+  const rand = () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]]; }
+  return arr;
+};
+// Returns { href, text } for slot `idx` of a page's shuffled link pool.
+const varLink = (seedText, idx, off = 0) => {
+  const pool = shufflePool(MAILER_LINKS, seedText);
+  const e = pool[idx % pool.length];
+  return { href: `/${e.slug}/`, text: e.a[(seedNum(seedText) + off) % e.a.length] };
+};
+const varPick = (seedText, arr, off = 0) => arr[(seedNum(seedText) + off) % arr.length];
+
 const productLink = (slug, textOverride) => {
   const product = productsBySlug.get(slug);
   if (!product) return textOverride || slug;
@@ -3134,6 +3164,22 @@ const renderCityPage = (state, city) => {
   ];
   const siblingCities = state.cities.filter((c) => c.slug !== city.slug);
 
+  // Varied internal links — unique target, anchor and sentence per city page.
+  const cSeed = city.slug + state.slug;
+  const cL0 = varLink(cSeed, 0, 0);
+  const cL1 = varLink(cSeed, 1, 1);
+  const cL2 = varLink(cSeed, 2, 2);
+  const cAns = varPick(cSeed, [
+    `A popular pick for ${city.name} ${city.signatureSector} sellers is our ${cL0.text ? `<a href="${cL0.href}">${cL0.text}</a>` : ""}, kept in stock for fast bulk supply.`,
+    `${city.name} sellers often start with our <a href="${cL0.href}">${cL0.text}</a> and scale up from there.`,
+    `For ${city.signatureSector} shipments, ${city.name} teams reach for our <a href="${cL0.href}">${cL0.text}</a>.`,
+  ]);
+  const cScene = varPick(cSeed, [
+    `Whatever you ship across ${city.name}, the right padded mailer keeps it protected and presentable. Our <a href="${cL1.href}">${cL1.text}</a> suit the way ${city.name} businesses pack and ship.`,
+    `To keep ${city.name} orders snug and light, sellers rely on our <a href="${cL1.href}">${cL1.text}</a>.`,
+    `Our <a href="${cL1.href}">${cL1.text}</a> are a natural fit for the pace of ${city.name} fulfillment.`,
+  ], 1);
+
   const answerHeading = locationPick(city.slug, [
     `Bubble Mailers in ${city.name}`,
     `Bulk & Custom Bubble Mailers for ${city.name}`,
@@ -3148,7 +3194,7 @@ const renderCityPage = (state, city) => {
   const cityFaqs = [
     [`Do you supply bubble mailers to ${city.name}?`, city.faqCityAnswer],
     [`What is the minimum order for ${city.name} businesses?`, `Our minimums stay low so small ${city.name} sellers can order without committing to huge volumes, and bulk pricing kicks in as your quantities grow. Tell us your target quantity and we will confirm pricing.`],
-    [`Can I get custom printed bubble mailers in ${city.name}?`, `Yes. Alongside plain stock, we offer <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> with your logo, colors, and return details for a branded unboxing experience.`],
+    [`Can I get custom printed bubble mailers in ${city.name}?`, `Yes. Alongside plain stock, we offer custom printed bubble mailers with your logo, colors, and return details for a branded unboxing experience.`],
     [`What sizes of bubble mailers do you offer?`, `We stock the full range of standard sizes, from compact 4x6 mailers up to large formats, plus numbered sizes #000 through #7. If you are unsure which size suits your product, our team can advise.`],
     [`How do I choose the right bubble mailer size for my product?`, `Measure your product's length and width, then add a little room for the padded lining. A snug fit protects contents and keeps postage low. Our size guide above maps the common numbered sizes to typical products, and we are glad to recommend a size for your ${city.name} shipments.`],
     [`What's the difference between kraft and poly bubble mailers?`, `Kraft bubble mailers have a natural paper exterior with a recyclable, eco-friendly look, while poly (white or colored) mailers are lightweight, water-resistant, and give a clean, modern finish. Both are bubble-lined for protection; the choice usually comes down to brand look and whether moisture resistance matters.`],
@@ -3187,7 +3233,7 @@ const renderCityPage = (state, city) => {
     <section class="section">
       <div class="container content-card content-flow">
         <h2>${answerHeading}</h2>
-        <p>Shop Bubble Mailers supplies bulk and custom padded bubble mailers to businesses across ${city.name} and the wider ${state.name} market. Every order can be printed to your brand or shipped plain, protecting compact goods without adding freight weight. A popular choice for ${city.name} ${city.signatureSector} sellers is our ${productLink(city.featuredProducts[0])}, kept in stock for fast bulk supply.</p>
+        <p>Shop Bubble Mailers supplies bulk and custom padded bubble mailers to businesses across ${city.name} and the wider ${state.name} market. Every order can be printed to your brand or shipped plain, protecting compact goods without adding freight weight. ${cAns}</p>
         <p><strong>Why ${city.name} sellers order from us:</strong> low minimums, bulk pricing, custom print options, fast quote turnaround, and reliable supply for repeat orders.</p>
       </div>
     </section>
@@ -3196,7 +3242,7 @@ const renderCityPage = (state, city) => {
         <div class="content-card content-flow">
           <h2>${city.sceneHeading}</h2>
           <p>${city.localScene}</p>
-          <p>Whatever you ship across ${city.name}, the right padded mailer keeps it protected and presentable. Our ${productLink(city.featuredProducts[1])} suits the way ${city.name} businesses pack and ship.</p>
+          <p>${cScene}</p>
           <h3>Areas We Serve in ${city.name}</h3>
           ${districtTags(city.districts)}
         </div>
@@ -3311,10 +3357,24 @@ const renderStatePage = (state) => {
     { href: routePath, label: state.name }
   ];
 
+  // Varied internal links — unique targets, anchors and sentences per state page.
+  const sL0 = varLink("state-" + state.slug, 0, 0);
+  const sL1 = varLink("state-" + state.slug, 1, 1);
+  const sScene = varPick("state-" + state.slug, [
+    `Across every industry here, a padded mailer that ships light keeps costs down — our <a href="${sL0.href}">${sL0.text}</a> are a popular choice for ${state.name} shippers.`,
+    `Whatever ${state.name} businesses send, our <a href="${sL0.href}">${sL0.text}</a> keep it protected without adding weight.`,
+    `From small parcels to bulk runs, ${state.name} sellers reach for our <a href="${sL0.href}">${sL0.text}</a>.`,
+  ]);
+  const sWho = varPick("state-" + state.slug, [
+    `We print for the full range of ${state.name} shippers — many start with our <a href="${sL1.href}">${sL1.text}</a> and add sizes as they grow.`,
+    `From solo sellers to 3PLs, ${state.name} businesses of every size order from us, including our <a href="${sL1.href}">${sL1.text}</a>.`,
+    `Whatever you pack in ${state.name}, there's a fit — our <a href="${sL1.href}">${sL1.text}</a> included.`,
+  ], 2);
+
   const stateFaqs = [
     [`Do you supply bubble mailers across ${state.name}?`, `Yes. We supply bulk and custom bubble mailers to businesses across ${state.name}, including ${state.cities.map((c) => c.name).join(", ")} and surrounding areas. Request a quote with your size and quantity for pricing.`],
     [`What is the minimum order?`, `Minimums stay low so smaller ${state.name} businesses can order comfortably, with bulk pricing as volumes grow. Share your target quantity for a tailored quote.`],
-    [`Do you offer custom printed bubble mailers?`, `Yes — we offer <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> with your logo and colors, as well as plain stock in kraft and white.`],
+    [`Do you offer custom printed bubble mailers?`, `Yes — we offer custom printed bubble mailers with your logo and colors, as well as plain stock in kraft and white.`],
     [`What bubble mailer sizes do you carry?`, `We carry the full range of numbered sizes from #000 (4 x 8 in) up to #7 (14.25 x 20 in), plus common cut sizes like 4x6 and 8.5x12. Most ${state.name} sellers keep one or two core sizes and add others as their product range grows.`],
     [`Kraft or poly bubble mailers — which should I choose?`, `Kraft mailers offer a natural, recyclable paper look, while poly mailers are lightweight and water-resistant with a clean finish. Both are bubble-lined for protection, so the choice usually comes down to brand appearance and whether you need moisture resistance.`],
     [`Are bubble mailers strong enough for fragile items?`, `Yes. The air-bubble lining cushions contents against knocks in transit, which is why ${state.name} sellers use them for cosmetics, electronics, jewelry, and other delicate goods. We can advise on size and padding for heavier items.`],
@@ -3357,7 +3417,7 @@ const renderStatePage = (state) => {
         <div class="content-card content-flow">
           <h2>${state.sceneHeading}</h2>
           <p>${state.marketScene}</p>
-          <p>Across every industry here, a padded mailer that ships light keeps costs down — our ${productLink(state.featuredProducts[0])} is a popular choice for ${state.name} shippers.</p>
+          <p>${sScene}</p>
         </div>
         ${renderQuoteForm(`Bubble Mailers — ${state.name}`)}
       </div>
@@ -3368,6 +3428,7 @@ const renderStatePage = (state) => {
           <span class="eyebrow">Who We Supply</span>
           <h2>${state.name} Businesses We Print For</h2>
         </div>
+        <p>${sWho}</p>
         ${industryList(state.industries)}
       </div>
     </section>
