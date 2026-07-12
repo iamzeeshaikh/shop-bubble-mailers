@@ -1930,3 +1930,9 @@ textarea {
     min-height: 300px;
   }
 }
+
+/* Location page value grid */
+.loc-value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 8px; }
+.loc-value-grid h3 { font-size: 1.02rem; margin-bottom: 6px; }
+@media (max-width: 900px) { .loc-value-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .loc-value-grid { grid-template-columns: 1fr; } }

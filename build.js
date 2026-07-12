@@ -3149,8 +3149,13 @@ const renderCityPage = (state, city) => {
     [`Do you supply bubble mailers to ${city.name}?`, city.faqCityAnswer],
     [`What is the minimum order for ${city.name} businesses?`, `Our minimums stay low so small ${city.name} sellers can order without committing to huge volumes, and bulk pricing kicks in as your quantities grow. Tell us your target quantity and we will confirm pricing.`],
     [`Can I get custom printed bubble mailers in ${city.name}?`, `Yes. Alongside plain stock, we offer <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> with your logo, colors, and return details for a branded unboxing experience.`],
-    [`What sizes of bubble mailers do you offer?`, `We stock the full range of standard sizes, from compact 4x6 mailers up to large formats, plus numbered mailers. If you are unsure which size suits your product, our team can advise.`],
-    [`How fast can I get a quote?`, `We typically respond to quote requests within 1-2 hours during business hours with pricing and supply guidance for your ${city.name} shipping program.`]
+    [`What sizes of bubble mailers do you offer?`, `We stock the full range of standard sizes, from compact 4x6 mailers up to large formats, plus numbered sizes #000 through #7. If you are unsure which size suits your product, our team can advise.`],
+    [`How do I choose the right bubble mailer size for my product?`, `Measure your product's length and width, then add a little room for the padded lining. A snug fit protects contents and keeps postage low. Our size guide above maps the common numbered sizes to typical products, and we are glad to recommend a size for your ${city.name} shipments.`],
+    [`What's the difference between kraft and poly bubble mailers?`, `Kraft bubble mailers have a natural paper exterior with a recyclable, eco-friendly look, while poly (white or colored) mailers are lightweight, water-resistant, and give a clean, modern finish. Both are bubble-lined for protection; the choice usually comes down to brand look and whether moisture resistance matters.`],
+    [`Are your bubble mailers padded enough to protect fragile items?`, `Every mailer is lined with air-bubble cushioning that absorbs shocks during transit, which is why sellers use them for electronics, cosmetics, jewelry, and other delicate goods. For heavier or highly fragile items, we can advise on the right size and padding level for your ${city.name} orders.`],
+    [`Can I order a mix of bubble mailer sizes in one order?`, `Yes. Many ${city.name} sellers run a mixed-size program to match different products, and we are happy to quote several sizes together. It is a common way to keep one supplier and one invoice while still fitting every order snugly.`],
+    [`Do you ship bulk bubble mailer quantities to ${city.name}?`, `Absolutely. Bulk is our specialty — we supply cartons and pallet quantities to ${city.name} sellers, fulfillment operations, and 3PLs, with per-unit pricing that drops as volume rises.`],
+    [`How fast can I get a quote and delivery?`, `We typically respond to quote requests within 1-2 hours during business hours with pricing and supply guidance, then ship your ${city.name} order on a reliable timeline. Share your size, quantity, and any print details to get started.`]
   ];
 
   const serviceSchema = {
@@ -3198,6 +3203,29 @@ const renderCityPage = (state, city) => {
         ${renderQuoteForm(`Bubble Mailers — ${city.name}, ${state.abbr}`)}
       </div>
     </section>
+    <section class="section" style="background:var(--color-bg-alt)">
+      <div class="container content-card content-flow">
+        <div class="section-heading">
+          <span class="eyebrow">Size Guide</span>
+          <h2>Bubble Mailer Sizes for ${city.name} Shippers</h2>
+        </div>
+        <p>Not sure which size fits your product? Here are the standard bubble mailer sizes we stock for ${city.name} businesses, with typical uses for each. Choosing a snug size protects the contents and keeps your postage weight down.</p>
+        <table>
+          <thead><tr><th>Size</th><th>Dimensions (in)</th><th>Commonly used for</th></tr></thead>
+          <tbody>
+            <tr><td>#000</td><td>4 x 8</td><td>Jewelry, cards, small parts, samples</td></tr>
+            <tr><td>#00</td><td>5 x 10</td><td>Cosmetics, small electronics, accessories</td></tr>
+            <tr><td>#0</td><td>6 x 10</td><td>Books, phone cases, small apparel</td></tr>
+            <tr><td>#1</td><td>7.25 x 12</td><td>Media, small boxed goods</td></tr>
+            <tr><td>#2</td><td>8.5 x 12</td><td>Clothing, tablets, folded apparel</td></tr>
+            <tr><td>#4</td><td>9.5 x 14.5</td><td>Shoes, bulkier soft goods</td></tr>
+            <tr><td>#5</td><td>10.5 x 16</td><td>Larger apparel and bundles</td></tr>
+            <tr><td>#7</td><td>14.25 x 20</td><td>Oversized soft goods</td></tr>
+          </tbody>
+        </table>
+        <p>Need help choosing? We recommend the right size for your ${city.signatureSector} shipments — just ask when you request a quote for ${city.name}.</p>
+      </div>
+    </section>
     <section class="section">
       <div class="container">
         <div class="section-heading">
@@ -3205,6 +3233,20 @@ const renderCityPage = (state, city) => {
           <h2>Bubble Mailers ${city.name} Businesses Order Most</h2>
         </div>
         ${renderProductCards(featured)}
+      </div>
+    </section>
+    <section class="section" style="background:var(--color-bg-alt)">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Why Buy Bulk</span>
+          <h2>Why ${city.name} Teams Order Bubble Mailers in Bulk</h2>
+        </div>
+        <div class="loc-value-grid">
+          <div class="content-card content-flow" style="padding:22px"><h3>Lower cost per unit</h3><p>Per-mailer pricing drops as your volume rises, so daily packers in ${city.name} keep packaging spend under control.</p></div>
+          <div class="content-card content-flow" style="padding:22px"><h3>Never run out mid-season</h3><p>Stocking cartons or pallets means your ${city.name} fulfillment keeps moving through peak periods without last-minute reorders.</p></div>
+          <div class="content-card content-flow" style="padding:22px"><h3>Consistent brand look</h3><p>Order the same size and print every time so every ${city.name} shipment arrives looking identical and on-brand.</p></div>
+          <div class="content-card content-flow" style="padding:22px"><h3>One supplier, one invoice</h3><p>Mixed-size bulk orders ship together, simplifying purchasing for ${city.name} sellers and 3PLs alike.</p></div>
+        </div>
       </div>
     </section>
     <section class="section">
@@ -3270,10 +3312,16 @@ const renderStatePage = (state) => {
   ];
 
   const stateFaqs = [
-    [`Do you supply bubble mailers across ${state.name}?`, `Yes. We supply bulk and custom bubble mailers to businesses across ${state.name}, including ${state.cities.map((c) => c.name).join(", ")}. Request a quote with your size and quantity for pricing.`],
+    [`Do you supply bubble mailers across ${state.name}?`, `Yes. We supply bulk and custom bubble mailers to businesses across ${state.name}, including ${state.cities.map((c) => c.name).join(", ")} and surrounding areas. Request a quote with your size and quantity for pricing.`],
     [`What is the minimum order?`, `Minimums stay low so smaller ${state.name} businesses can order comfortably, with bulk pricing as volumes grow. Share your target quantity for a tailored quote.`],
     [`Do you offer custom printed bubble mailers?`, `Yes — we offer <a href="/custom-bubble-mailers/">custom printed bubble mailers</a> with your logo and colors, as well as plain stock in kraft and white.`],
-    [`How fast is your quote response?`, `We typically reply within 1-2 hours during business hours with pricing and supply guidance for your ${state.name} program.`]
+    [`What bubble mailer sizes do you carry?`, `We carry the full range of numbered sizes from #000 (4 x 8 in) up to #7 (14.25 x 20 in), plus common cut sizes like 4x6 and 8.5x12. Most ${state.name} sellers keep one or two core sizes and add others as their product range grows.`],
+    [`Kraft or poly bubble mailers — which should I choose?`, `Kraft mailers offer a natural, recyclable paper look, while poly mailers are lightweight and water-resistant with a clean finish. Both are bubble-lined for protection, so the choice usually comes down to brand appearance and whether you need moisture resistance.`],
+    [`Are bubble mailers strong enough for fragile items?`, `Yes. The air-bubble lining cushions contents against knocks in transit, which is why ${state.name} sellers use them for cosmetics, electronics, jewelry, and other delicate goods. We can advise on size and padding for heavier items.`],
+    [`Can I order multiple sizes together?`, `Definitely. A mixed-size program lets you fit each product snugly while keeping one supplier and one invoice. We quote several sizes together for ${state.name} businesses all the time.`],
+    [`Do you ship bulk quantities statewide?`, `Yes — bulk is our focus. We supply cartons and pallet quantities to sellers, fulfillment centers, and 3PLs across ${state.name}, with per-unit pricing that improves as volume rises.`],
+    [`Do you provide samples or a proof for custom orders?`, `For custom printed orders we confirm your artwork and provide a digital proof before production, so your ${state.name} branding lands exactly as intended.`],
+    [`How fast is your quote response and delivery?`, `We typically reply within 1-2 hours during business hours with pricing and supply guidance, then ship your ${state.name} order on a reliable timeline.`]
   ];
 
   const collectionSchema = {
@@ -3321,6 +3369,27 @@ const renderStatePage = (state) => {
           <h2>${state.name} Businesses We Print For</h2>
         </div>
         ${industryList(state.industries)}
+      </div>
+    </section>
+    <section class="section" style="background:var(--color-bg-alt)">
+      <div class="container content-card content-flow">
+        <div class="section-heading">
+          <span class="eyebrow">Size Guide</span>
+          <h2>Bubble Mailer Sizes for ${state.name} Businesses</h2>
+        </div>
+        <p>We stock the full range of standard bubble mailer sizes for ${state.name} sellers, from compact jewelry mailers to oversized apparel formats. Here are the common numbered sizes and what they are typically used for.</p>
+        <table>
+          <thead><tr><th>Size</th><th>Dimensions (in)</th><th>Commonly used for</th></tr></thead>
+          <tbody>
+            <tr><td>#000</td><td>4 x 8</td><td>Jewelry, cards, small parts, samples</td></tr>
+            <tr><td>#00</td><td>5 x 10</td><td>Cosmetics, small electronics, accessories</td></tr>
+            <tr><td>#0</td><td>6 x 10</td><td>Books, phone cases, small apparel</td></tr>
+            <tr><td>#2</td><td>8.5 x 12</td><td>Clothing, tablets, folded apparel</td></tr>
+            <tr><td>#4</td><td>9.5 x 14.5</td><td>Shoes, bulkier soft goods</td></tr>
+            <tr><td>#5</td><td>10.5 x 16</td><td>Larger apparel and bundles</td></tr>
+            <tr><td>#7</td><td>14.25 x 20</td><td>Oversized soft goods</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
     <section class="section">
