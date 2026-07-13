@@ -1936,3 +1936,10 @@ textarea {
 .loc-value-grid h3 { font-size: 1.02rem; margin-bottom: 6px; }
 @media (max-width: 900px) { .loc-value-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .loc-value-grid { grid-template-columns: 1fr; } }
+
+/* Mobile-friendly tables: constrain on desktop, scroll on small screens */
+.content-flow table { width: 100%; border-collapse: collapse; }
+@media (max-width: 600px) {
+  .content-flow table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+  .content-flow table th, .content-flow table td { white-space: nowrap; }
+}
