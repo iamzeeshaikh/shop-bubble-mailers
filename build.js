@@ -1,6 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 const { locationStates } = require("./locations-data.js");
+const sharp = require("sharp");
+
+/** Image conversions run in parallel and are awaited before the build ends. */
+const imageJobs = [];
 
 const rootDir = __dirname;
 const srcDir = path.join(rootDir, "src");
@@ -57,17 +61,36 @@ const assetFiles = fs
   .filter((file) => file.toLowerCase().endsWith(".png"))
   .sort((a, b) => a.localeCompare(b));
 
+// Source art is PNG; the site ships WebP at two widths instead, which cuts the
+// largest images by roughly 80% without a visible quality change.
+const imagePipeline = [
+  { suffix: "", width: 1000, quality: 76 },
+  { suffix: "-400", width: 400, quality: 72 }
+];
+
 const assetCatalog = assetFiles.map((file, index) => {
   const ext = path.extname(file).toLowerCase();
   const base = path.basename(file, ext);
-  const outputName = `${slugify(base)}${ext}`;
-  fs.copyFileSync(path.join(assetsDir, file), path.join(distAssetsDir, outputName));
+  const slug = slugify(base);
+  const outputName = `${slug}.webp`;
+  const source = path.join(assetsDir, file);
+
+  for (const { suffix, width, quality } of imagePipeline) {
+    const target = path.join(distAssetsDir, `${slug}${suffix}.webp`);
+    imageJobs.push(
+      sharp(source)
+        .resize({ width, height: width, fit: "inside", withoutEnlargement: true })
+        .webp({ quality, effort: 5 })
+        .toFile(target)
+    );
+  }
 
   return {
     id: `asset-${index + 1}`,
     original: file,
     filename: outputName,
     url: `/assets/images/${outputName}`,
+    thumb: `/assets/images/${slug}-400.webp`,
     alt: titleCase(base).replace(/Pbee|Tpb/g, "").replace(/\s+/g, " ").trim()
   };
 });
@@ -1325,6 +1348,183 @@ const renderQuoteForm = (productName = "") => `
   </div>
 `;
 
+
+const configuratorOptions = {
+  size: [
+    ["4x6", "4 x 6 in", "Jewelry, cosmetics, small parts"],
+    ["4x7", "4 x 7 in", "Phone cases, accessories"],
+    ["6x9", "6 x 9 in", "Apparel singles, books"],
+    ["7x9", "7 x 9 in", "Folded garments, kits"],
+    ["8.5x12", "8.5 x 12 in", "Multi-item orders"],
+    ["10.5x15", "10.5 x 15 in", "Bulky soft goods"],
+    ["12x15", "12 x 15 in", "Large apparel packs"],
+    ["custom", "Custom size", "Enter below"]
+  ],
+  material: [
+    ["kraft", "Kraft padded", "Natural recyclable paper", 0.16],
+    ["white", "White poly", "Clean printable surface", 0.14],
+    ["metallic", "Metallic", "Retail-facing shine", 0.22],
+    ["recyclable", "Recyclable paper", "Curbside recyclable", 0.19],
+    ["biodegradable", "Compostable", "Plant-based film", 0.26]
+  ],
+  closure: [
+    ["selfseal", "Self-seal strip", "Peel and press", 0],
+    ["peelseal", "Peel &amp; seal", "Extra-strong adhesive", 0.02],
+    ["tearstrip", "Tear strip", "Easy opening", 0.03],
+    ["doubleseal", "Double seal", "Tamper resistant", 0.04]
+  ],
+  printing: [
+    ["none", "Unprinted", "Plain stock", -0.02],
+    ["one", "1 colour", "Single ink logo", 0.04],
+    ["two", "2 colours", "Two-ink brand print", 0.07],
+    ["full", "Full colour", "Photographic print", 0.11],
+    ["both", "Both sides", "Front and back", 0.13]
+  ],
+  addOn: [
+    ["returnpanel", "Return label panel", "Blank write-on area", 0.02],
+    ["matte", "Matte finish", "Soft, non-reflective", 0.03],
+    ["tamper", "Tamper-evident seal", "Void-on-open", 0.04],
+    ["insideprint", "Inside printing", "Unboxing message", 0.05],
+    ["bundled", "Bundled in 50s", "Counted packs", 0.01],
+    ["express", "Express production", "Priority queue", 0.06]
+  ]
+};
+
+const configuratorQuantities = [250, 500, 1000, 2500, 5000, 10000, 25000, 50000];
+
+const renderOptionButtons = (group, options) =>
+  options
+    .map(
+      ([value, label, hint, price]) => `
+      <button type="button" class="cfg-option" data-group="${group}" data-value="${value}" data-label="${label}"${
+        price === undefined ? "" : ` data-price="${price}"`
+      } aria-pressed="false">
+        <span class="cfg-option-label">${label}</span>
+        <span class="cfg-option-hint">${hint}</span>
+      </button>`
+    )
+    .join("");
+
+const renderConfigurator = (productName) => `
+  <section class="section section-muted" id="configurator">
+    <div class="container">
+      <div class="cfg-head">
+        <span class="cfg-eyebrow">Interactive configurator</span>
+        <h2>Build your ${productName.toLowerCase()} spec</h2>
+        <p>Pick your size, material, sealing, printing and quantity to see an instant price estimate, then send the spec to our team for a firm quote.</p>
+      </div>
+
+      <form class="cfg-form" data-configurator action="${site.formAction}" method="POST">
+        <input type="hidden" name="form_subject" value="Configurator spec from ${site.brand}">
+        <input type="hidden" name="Product Interested In" value="${productName}">
+
+        <div class="cfg-steps">
+          <fieldset class="cfg-step" data-mode="single" data-group="size">
+            <legend><span class="cfg-num">1</span> Mailer size</legend>
+            <div class="cfg-options">${renderOptionButtons("size", configuratorOptions.size)}</div>
+            <div class="cfg-custom" data-custom-size hidden>
+              <label for="cfg-dims">Required dimensions</label>
+              <input type="text" id="cfg-dims" data-dims placeholder="e.g. 9 x 11 in" maxlength="60">
+            </div>
+          </fieldset>
+
+          <fieldset class="cfg-step" data-mode="single" data-group="material">
+            <legend><span class="cfg-num">2</span> Material</legend>
+            <div class="cfg-options">${renderOptionButtons("material", configuratorOptions.material)}</div>
+          </fieldset>
+
+          <fieldset class="cfg-step" data-mode="single" data-group="closure">
+            <legend><span class="cfg-num">3</span> Closure</legend>
+            <div class="cfg-options">${renderOptionButtons("closure", configuratorOptions.closure)}</div>
+          </fieldset>
+
+          <fieldset class="cfg-step" data-mode="multi" data-group="printing">
+            <legend><span class="cfg-num">4</span> Printing <span class="cfg-note">Select all that apply</span></legend>
+            <div class="cfg-options">${renderOptionButtons("printing", configuratorOptions.printing)}</div>
+          </fieldset>
+
+          <fieldset class="cfg-step" data-mode="single" data-group="quantity">
+            <legend><span class="cfg-num">5</span> Quantity</legend>
+            <div class="cfg-pills">
+              ${configuratorQuantities
+                .map(
+                  (value) =>
+                    `<button type="button" class="cfg-pill" data-group="quantity" data-value="${value}" data-label="${value.toLocaleString("en-US")} units" aria-pressed="false">${value.toLocaleString("en-US")}</button>`
+                )
+                .join("")}
+            </div>
+            <div class="cfg-custom">
+              <label for="cfg-qty">Or enter your own quantity</label>
+              <input type="text" inputmode="numeric" id="cfg-qty" data-custom-qty placeholder="e.g. 7,500" maxlength="9">
+            </div>
+          </fieldset>
+
+          <fieldset class="cfg-step" data-mode="multi" data-group="addOn">
+            <legend><span class="cfg-num">6</span> Add-ons <span class="cfg-note">Optional</span></legend>
+            <div class="cfg-options">${renderOptionButtons("addOn", configuratorOptions.addOn)}</div>
+          </fieldset>
+
+          <fieldset class="cfg-step">
+            <legend><span class="cfg-num">7</span> Artwork &amp; details</legend>
+            <label class="cfg-upload" for="cfg-artwork">
+              ${iconSvg("quote", "row-icon")}
+              <span data-upload-label>Upload artwork (optional) — PDF, AI, EPS, PNG, JPG</span>
+            </label>
+            <input class="cfg-file" type="file" id="cfg-artwork" name="attachment" accept=".pdf,.ai,.eps,.png,.jpg,.jpeg">
+
+            <div class="cfg-grid">
+              <label>Name
+                <input type="text" name="Name" required>
+              </label>
+              <label>Email
+                <input type="email" name="Email" required>
+              </label>
+              <label>Phone
+                <input type="tel" name="Phone">
+              </label>
+              <label>Company
+                <input type="text" name="Company">
+              </label>
+            </div>
+            <label>Message / instructions
+              <textarea name="Notes" data-notes rows="3" placeholder="Deadline, delivery city, or anything else we should know."></textarea>
+            </label>
+          </fieldset>
+        </div>
+
+        <aside class="cfg-summary">
+          <div class="cfg-summary-inner">
+            <p class="cfg-summary-title">Your specification</p>
+            <dl class="cfg-rows">
+              <div><dt>Size</dt><dd data-summary="size">Not selected</dd></div>
+              <div><dt>Material</dt><dd data-summary="material">Not selected</dd></div>
+              <div><dt>Closure</dt><dd data-summary="closure">Not selected</dd></div>
+              <div><dt>Printing</dt><dd data-summary="printing">Not selected</dd></div>
+              <div><dt>Quantity</dt><dd data-summary="quantity">Not selected</dd></div>
+              <div><dt>Add-ons</dt><dd data-summary="addOn">None</dd></div>
+              <div><dt>Artwork</dt><dd data-summary="artwork">Not attached</dd></div>
+            </dl>
+
+            <div class="cfg-estimate">
+              <p class="cfg-estimate-label">Estimated price range</p>
+              <p class="cfg-estimate-value" data-estimate>Select material &amp; quantity</p>
+              <p class="cfg-estimate-note">Indicative only. Final pricing is confirmed once our team reviews your spec.</p>
+            </div>
+
+            <input type="hidden" name="Configuration" data-spec-field>
+            <input type="hidden" name="Quantity" data-qty-field>
+            <input type="hidden" name="Size" data-size-field>
+
+            <p class="form-status" data-form-status aria-live="polite"></p>
+            <button type="submit" class="button button-primary cfg-submit">${iconSvg("quote", "button-icon")}<span>Send my spec</span></button>
+            <a class="cfg-call" href="tel:${site.phoneHref}">Talk to a packaging expert</a>
+          </div>
+        </aside>
+      </form>
+    </div>
+  </section>
+`;
+
 const renderFaqList = (faqs) => `
   <div class="faq-list">
     ${faqs
@@ -1434,16 +1634,6 @@ const buildPage = ({
   <meta name="twitter:description" content="${metaDescription}">
   <meta name="twitter:image" content="${imageAbsoluteUrl(heroImage || site.socialImage)}">
   <link rel="stylesheet" href="/styles.css">
-  <!--Start of Zendesk Chat Script-->
-  <script type="text/javascript">
-  window.$zopim||(function(d,s){var z=$zopim=function(c){
-  z._.push(c)},$=z.s=
-  d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-  _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');
-  $.src='https://v2.zopim.com/?4h3lbyJihoT1mCOqDA0VoQOaVQE9qTOP';z.t=+new Date;$.
-  type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
-  </script>
-  <!--End of Zendesk Chat Script-->
   ${renderSchemaScripts(pageSchemas)}
 </head>
 <body>
@@ -1454,6 +1644,27 @@ const buildPage = ({
   </main>
   ${renderFooter()}
   <script src="/script.js" defer></script>
+  <!-- ZeeOps live chat (replaced Zendesk) — conversations land in the dashboard
+       at chat.zeeops.dev under the shopbubblemailers site. -->
+  <script>
+    // The chat widget waits for the first interaction (or 6s of idle) so it
+    // never competes with the page's own render.
+    (function () {
+      var loaded = false;
+      function load() {
+        if (loaded) return;
+        loaded = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://chat.zeeops.dev/widget.js?siteId=shopbubblemailers';
+        document.head.appendChild(s);
+      }
+      ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (evt) {
+        window.addEventListener(evt, load, { once: true, passive: true });
+      });
+      window.addEventListener('load', function () { setTimeout(load, 6000); });
+    })();
+  </script>
   <a href="https://api.whatsapp.com/send/?phone=15033580443&text=Hi+Shop+Bubble+Mailers!+I+need+more+info+about+Shop+Bubble+Mailers+https%3A%2F%2Fshopbubblemailers.com%2F&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" style="position:fixed;bottom:24px;left:24px;z-index:9999;background:#25D366;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.25);text-decoration:none;transition:transform .2s ease" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="34" height="34"><path fill="white" d="M4.868 43.303l2.694-9.835a18.838 18.838 0 01-2.52-9.444C5.044 13.505 13.561 5 24.014 5a18.864 18.864 0 0113.37 5.536A18.843 18.843 0 0143 23.917c-.004 10.385-8.52 18.886-18.973 18.886a18.93 18.93 0 01-9.34-2.465L4.868 43.303zm10.733-6.19l.594.352a15.72 15.72 0 008.8 2.678c8.663 0 15.713-7.037 15.716-15.693a15.656 15.656 0 00-4.608-11.131A15.648 15.648 0 0024.027 8.28c-8.669 0-15.718 7.036-15.721 15.69a15.657 15.657 0 002.854 9.032l.444.705-1.888 6.893 6.885-1.787z"/><path fill="white" fill-rule="evenodd" d="M19.268 15.787c-.345-.768-.709-.784-1.037-.797-.268-.01-.576-.01-.883-.01a1.692 1.692 0 00-1.228.576c-.422.46-1.611 1.573-1.611 3.836s1.649 4.453 1.878 4.761c.23.307 3.221 5.146 7.927 7.008 3.921 1.547 4.72 1.238 5.572 1.16.852-.077 2.75-1.124 3.137-2.21.389-1.085.389-2.017.273-2.21-.115-.192-.422-.307-.882-.537-.46-.23-2.75-1.355-3.175-1.509-.422-.153-.729-.23-1.036.23-.307.46-1.19 1.509-1.458 1.816-.268.308-.537.346-.997.116-.46-.23-1.94-.714-3.695-2.28-1.365-1.218-2.286-2.723-2.554-3.183-.268-.46-.028-.71.2-.937.208-.206.46-.538.69-.806.23-.268.307-.461.46-.768.154-.307.077-.576-.038-.806-.116-.23-1.005-2.494-1.42-3.41z"/></svg></a>
 </body>
 </html>`;
@@ -2362,6 +2573,8 @@ const productSections = (product) => {
         ${renderQuoteForm(product.name)}
       </div>
     </section>
+
+    ${renderConfigurator(product.name)}
 
     <section class="section section-muted">
       <div class="container split-grid">
@@ -3661,11 +3874,18 @@ ${products.map((product) => `- /${product.slug}/`).join("\n")}
 - Canonical, Open Graph, and Twitter card tags included
 
 ## 7. Missing Images or Issues
-- All PNG images from the Assets folder were copied into dist/assets/images and used on the site
+- Assets folder PNGs are converted to WebP (1000px and 400px) during the build and used on the site
 - Product-to-image matching was based on the closest relevant asset where filenames were broad rather than exact
 - Quote forms are wired to FormSubmit for no-backend lead capture and can be swapped later if you want a custom form handler
 `;
 
 fs.writeFileSync(path.join(rootDir, "FINAL-CHECKLIST.md"), checklist);
 
-console.log(`Built ${siteRoutes.length} routes with ${assetCatalog.length} images.`);
+Promise.all(imageJobs)
+  .then(() => {
+    console.log(`Built ${siteRoutes.length} routes with ${assetCatalog.length} images.`);
+  })
+  .catch((error) => {
+    console.error("Image conversion failed:", error.message);
+    process.exit(1);
+  });

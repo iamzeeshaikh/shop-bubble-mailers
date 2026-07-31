@@ -54,7 +54,9 @@ module.exports = async (req, res) => {
   const product = body["Product Interested In"] || body.product || "";
   const quantity = body.Quantity || body.quantity || "";
   const size = body.Size || body.size || "";
-  const message = body.Message || body.message || "";
+  const message = body.Message || body.message || body.Notes || "";
+  const company = body.Company || body.company || "";
+  const configuration = body.Configuration || body.configuration || "";
   const subject = body.form_subject || "Quote request from Shop Bubble Mailers";
   const attachmentName = body.attachmentName || "";
 
@@ -66,7 +68,9 @@ module.exports = async (req, res) => {
   const port = Number(envValue("SMTP_PORT", "587"));
   const smtpUser = envValue("SMTP_USER");
   const smtpPass = envValue("SMTP_PASS");
-  const smtpFrom = envValue("SMTP_FROM") || smtpUser;
+  const fromName = envValue("SMTP_FROM_NAME") || "Shop Bubble Mailers";
+  const fromEmail = envValue("SMTP_FROM_EMAIL") || envValue("SMTP_FROM") || smtpUser;
+  const smtpFrom = fromEmail.includes("<") ? fromEmail : `"${fromName}" <${fromEmail}>`;
   const smtpTo = envValue("SMTP_TO") || smtpUser;
   const secure =
     String(envValue("SMTP_SECURE")).toLowerCase() === "true" || port === 465;
@@ -85,12 +89,14 @@ module.exports = async (req, res) => {
     ["Name", name],
     ["Email", email],
     ["Phone", phone],
+    ["Company", company],
     ["Product Interested In", product],
     ["Quantity", quantity],
     ["Size", size],
+    ["Configuration", configuration],
     ["Artwork Filename", attachmentName || "No file attached"],
     ["Message", message || "No additional message provided"]
-  ];
+  ].filter(([, value]) => String(value ?? "").trim() !== "");
 
   const html = `
     <div style="font-family:Arial,sans-serif;color:#1f2c3b;line-height:1.6">

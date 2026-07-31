@@ -59,6 +59,6 @@
 - Canonical, Open Graph, and Twitter card tags included
 
 ## 7. Missing Images or Issues
-- All PNG images from the Assets folder were copied into dist/assets/images and used on the site
+- Assets folder PNGs are converted to WebP (1000px and 400px) during the build and used on the site
 - Product-to-image matching was based on the closest relevant asset where filenames were broad rather than exact
 - Quote forms are wired to FormSubmit for no-backend lead capture and can be swapped later if you want a custom form handler
