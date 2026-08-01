@@ -34,7 +34,7 @@ body {
   color: var(--navy);
   background: linear-gradient(180deg, #fbfaf8 0%, #ffffff 220px);
   line-height: 1.65;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 img {
@@ -97,7 +97,9 @@ h3 {
 }
 
 main {
-  overflow: hidden;
+  /* clip, not hidden: hidden makes this a scroll container and stops the
+     configurator summary from sticking. */
+  overflow-x: clip;
 }
 
 .container {

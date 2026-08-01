@@ -1414,7 +1414,7 @@ const renderConfigurator = (productName) => `
         <p>Pick your size, material, sealing, printing and quantity to see an instant price estimate, then send the spec to our team for a firm quote.</p>
       </div>
 
-      <form class="cfg-form" data-configurator action="${site.formAction}" method="POST">
+      <form class="cfg-form" data-configurator data-quote-form action="${site.formAction}" method="POST">
         <input type="hidden" name="form_subject" value="Configurator spec from ${site.brand}">
         <input type="hidden" name="Product Interested In" value="${productName}">
 
@@ -2578,8 +2578,6 @@ const productSections = (product) => {
       </div>
     </section>
 
-    ${renderConfigurator(product.name)}
-
     <section class="section section-muted">
       <div class="container split-grid">
         <div class="content-card content-flow">
@@ -2632,6 +2630,8 @@ const productSections = (product) => {
         </div>
       </div>
     </section>
+
+    ${renderConfigurator(product.name)}
 
     <section class="section">
       <div class="container">
