@@ -2109,8 +2109,54 @@ textarea {
 
 .cfg-summary { min-width: 0; }
 @media (min-width: 62rem) {
-  .cfg-summary-inner { position: sticky; top: 1.5rem; }
+  .cfg-summary { position: sticky; top: 1.5rem; }
+  .cfg-summary-inner { max-height: calc(100vh - 3rem); overflow-y: auto; }
 }
+
+/* Phones: a grid item cannot travel in a single column, so the specification
+   becomes a fixed bar that shows while the configurator is on screen. */
+@media (max-width: 61.99rem) {
+  .cfg-summary {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    transform: translateY(110%);
+    transition: transform 0.25s ease;
+    pointer-events: none;
+  }
+  .cfg-summary.is-visible { transform: translateY(0); pointer-events: auto; }
+  .cfg-summary-inner {
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    box-shadow: 0 -10px 30px rgba(31, 44, 59, 0.2);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .cfg-summary-toggle { display: flex; }
+  .cfg-rows { display: none; }
+  .cfg-summary.is-open .cfg-rows { display: block; }
+  .cfg-estimate { margin-top: 0.5rem; padding: 0.7rem 0.9rem 0.75rem; }
+  .cfg-estimate-note { display: none; }
+  .cfg-summary.is-open .cfg-estimate-note { display: block; }
+}
+
+.cfg-summary-toggle {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.3rem 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy);
+  cursor: pointer;
+}
+.cfg-summary-toggle span:last-child { font-size: 0.78rem; font-weight: 500; color: var(--gray); }
 .cfg-summary-inner {
   background: var(--white);
   border: 1px solid var(--line);
@@ -2194,3 +2240,58 @@ input, select, textarea, button { max-width: 100%; box-sizing: border-box; }
 
   table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
+
+/* ── Thank you page ─────────────────────────────────────────────────────── */
+
+.thankyou-card {
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+.thankyou-mark {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.25rem;
+  border-radius: 999px;
+  background: var(--kraft-soft);
+  color: var(--kraft);
+}
+.thankyou-lede { color: var(--gray); margin-bottom: 1.75rem; }
+.thankyou-steps {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0 0 1.75rem;
+  padding: 1.1rem;
+  text-align: left;
+  list-style: none;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+}
+.thankyou-steps li { display: flex; align-items: center; gap: 0.7rem; font-size: 0.92rem; }
+.thankyou-steps span {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.thankyou-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+.thankyou-contact { font-size: 0.9rem; color: var(--gray); }
+.thankyou-contact a { color: var(--kraft); font-weight: 700; }

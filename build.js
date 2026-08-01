@@ -1495,6 +1495,10 @@ const renderConfigurator = (productName) => `
         <aside class="cfg-summary">
           <div class="cfg-summary-inner">
             <p class="cfg-summary-title">Your specification</p>
+            <button type="button" class="cfg-summary-toggle" data-summary-toggle aria-expanded="false">
+              <span data-summary-count>Nothing selected yet</span>
+              <span data-summary-hint>Show</span>
+            </button>
             <dl class="cfg-rows">
               <div><dt>Size</dt><dd data-summary="size">Not selected</dd></div>
               <div><dt>Material</dt><dd data-summary="material">Not selected</dd></div>
@@ -2888,7 +2892,47 @@ writeRoute(
     relatedSlugs: ["bubble-mailer-white", "8-5-x-12-bubble-mailer", "9x6-bubble-mailer", "4x6-bubble-mailer"]
   })
 );
+
+const renderThankYouPage = () => {
+  const body = `
+    <section class="section">
+      <div class="container">
+        <div class="thankyou-card">
+          <div class="thankyou-mark">${iconSvg("quote", "row-icon")}</div>
+          <h1>Thank you — we have your request</h1>
+          <p class="thankyou-lede">
+            Your details are with our quote team. We reply with pricing, sizing guidance and lead
+            time within 1-2 hours during US business hours.
+          </p>
+          <ol class="thankyou-steps">
+            <li><span>1</span> We review your size, quantity and any artwork.</li>
+            <li><span>2</span> You get a written price with material and print options.</li>
+            <li><span>3</span> We confirm lead time and shipping before anything runs.</li>
+          </ol>
+          <div class="thankyou-actions">
+            <a class="button button-primary" href="/">Back to home</a>
+            <a class="button button-outline" href="/products/">Browse bubble mailers</a>
+          </div>
+          <p class="thankyou-contact">
+            Need it sooner? Call <a href="tel:${site.phoneHref}">${site.phone}</a> or email
+            <a href="mailto:${site.email}">${site.email}</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+  `;
+
+  return buildPage({
+    routePath: "/thank-you/",
+    title: "Thank you — your request is with us",
+    metaTitle: "Thank You | Shop Bubble Mailers",
+    metaDescription: "Your bubble mailer quote request has been received. Our team replies with pricing within 1-2 hours.",
+    body
+  });
+};
+
 writeRoute("/contact-us/", renderContactPage());
+writeRoute("/thank-you/", renderThankYouPage());
 writeRoute(
   "/privacy-policy/",
   renderPolicyPage({

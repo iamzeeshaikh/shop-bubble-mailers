@@ -66,10 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         form.reset();
-        if (status) {
-          status.textContent = result.message || "Your request has been sent. We will reply shortly.";
-          status.classList.add("is-success");
-        }
+        window.location.href = "/thank-you/";
+        return;
       } catch (error) {
         if (status) {
           status.textContent = error.message || "There was a problem sending your request.";
@@ -195,6 +193,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const range = currentRange();
       if (estimate) estimate.textContent = range || "Select material & quantity";
 
+      const chosenCount = Object.keys(LABELS).filter(function (g) { return labelFor(g); }).length;
+      const countEl = form.querySelector("[data-summary-count]");
+      if (countEl) {
+        countEl.textContent = chosenCount
+          ? chosenCount + " option" + (chosenCount === 1 ? "" : "s") + " selected"
+          : "Nothing selected yet";
+      }
+
       const lines = Object.keys(LABELS).map((group) => LABELS[group] + ": " + (labelFor(group) || "Not selected"));
       lines.push("Estimated budget: " + (range || "pending review"));
       const extra = notes && notes.value.trim();
@@ -238,6 +244,26 @@ document.addEventListener("DOMContentLoaded", () => {
           chosen.quantity = [];
         }
         refresh();
+      });
+    }
+
+    const summaryPanel = form.querySelector(".cfg-summary");
+    const summaryToggle = form.querySelector("[data-summary-toggle]");
+    const section = form.closest("section");
+    if (summaryPanel && section && window.matchMedia("(max-width: 61.99rem)").matches) {
+      new IntersectionObserver(
+        function (entries) {
+          summaryPanel.classList.toggle("is-visible", entries[0].isIntersecting);
+        },
+        { rootMargin: "-10% 0px -20% 0px" }
+      ).observe(section);
+    }
+    if (summaryToggle) {
+      summaryToggle.addEventListener("click", function () {
+        const open = summaryPanel.classList.toggle("is-open");
+        summaryToggle.setAttribute("aria-expanded", String(open));
+        const hint = summaryToggle.querySelector("[data-summary-hint]");
+        if (hint) hint.textContent = open ? "Hide" : "Show";
       });
     }
 
