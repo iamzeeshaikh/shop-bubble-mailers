@@ -264,6 +264,18 @@ main {
   z-index: 120;
 }
 
+/* The panel sits 14px below the trigger, so the cursor crossed dead space on
+   its way down and :hover was lost before it arrived. This invisible strip
+   spans the gap and keeps the pointer inside the menu the whole way. */
+.nav-dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 14px;
+}
+
 .nav-dropdown-menu.is-open,
 .nav-item-dropdown:hover .nav-dropdown-menu,
 .nav-item-dropdown:focus-within .nav-dropdown-menu {
