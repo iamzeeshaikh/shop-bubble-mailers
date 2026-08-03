@@ -8,7 +8,7 @@ const locationStates = [
     slug: "california",
     name: "California",
     abbr: "CA",
-    metaTitle: "Bubble Mailers in California | Bulk Supplier | Shop Bubble Mailers",
+    metaTitle: "Bubble Mailers in California | Shop Bubble Mailers",
     metaDescription:
       "Bulk and custom bubble mailers for California businesses — apparel, beauty, and DTC brands from Los Angeles to San Francisco. Request a free quote.",
     h1: "Bubble Mailers for California Businesses",
@@ -97,7 +97,7 @@ const locationStates = [
     slug: "texas",
     name: "Texas",
     abbr: "TX",
-    metaTitle: "Bubble Mailers in Texas | Bulk Supplier | Shop Bubble Mailers",
+    metaTitle: "Bubble Mailers in Texas | Shop Bubble Mailers",
     metaDescription:
       "Bulk and custom bubble mailers for Texas businesses — from Houston to Austin. Fast quote support, low minimums, and reliable supply across the state.",
     h1: "Bubble Mailers for Texas Businesses",
@@ -186,7 +186,7 @@ const locationStates = [
     slug: "new-york",
     name: "New York",
     abbr: "NY",
-    metaTitle: "Bubble Mailers in New York | Bulk Supplier | Shop Bubble Mailers",
+    metaTitle: "Bubble Mailers in New York | Shop Bubble Mailers",
     metaDescription:
       "Bulk and custom bubble mailers for New York businesses — apparel, jewelry, and marketplace sellers from NYC to upstate. Free quote.",
     h1: "Bubble Mailers for New York Businesses",
@@ -254,7 +254,7 @@ const locationStates = [
     slug: "florida",
     name: "Florida",
     abbr: "FL",
-    metaTitle: "Bubble Mailers in Florida | Bulk Supplier | Shop Bubble Mailers",
+    metaTitle: "Bubble Mailers in Florida | Shop Bubble Mailers",
     metaDescription:
       "Bulk and custom bubble mailers for Florida businesses — beauty, export, and eCommerce sellers from Miami to Jacksonville. Free quote.",
     h1: "Bubble Mailers for Florida Businesses",
@@ -322,7 +322,7 @@ const locationStates = [
     slug: "illinois",
     name: "Illinois",
     abbr: "IL",
-    metaTitle: "Bubble Mailers in Illinois | Bulk Supplier | Shop Bubble Mailers",
+    metaTitle: "Bubble Mailers in Illinois | Shop Bubble Mailers",
     metaDescription:
       "Bulk and custom bubble mailers for Illinois businesses. Based in Bloomington, IL, we serve Chicago and statewide sellers with fast quotes.",
     h1: "Bubble Mailers for Illinois Businesses",
@@ -390,7 +390,7 @@ const locationStates = [
     slug: "georgia",
     name: "Georgia",
     abbr: "GA",
-    metaTitle: "Bubble Mailers in Georgia | Bulk Supplier | Shop Bubble Mailers",
+    metaTitle: "Bubble Mailers in Georgia | Shop Bubble Mailers",
     metaDescription:
       "Bulk and custom bubble mailers for Georgia businesses — Atlanta logistics, makers, and eCommerce sellers. Free quote and low minimums.",
     h1: "Bubble Mailers for Georgia Businesses",
@@ -458,7 +458,7 @@ const locationStates = [
     slug: "washington",
     name: "Washington",
     abbr: "WA",
-    metaTitle: "Bubble Mailers in Washington | Bulk Supplier | Shop Bubble Mailers",
+    metaTitle: "Bubble Mailers in Washington | Shop Bubble Mailers",
     metaDescription:
       "Bulk and custom bubble mailers for Washington State businesses — Seattle eCommerce, tech, and outdoor brands. Free quote and low minimums.",
     h1: "Bubble Mailers for Washington State Businesses",

@@ -217,7 +217,7 @@ const products = [
   {
     slug: "kraft-bubble-mailer",
     name: "Kraft Bubble Mailer",
-    metaTitle: "Kraft Bubble Mailer Supplier in the USA | Shop Bubble Mailers",
+    metaTitle: "Kraft Bubble Mailer Supplier | Shop Bubble Mailers",
     metaDescription: "Get bulk kraft bubble mailers with padded protection, clean sealing, custom sizes, and fast quote support for US businesses.",
     category: "Kraft Bubble Mailers",
     image: pickAsset("generic", 0),
@@ -297,7 +297,7 @@ const products = [
   {
     slug: "4-x-6-bubble-mailer",
     name: "4 x 6 Bubble Mailer",
-    metaTitle: "4 x 6 Bubble Mailer for Small Shipments | Shop Bubble Mailers",
+    metaTitle: "4 x 6 Bubble Mailer | Shop Bubble Mailers",
     metaDescription: "Shop 4 x 6 bubble mailers for compact business shipments, sample packs, and lightweight padded mailing needs.",
     category: "Small Bubble Mailers",
     image: pickAsset("generic", 5),
@@ -1030,6 +1030,9 @@ const navLinks = [
   { href: "/locations/", label: "Locations" }
 ];
 
+/** Routes that carry a noindex tag and therefore stay out of the sitemap. */
+const NOINDEX_ROUTES = new Set(["/thank-you/"]);
+
 const siteRoutes = [];
 const registerRoute = (route) => {
   if (!siteRoutes.includes(route)) {
@@ -1176,7 +1179,7 @@ const renderHeader = (currentPath) => `
       <a class="brand" href="/" aria-label="${site.brand} home">
         ${logoSvg()}
       </a>
-      <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-label="Toggle navigation">Menu</button>
+      <button class="nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
       <nav class="site-nav" data-nav>
         ${navLinks
           .map((link) => {
@@ -1606,7 +1609,8 @@ const buildPage = ({
   heroImage,
   body,
   breadcrumbs = null,
-  schemas = []
+  schemas = [],
+  noindex = false
 }) => {
   const canonical = absoluteUrl(routePath);
   const pageSchemas = [...globalSchemas(), ...schemas];
@@ -1624,6 +1628,7 @@ const buildPage = ({
   <meta name="google-site-verification" content="Yye2yzfBZUck9eU_lSGfv6b8-vShEzolCHPJprQ_HJo">
   <meta name="theme-color" content="#1f2c3b">
   <link rel="canonical" href="${canonical}">
+  ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.svg">
@@ -2923,6 +2928,8 @@ const renderThankYouPage = () => {
   `;
 
   return buildPage({
+    // A confirmation page has no search value and reads badly in results.
+    noindex: true,
     routePath: "/thank-you/",
     title: "Thank you — your request is with us",
     metaTitle: "Thank You | Shop Bubble Mailers",
@@ -3059,7 +3066,7 @@ const blogPosts = [
     date: "2026-05-19",
     readTime: "7 min read",
     title: "How to Choose the Right Bubble Mailer Size",
-    metaTitle: "How to Choose the Right Bubble Mailer Size | Shop Bubble Mailers",
+    metaTitle: "How to Choose a Bubble Mailer Size | Shop Bubble Mailers",
     metaDescription:
       "A practical guide to choosing bubble mailer sizes - matching the mailer to your product, common size ranges, and avoiding costly oversizing on shipping.",
     intro:
@@ -3326,7 +3333,7 @@ const renderBlogIndex = () => {
   return buildPage({
     routePath: "/blog/",
     title: "Bubble Mailer Blog",
-    metaTitle: "Bubble Mailer Blog | Guides on Sizes, Kraft vs White & Branding",
+    metaTitle: "Bubble Mailer Guides & Buying Advice",
     metaDescription: "Practical bubble mailer guides — how to choose sizes, kraft vs white mailers, and custom printed mailers for branded shipping.",
     heroImage: pickAsset("generic", 1).url,
     body,
@@ -3825,7 +3832,7 @@ const renderLocationsHub = () => {
   return buildPage({
     routePath,
     title: "USA Delivery Locations",
-    metaTitle: "Bubble Mailers Across the USA | State & City Supply | Shop Bubble Mailers",
+    metaTitle: "Bubble Mailers Across the USA | Shop Bubble Mailers",
     metaDescription: "Shop Bubble Mailers supplies bulk and custom bubble mailers to businesses across the USA — browse locations by state and city, or request a free quote.",
     heroImage: heroImage.url,
     body,
@@ -3855,6 +3862,7 @@ const LASTMOD = "2026-07-09";
 writeStaticAsset(
   "sitemap.xml",
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${siteRoutes
+    .filter((route) => !NOINDEX_ROUTES.has(route))
     .map((route) => {
       const slug = route.replace(/^\/|\/$/g, "");
       let priority = "0.7";
