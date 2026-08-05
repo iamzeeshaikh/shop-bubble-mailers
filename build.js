@@ -1111,6 +1111,47 @@ const faqSchema = (faqs) => ({
   }))
 });
 
+/**
+ * Per-unit starting price derived from the on-site configurator rates:
+ * material base (kraft 0.16, white poly 0.14) minus the unprinted modifier
+ * (-0.02), at the 5,000-unit tier where the quantity scale is 1.0.
+ */
+const productUnitPrice = (product) =>
+  product.material.toLowerCase().includes("kraft") ? "0.14" : "0.12";
+
+/**
+ * Single shared Product JSON-LD builder used by every product page so each
+ * page emits exactly one complete Product schema (Google Product snippets +
+ * Merchant listing fields: brand, sku, image, offers with price/availability).
+ */
+const buildProductSchema = (product, sizesValue) => ({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: product.name,
+  image: [imageAbsoluteUrl(product.image.url), ...product.accentImages.map((image) => imageAbsoluteUrl(image.url))],
+  description: product.metaDescription,
+  brand: { "@type": "Brand", name: site.brand },
+  sku: product.slug.toUpperCase(),
+  material: product.material,
+  category: product.category,
+  additionalProperty: [{ "@type": "PropertyValue", name: "Available Sizes", value: sizesValue }],
+  url: absoluteUrl(`/${product.slug}/`),
+  offers: {
+    "@type": "Offer",
+    url: absoluteUrl(`/${product.slug}/`),
+    priceCurrency: "USD",
+    price: productUnitPrice(product),
+    priceValidUntil: "2027-08-04",
+    availability: "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
+    seller: { "@type": "Organization", name: site.brand },
+    shippingDetails: {
+      "@type": "OfferShippingDetails",
+      shippingDestination: { "@type": "DefinedRegion", addressCountry: "US" }
+    }
+  }
+});
+
 const renderSchemaScripts = (schemas) =>
   schemas
     .filter(Boolean)
@@ -2474,27 +2515,7 @@ const renderKraftProductPage = (product) => {
     { href: `/${product.slug}/`, label: product.name }
   ];
 
-  const schemas = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      name: product.name,
-      image: [imageAbsoluteUrl(product.image.url), ...product.accentImages.map((image) => imageAbsoluteUrl(image.url))],
-      description: product.metaDescription,
-      brand: { "@type": "Brand", name: site.brand },
-      sku: product.slug.toUpperCase(),
-      material: product.material,
-      category: product.category,
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.8",
-        reviewCount: "127"
-      },
-      additionalProperty: [{ "@type": "PropertyValue", name: "Available Sizes", value: [...sizeExamples, ...sizeGrid].join(", ") }],
-      url: absoluteUrl(`/${product.slug}/`)
-    },
-    faqSchema(faqs)
-  ];
+  const schemas = [buildProductSchema(product, [...sizeExamples, ...sizeGrid].join(", ")), faqSchema(faqs)];
 
   return buildPage({
     routePath: `/${product.slug}/`,
@@ -2666,36 +2687,7 @@ const productSections = (product) => {
     { href: `/${product.slug}/`, label: product.name }
   ];
 
-  const schemas = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      name: product.name,
-      image: [imageAbsoluteUrl(product.image.url), ...product.accentImages.map((image) => imageAbsoluteUrl(image.url))],
-      description: product.metaDescription,
-      brand: {
-        "@type": "Brand",
-        name: site.brand
-      },
-      sku: product.slug.toUpperCase(),
-      material: product.material,
-      category: product.category,
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.8",
-        reviewCount: "127"
-      },
-      additionalProperty: [
-        {
-          "@type": "PropertyValue",
-          name: "Available Sizes",
-          value: product.sizes.join(", ")
-        }
-      ],
-      url: absoluteUrl(`/${product.slug}/`)
-    },
-    faqSchema(faqs)
-  ];
+  const schemas = [buildProductSchema(product, product.sizes.join(", ")), faqSchema(faqs)];
 
   return buildPage({
     routePath: `/${product.slug}/`,

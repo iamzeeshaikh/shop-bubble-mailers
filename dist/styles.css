@@ -4,7 +4,8 @@
   --kraft: #b08b57;
   --kraft-soft: #e8dcc9;
   --orange: #d98a2f;
-  --orange-dark: #b36d20;
+  /* 4.77:1 on white; the previous #b36d20 was 4.10:1 and failed AA. */
+  --orange-dark: #a5631c;
   --white: #ffffff;
   --surface: #f5f3ef;
   --surface-strong: #ebe7e0;
@@ -261,6 +262,18 @@ main {
   box-shadow: 0 18px 42px rgba(31, 44, 59, 0.12);
   display: none;
   z-index: 120;
+}
+
+/* The panel sits 14px below the trigger, so the cursor crossed dead space on
+   its way down and :hover was lost before it arrived. This invisible strip
+   spans the gap and keeps the pointer inside the menu the whole way. */
+.nav-dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 14px;
 }
 
 .nav-dropdown-menu.is-open,
@@ -1781,6 +1794,11 @@ textarea {
     height: 46px;
     border-radius: 14px;
     background: var(--surface);
+    /* The label inherited white from the header and vanished against this
+       off-white surface at 1.1:1. */
+    color: var(--navy);
+    font-size: 0.82rem;
+    font-weight: 700;
     border: 1px solid rgba(31, 44, 59, 0.08);
   }
 
