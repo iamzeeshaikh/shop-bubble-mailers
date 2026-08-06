@@ -24,7 +24,7 @@ const site = {
   postalCode: "61701",
   country: "US",
   formAction: "/api/send-quote",
-  socialImage: "/assets/images/bubble-mailers-pbee-3.png"
+  socialImage: "/assets/images/bubble-mailers-pbee-3.webp"
 };
 
 const slugify = (value) =>
@@ -58,7 +58,9 @@ ensureDir(distAssetsDir);
 
 const assetFiles = fs
   .readdirSync(assetsDir)
-  .filter((file) => file.toLowerCase().endsWith(".png"))
+  // exFAT drives grow AppleDouble "._foo.png" sidecars; they pass an extension
+  // check but are not real images, so drop them before the sharp pipeline.
+  .filter((file) => !file.startsWith("._") && !file.startsWith(".") && file.toLowerCase().endsWith(".png"))
   .sort((a, b) => a.localeCompare(b));
 
 // Source art is PNG; the site ships WebP at two widths instead, which cuts the
@@ -1148,6 +1150,14 @@ const buildProductSchema = (product, sizesValue) => ({
     shippingDetails: {
       "@type": "OfferShippingDetails",
       shippingDestination: { "@type": "DefinedRegion", addressCountry: "US" }
+    },
+    // The site sells via negotiated bulk quotes; freight and any return terms
+    // are confirmed per order (see /terms-and-conditions/), so the policy is
+    // declared as unspecified rather than inventing a blanket return window.
+    hasMerchantReturnPolicy: {
+      "@type": "MerchantReturnPolicy",
+      applicableCountry: "US",
+      returnPolicyCategory: "https://schema.org/MerchantReturnUnspecified"
     }
   }
 });
@@ -1599,7 +1609,7 @@ const renderProductCards = (items) => `
       .map(
         (product) => `
       <article class="product-card">
-        <img src="${product.image.url}" alt="${product.name} product image" loading="lazy" width="1080" height="1080">
+        <img src="${product.image.url}" alt="${product.name} product image" loading="lazy" decoding="async" width="1080" height="1080">
         <div>
           <h3><a href="/${product.slug}/">${product.name}</a></h3>
           <p>${product.metaDescription}</p>
@@ -1621,7 +1631,7 @@ const renderGallery = (items, className = "") => `
       .map(
         (asset, index) => `
       <figure class="gallery-card">
-        <img src="${asset.url}" alt="${asset.alt || `Bubble mailer product image ${index + 1}`}" loading="lazy" width="1080" height="1080">
+        <img src="${asset.url}" alt="${asset.alt || `Bubble mailer product image ${index + 1}`}" loading="lazy" decoding="async" width="1080" height="1080">
       </figure>
     `
       )
@@ -1637,7 +1647,44 @@ const renderProductFeatureImage = (product) => {
 
   return `
     <div class="product-feature-card">
-      <img src="${product.image.url}" alt="${altText}" loading="lazy" width="1080" height="1080">
+      <img src="${product.image.url}" alt="${altText}" loading="lazy" decoding="async" width="1080" height="1080">
+    </div>
+  `;
+};
+
+/* Product-page gallery: the main image plus one thumbnail button per product
+   image. Clicking a thumbnail swaps #main-img in place (see src/script.js) —
+   no navigation, no dead click. The main image is the LCP element, so it loads
+   eager/high-priority; thumbnails use the 400px renditions and lazy-load. */
+const renderProductGallery = (product, mainAlt, extraClass = "") => {
+  const seen = new Set();
+  const images = [product.image, ...(product.accentImages || [])].filter((asset) => {
+    if (!asset || seen.has(asset.url)) return false;
+    seen.add(asset.url);
+    return true;
+  });
+  const main = images[0];
+  const thumbs = images.length > 1
+    ? `
+      <div class="thumb-row" role="group" aria-label="${product.name} image gallery">
+        ${images
+          .map(
+            (asset, index) => `
+          <button type="button" class="thumb-btn${index === 0 ? " active" : ""}" data-src="${asset.url}" aria-label="View image ${index + 1}">
+            <img src="${asset.thumb}" alt="${product.name} image ${index + 1}" loading="lazy" decoding="async" width="400" height="400">
+          </button>
+        `
+          )
+          .join("")}
+      </div>
+    `
+    : "";
+  return `
+    <div class="product-gallery">
+      <div class="product-hero-image hero-panel${extraClass ? ` ${extraClass}` : ""}">
+        <img id="main-img" src="${main.url}" alt="${mainAlt || `${product.name} product photo`}" width="1000" height="1000" loading="eager" fetchpriority="high" decoding="async">
+      </div>
+      ${thumbs}
     </div>
   `;
 };
@@ -1763,7 +1810,7 @@ const renderHomePage = () => {
           <div class="hero-showcase">
             <div class="hero-spotlight">
               <div class="hero-visual-stage">
-                <img class="hero-main-image hero-main-3d" src="${pickAsset("generic", 2).url}" alt="Bulk bubble mailers packaging for business shipping" width="1080" height="1080">
+                <img class="hero-main-image hero-main-3d" src="${pickAsset("generic", 2).url}" alt="Bulk bubble mailers packaging for business shipping" width="1080" height="1080" loading="eager" fetchpriority="high" decoding="async">
               </div>
               <div class="hero-support-card">
                 ${iconSvg("package", "support-icon")}
@@ -1775,11 +1822,11 @@ const renderHomePage = () => {
             </div>
             <div class="hero-side-stack">
               <div class="hero-mini-card">
-                <img src="${pickAsset("plain", 2).url}" alt="White bubble mailers for retail shipping" loading="lazy" width="1080" height="1080">
+                <img src="${pickAsset("plain", 2).url}" alt="White bubble mailers for retail shipping" loading="lazy" decoding="async" width="1080" height="1080">
                 <span><strong>White mailers</strong><small>Clean &amp; professional</small></span>
               </div>
               <div class="hero-mini-card">
-                <img src="${pickAsset("halloween", 0).url}" alt="Custom printed bubble mailer packaging" loading="lazy" width="1080" height="1080">
+                <img src="${pickAsset("halloween", 0).url}" alt="Custom printed bubble mailer packaging" loading="lazy" decoding="async" width="1080" height="1080">
                 <span><strong>Custom printed mailers</strong><small>Promote your brand</small></span>
               </div>
             </div>
@@ -1802,7 +1849,7 @@ const renderHomePage = () => {
           .map(
             (category) => `
           <article class="category-card">
-            <img src="${category.image.url}" alt="${category.title}" loading="lazy" width="1080" height="1080">
+            <img src="${category.image.url}" alt="${category.title}" loading="lazy" decoding="async" width="1080" height="1080">
             <div>
               <h3><a href="${category.href}">${category.title}</a></h3>
               <p>${category.text}</p>
@@ -1887,10 +1934,10 @@ const renderHomePage = () => {
         <div class="content-card benefits-card">
           <div class="print-mockup">
             <div class="print-mockup-back">
-              <img src="${pickAsset("plain", 4).url}" alt="Printed bubble mailer back view" loading="lazy" width="1080" height="1080">
+              <img src="${pickAsset("plain", 4).url}" alt="Printed bubble mailer back view" loading="lazy" decoding="async" width="1080" height="1080">
             </div>
             <div class="print-mockup-front">
-              <img src="${pickAsset("halloween", 1).url}" alt="Custom bubble mailer packaging sample" loading="lazy" width="1080" height="1080">
+              <img src="${pickAsset("halloween", 1).url}" alt="Custom bubble mailer packaging sample" loading="lazy" decoding="async" width="1080" height="1080">
               <div class="mockup-brand-stamp">SHOP BUBBLE</div>
             </div>
             <span class="mockup-tag mockup-tag-one">Custom Print</span>
@@ -1957,7 +2004,7 @@ const renderStandardPageHero = ({ eyebrow, title, description, image, ctas }) =>
         </div>
       </div>
       <div class="hero-panel">
-        <img src="${image.url}" alt="${title}" width="1080" height="1080">
+        <img src="${image.url}" alt="${title}" width="1080" height="1080" loading="eager" fetchpriority="high" decoding="async">
       </div>
     </div>
   </section>
@@ -2237,9 +2284,7 @@ const renderKraftProductPage = (product) => {
             <a class="button button-outline" href="#available-sizes">View Sizes</a>
           </div>
         </div>
-        <div class="product-hero-image hero-panel kraft-product-image">
-          <img src="${product.image.url}" alt="Kraft bubble mailers for shipping" width="1080" height="1080">
-        </div>
+        ${renderProductGallery(product, "Kraft bubble mailers for shipping", "kraft-product-image")}
       </div>
     </section>
 
@@ -2355,13 +2400,13 @@ const renderKraftProductPage = (product) => {
             <p>For fulfillment teams, the format is useful because it combines a customer-ready look with padded protection and a simple self-seal workflow. It works well for repeat shipments that need a more polished finish without adding the storage demands of a box-heavy packing program.</p>
           </div>
           <div class="detail-media">
-            <img src="${product.image.url}" alt="Kraft bubble mailer close view" loading="lazy" width="1080" height="1080">
+            <img src="${product.image.url}" alt="Kraft bubble mailer close view" loading="lazy" decoding="async" width="1080" height="1080">
             <p class="detail-caption">A closer look at the outer finish and padded mailer format used for secure day-to-day shipping.</p>
           </div>
         </div>
         <div class="gallery-card detail-row detail-row-reverse">
           <div class="detail-media">
-            <img src="${product.accentImages[0].url}" alt="Inside bubble cushioning for kraft bubble mailers" loading="lazy" width="1080" height="1080">
+            <img src="${product.accentImages[0].url}" alt="Inside bubble cushioning for kraft bubble mailers" loading="lazy" decoding="async" width="1080" height="1080">
             <p class="detail-caption">The inner bubble layer helps reduce rubbing, pressure marks, and handling wear during transit.</p>
           </div>
           <div class="detail-copy content-flow">
@@ -2379,7 +2424,7 @@ const renderKraftProductPage = (product) => {
             <p>Businesses that ship daily often request bulk bubble mailers in core sizes so staff can move faster during fulfillment while maintaining a more consistent shipping presentation from one order to the next.</p>
           </div>
           <div class="detail-media">
-            <img src="${product.accentImages[1].url}" alt="Bulk stacked kraft bubble mailers for shipping supply" loading="lazy" width="1080" height="1080">
+            <img src="${product.accentImages[1].url}" alt="Bulk stacked kraft bubble mailers for shipping supply" loading="lazy" decoding="async" width="1080" height="1080">
             <p class="detail-caption">Bulk-packed mailers help fulfillment teams keep repeat sizes stocked and ready for outgoing orders.</p>
           </div>
         </div>
@@ -2583,9 +2628,7 @@ const productSections = (product) => {
             <a class="button button-secondary button-small" href="tel:${site.phoneHref}">Call Now</a>
           </div>
         </div>
-        <div class="product-hero-image hero-panel">
-          <img src="${product.image.url}" alt="${product.name}" width="1080" height="1080">
-        </div>
+        ${renderProductGallery(product, `${product.name} product photo showing the padded mailer exterior`)}
       </div>
     </section>
 
@@ -3220,7 +3263,7 @@ const renderRelatedBlog = (post) => {
           ${items
             .map(
               (item) => `<article class="product-card">
-            <img src="${pickAsset(item.image, 0).url}" alt="${item.title}" loading="lazy" width="1080" height="1080">
+            <img src="${pickAsset(item.image, 0).url}" alt="${item.title}" loading="lazy" decoding="async" width="1080" height="1080">
             <div>
               <span class="eyebrow">${item.category}</span>
               <h3><a href="/blog/${item.slug}/">${item.title}</a></h3>
@@ -3293,7 +3336,7 @@ const renderBlogIndex = () => {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map(
       (post) => `<article class="product-card">
-        <img src="${pickAsset(post.image, 0).url}" alt="${post.title}" loading="lazy" width="1080" height="1080">
+        <img src="${pickAsset(post.image, 0).url}" alt="${post.title}" loading="lazy" decoding="async" width="1080" height="1080">
         <div>
           <span class="eyebrow">${post.category}</span>
           <h3><a href="/blog/${post.slug}/">${post.title}</a></h3>
@@ -3383,7 +3426,7 @@ const locationCardGrid = (cards) => `
       .map(
         (card) => `
       <article class="product-card">
-        <img src="${card.image.url}" alt="${card.alt}" loading="lazy" width="1080" height="1080">
+        <img src="${card.image.url}" alt="${card.alt}" loading="lazy" decoding="async" width="1080" height="1080">
         <div>
           <h3><a href="${card.href}">${card.title}</a></h3>
           <p>${card.desc}</p>

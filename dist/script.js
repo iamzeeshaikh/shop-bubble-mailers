@@ -284,6 +284,51 @@ document.addEventListener("DOMContentLoaded", () => {
     refresh();
   });
 
+  /* ── Product gallery ────────────────────────────────────────────────────
+     Clicking a thumbnail swaps the main product image in place. All gallery
+     images are warmed (pre-decoded) during idle time and again on hover /
+     touch, so the swap is instant with no visible loading flash. */
+  const mainImg = document.getElementById("main-img");
+  const thumbButtons = Array.prototype.slice.call(document.querySelectorAll(".thumb-btn"));
+
+  if (mainImg && thumbButtons.length) {
+    const warm = (btn) => {
+      if (btn.dataset.warmed || !btn.dataset.src) return;
+      btn.dataset.warmed = "true";
+      const preload = new Image();
+      preload.fetchPriority = "low";
+      preload.decoding = "async";
+      if (btn.dataset.srcset) preload.srcset = btn.dataset.srcset;
+      preload.src = btn.dataset.src;
+    };
+    const warmAll = () => thumbButtons.forEach(warm);
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(warmAll, { timeout: 3000 });
+    } else if (document.readyState === "complete") {
+      setTimeout(warmAll, 250);
+    } else {
+      window.addEventListener("load", () => setTimeout(warmAll, 250));
+    }
+
+    thumbButtons.forEach((btn) => {
+      ["pointerenter", "touchstart"].forEach((eventName) => {
+        btn.addEventListener(eventName, () => warm(btn), { passive: true });
+      });
+
+      btn.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (!btn.dataset.src) return;
+        thumbButtons.forEach((other) => other.classList.remove("active"));
+        btn.classList.add("active");
+        // Swap srcset before src — if a srcset is present the browser keeps
+        // showing the old candidate unless both are updated together.
+        mainImg.srcset = btn.dataset.srcset || "";
+        mainImg.src = btn.dataset.src;
+      });
+    });
+  }
+
   const yearTarget = document.querySelector("[data-current-year]");
   if (yearTarget) {
     yearTarget.textContent = String(new Date().getFullYear());
