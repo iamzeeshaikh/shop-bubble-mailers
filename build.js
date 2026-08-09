@@ -1062,6 +1062,7 @@ const globalSchemas = () => [
     "@type": "Organization",
     name: site.brand,
     url: site.domain,
+    logo: { "@type": "ImageObject", url: `${site.domain}/apple-touch-icon.svg` },
     email: site.email,
     telephone: site.phone,
     address: {
@@ -3813,7 +3814,7 @@ const MAILER_LINKS = [
   { slug: "12x15-bubble-mailer", a: ["12x15 bubble mailers", "large 12x15 mailers"] },
   { slug: "bubble-mailer-bags", a: ["bubble mailer bags", "padded mailer bags"] },
   { slug: "bubble-mailer-packaging", a: ["bubble mailer packaging", "padded mailer packaging"] },
-  { slug: "custom-bubble-mailers", a: ["custom printed bubble mailers", "branded bubble mailers", "logo-printed mailers"] },
+  { slug: "custom-bubble-mailers", a: ["custom printed bubble mailers", "branded bubble mailers", "logo-printed bubble mailers"] },
   { slug: "kraft-bubble-mailers", a: ["our kraft bubble mailer range", "kraft mailer options"] },
   { slug: "white-bubble-mailers", a: ["our white bubble mailer range", "white mailer options"] },
 ];
