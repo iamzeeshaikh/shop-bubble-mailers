@@ -3116,7 +3116,7 @@ const blogPosts = [
         heading: "Common sizes and what they fit",
         html: `<p>Bubble mailer sizes are usually described by their internal usable dimensions - the space you actually have once the seal and padding are accounted for, not the outside measurement. A handful of formats cover the vast majority of eCommerce needs, from tiny accessories to folded apparel and mixed kits. Learning which size maps to which product type removes most of the guesswork.</p>`,
         bullets: [
-          `Small (around <a href="/4x6-bubble-mailer/">4x6</a> and 4x7): jewelry, cards, samples, small accessories, single cosmetics.`,
+          `Small: jewelry, cards, samples, and single cosmetics travel well in a <a href="/4x6-bubble-mailer/">4x6 bubble mailer sized for small accessories</a>.`,
           "Medium (7x9, 8.5x12): books, larger cosmetics, small apparel, electronics accessories, multi-item orders.",
           "Large (10.5x15 and up): folded apparel, kits, documents, and mixed retail orders.",
         ],
@@ -3230,6 +3230,427 @@ const blogPosts = [
     ],
     related: ["how-to-choose-bubble-mailer-size", "kraft-vs-white-bubble-mailers"],
   },
+  {
+    slug: "bubble-mailers-vs-boxes",
+    category: "Comparison",
+    image: "generic",
+    imageIndex: 1,
+    date: "2026-07-02",
+    readTime: "7 min read",
+    title: "Bubble Mailers vs Boxes: Which Should You Ship In?",
+    metaTitle: "Bubble Mailers vs Boxes | Which To Ship In",
+    metaDescription:
+      "When a padded mailer beats a box and when it does not - compare protection, postage, packing speed, and storage to pick the right format for each product.",
+    intro:
+      "Most shipping programs use both mailers and boxes, but plenty of sellers default to boxes for everything and quietly overpay on every order. A padded mailer is lighter, cheaper, faster to pack, and takes up a fraction of the storage space - yet it is genuinely the wrong choice for some products. Here is how to decide which format belongs on which SKU.",
+    sections: [
+      {
+        heading: "What each format is actually good at",
+        html: `<p>A box protects by holding its shape. Rigid walls keep pressure off the contents, which is what breakable and oddly balanced items need. A padded mailer protects differently - it absorbs scuffs, moisture, and light impacts while flexing with the parcel rather than resisting it. For anything that is not fragile, that flexibility is an advantage, because a flexible parcel is less likely to be crushed than an empty-cornered box travelling through the same sorting equipment.</p>
+        <p>The practical dividing line is whether your product can survive being pressed on. Books, apparel, phone cases, cosmetics in solid containers, documents, and most accessories can. Glassware, ceramics, loose electronics with exposed ports, and anything with a delicate protruding part cannot, and those belong in a box with internal cushioning. Comparing formats against your real catalogue is easier from our full <a href="/products/">bubble mailer range</a> than from a spec sheet.</p>`,
+      },
+      {
+        heading: "Cost, postage, and packing speed",
+        html: `<p>Mailers win on almost every operational metric. The material itself costs less per unit, and because a mailer adds far less weight and volume than a box, it usually lands in a cheaper postage band. That matters most under dimensional-weight pricing, where carriers bill for the space a parcel occupies - a lightweight product in a box is charged as though it were heavy, while the same product in a snug mailer is not.</p>
+        <p>Packing speed is the cost most sellers forget to measure. A mailer is one motion: insert, peel, seal. A box needs assembling, void fill, and taping, which can be three to four times longer per order. Across a few hundred orders a week that difference is real labour. Boxes also arrive flat but still consume shelf space, whereas mailers stack in a fraction of the footprint - a genuine advantage if you pack from a spare room or a small unit.</p>`,
+      },
+      {
+        heading: "When a box is still the right call",
+        html: `<p>Do not force a mailer onto a product that needs structure. Anything breakable, anything with sharp corners that will work through the lining, and anything heavy enough to strain the seams belongs in a box. Multi-item orders that need internal separation are usually better boxed too, since loose items rubbing together inside a mailer is a common and avoidable damage cause.</p>
+        <p>Presentation can justify a box as well. For gifting, subscription boxes, and higher-priced items, the rigid unboxing moment is part of what the customer is paying for. That said, a well-printed mailer closes much of that gap at a fraction of the cost - the format matters less than whether it looks deliberate. Our guide to <a href="/blog/custom-printed-bubble-mailers-branding/">custom printed bubble mailers</a> covers how to get that polished look without moving to boxes.</p>`,
+      },
+      {
+        heading: "Running both formats without complicating your operation",
+        html: `<p>The efficient setup for most sellers is two or three mailer sizes covering the bulk of orders, plus one or two box sizes for the exceptions. Split the catalogue once - mailer-safe versus box-only - and record the decision against each SKU so packers are not judging it order by order. That single piece of documentation removes most packing mistakes and most damage claims.</p>
+        <p>Review the split every few months as your range changes, especially if you add heavier or more fragile lines. If mailers cover most of your volume, larger formats such as our <a href="/10-5-x-15-bubble-mailer/">10.5x15 bubble mailer</a> often absorb the orders you assumed needed a box, letting you shrink your box inventory to genuine exceptions only.</p>`,
+      },
+    ],
+    faq: [
+      ["Are bubble mailers safe for fragile items?", "Generally no. Bubble mailers protect against scuffs, moisture, and light impacts, but they do not resist crushing the way a rigid box does. Glass, ceramics, and delicate electronics should go in a box with internal cushioning."],
+      ["Is it cheaper to ship in a bubble mailer or a box?", "A bubble mailer is almost always cheaper. It costs less per unit, adds less weight, and occupies less space, which often puts the parcel in a lower postage band under dimensional-weight pricing."],
+      ["Can I ship books in a bubble mailer?", "Yes. Books are flat, rigid, and not easily crushed, which makes them one of the best-suited products for padded mailers. Choose a size that fits snugly so the book does not shift in transit."],
+      ["Do bubble mailers protect as well as boxes?", "They protect differently. Mailers absorb scuffs, moisture, and light impacts while flexing with the parcel; boxes resist pressure with rigid walls. For non-breakable goods a mailer is usually sufficient and often handles better."],
+      ["How much faster is packing a mailer than a box?", "Packing a mailer is typically three to four times faster, because it is a single insert-and-seal motion with no assembly, void fill, or taping. Across a few hundred orders a week that adds up to significant labour savings."],
+      ["Should I use mailers or boxes for multi-item orders?", "It depends on whether the items need separating. Soft items that can sit together pack fine in a larger mailer, but mixed or hard items that would rub against each other are safer in a box with internal separation."],
+    ],
+    related: ["how-to-choose-bubble-mailer-size", "custom-printed-bubble-mailers-branding"],
+  },
+  {
+    slug: "how-to-pack-a-bubble-mailer",
+    category: "How-To",
+    image: "plain",
+    imageIndex: 1,
+    date: "2026-07-10",
+    readTime: "7 min read",
+    title: "How to Pack and Seal a Bubble Mailer Properly",
+    metaTitle: "How to Pack a Bubble Mailer | Packing Guide",
+    metaDescription:
+      "A step-by-step guide to packing and sealing bubble mailers - loading the product, getting a secure seal, placing the label, and the mistakes that cause damage.",
+    intro:
+      "Most bubble mailer damage is not a material failure - it is a packing failure. A mailer that is loaded badly, sealed carelessly, or labelled over a fold will fail in transit even when the product inside was well chosen. The good news is that packing one properly takes about fifteen seconds once the habit is set. Here is the routine worth teaching every packer on day one.",
+    sections: [
+      {
+        heading: "Prepare the product before it goes in",
+        html: `<p>Anything with a screen, a polished surface, or loose parts should get a thin protective layer before it enters the mailer - tissue, a poly bag, or a simple wrap is enough. The padded lining handles impact, not abrasion, and a product sliding against the interior over a multi-day journey is what produces most of the scuff complaints sellers blame on the mailer itself.</p>
+        <p>If you are shipping more than one item, bundle them together so they travel as a single mass rather than as separate objects knocking into each other. Small accessories are worth bagging individually. For high-volume operations where every second counts, <a href="/bubble-mailer-bags/">bubble mailer bags</a> speed this stage up because the product goes straight in without any additional handling.</p>`,
+      },
+      {
+        heading: "Load it without overfilling",
+        html: `<p>Slide the product in flat and push it down to the sealed base so it sits against the bottom edge rather than floating near the opening. A product resting at the top puts all its weight on the seal, which is the weakest point of the whole mailer and the first thing to fail when a parcel is dropped.</p>
+        <p>Leave enough room above the product to fold and seal cleanly. If the mailer bulges so much that the adhesive strip is under tension when closed, the size is wrong - the seal will peel open somewhere in the network. Equally, if the product slides freely from end to end, it needs a smaller mailer or a little padding. The target is snug, flat, and closable without force.</p>`,
+        bullets: [
+          "Push the product to the sealed base, not the opening.",
+          "Keep at least a finger's width of clearance above it for the fold.",
+          "If the adhesive strip is under tension when closed, go one size up.",
+          `For small items, size down rather than padding out - a <a href="/4x6-bubble-mailer/">4x6 bubble mailer</a> beats a half-empty medium.`,
+        ],
+      },
+      {
+        heading: "Get a seal that actually holds",
+        html: `<p>Wipe or brush any dust off the sealing area first, then peel the liner in one continuous motion rather than in sections. Fold the flap over evenly and press firmly along the entire strip, working from one end to the other so no air pockets are trapped. A partially pressed seal looks closed on the packing bench and opens in a sorting machine.</p>
+        <p>For heavier contents or long-distance shipments, run a strip of tape across each end of the seal. This does not compensate for a bad seal, but it does protect the corners of the flap, which is where peeling usually starts. Never staple a padded mailer - a staple punctures the lining, creates a snag point, and can damage the product inside.</p>`,
+      },
+      {
+        heading: "Label placement and final checks",
+        html: `<p>Place the shipping label flat on the smoothest face of the mailer, avoiding folds, seams, and the sealed edge. A label creased over a fold will not scan reliably, and an unscannable label means a manually sorted parcel, a slower delivery, and sometimes a lost one. Keep the barcode area clear of tape unless your carrier specifically allows tape over it.</p>
+        <p>Finish with a two-second check: shake the parcel gently and listen. If the contents shift audibly, the mailer is too big or the product is underprepared. If the parcel is flat, quiet, and the seal holds when you flex it, it is ready. Getting the size right at the start makes this check pass almost every time - our guide to <a href="/blog/how-to-choose-bubble-mailer-size/">choosing the right bubble mailer size</a> covers how to pick formats that pack cleanly.</p>`,
+      },
+    ],
+    faq: [
+      ["Do I need to wrap a product before putting it in a bubble mailer?", "For anything with a screen, polished surface, or loose parts, yes. The padded lining handles impact but not abrasion, so a thin layer of tissue or a poly bag prevents the scuffs that cause most complaints."],
+      ["Should I tape a bubble mailer shut as well as sealing it?", "The adhesive strip is designed to hold on its own, but a strip of tape across each end of the seal protects the flap corners on heavier or long-distance shipments. Tape is a supplement, not a fix for a poorly pressed seal."],
+      ["Can I staple a bubble mailer closed?", "No. A staple punctures the padded lining, creates a snag point in sorting machinery, and can damage the product inside. Use the adhesive strip and reinforce with tape if needed."],
+      ["Where should the shipping label go on a bubble mailer?", "Place it flat on the smoothest face, away from folds, seams, and the sealed edge. A label creased over a fold may not scan, which leads to manual sorting and delays."],
+      ["How full should a bubble mailer be?", "Full enough that the product does not slide from end to end, but not so full that the adhesive strip is under tension when closed. If the seal strains when you fold it, move up a size."],
+      ["Can bubble mailers be resealed or reused?", "The original adhesive strip is single-use, so a reused mailer needs tape or a new seal and will not be as secure. Some sellers reuse mailers for internal transfers, but for customer orders a fresh mailer presents better and seals reliably."],
+    ],
+    related: ["how-to-choose-bubble-mailer-size", "bubble-mailers-vs-boxes"],
+  },
+  {
+    slug: "bubble-mailer-shipping-costs",
+    category: "Shipping",
+    image: "bulk500",
+    imageIndex: 0,
+    date: "2026-07-17",
+    readTime: "7 min read",
+    title: "How Bubble Mailers Cut Your Shipping Costs",
+    metaTitle: "Bubble Mailer Shipping Costs | Save On Postage",
+    metaDescription:
+      "Understand what actually drives your postage bill - weight, dimensions, and thickness bands - and how the right padded mailer lowers the cost of every order.",
+    intro:
+      "Packaging is usually a small line on the invoice and a large influence on the shipping bill underneath it. Carriers price on weight, dimensions, and sometimes thickness, and a padded mailer affects all three. Sellers who switch a portion of their orders from boxes to correctly sized mailers routinely cut postage per parcel without touching their carrier contract. Here is where that saving actually comes from.",
+    sections: [
+      {
+        heading: "Understand what your carrier is charging for",
+        html: `<p>Carriers bill on the greater of actual weight and dimensional weight - a figure calculated from the parcel's length, width, and depth. This is why a light product in an oversized box can cost the same as something several times heavier. A padded mailer collapses around its contents, so the dimensional figure stays close to the real product size instead of being inflated by empty space.</p>
+        <p>Depth is the dimension that costs most sellers money, because it is the one a box adds and a mailer barely does. Many postal services also run thickness-based tiers, where a parcel under a certain depth ships at a noticeably lower rate. Products that only just miss that threshold in a box often fall comfortably inside it in a mailer, which is one of the largest single savings available.</p>`,
+      },
+      {
+        heading: "Weight savings compound across a year",
+        html: `<p>An empty padded mailer weighs a fraction of an equivalent box, and that difference travels on every parcel you send. On its own it looks trivial. Across a few thousand orders it moves a meaningful share of your volume into a lower weight band, and weight bands are where postage pricing steps rather than slides - crossing one costs real money.</p>
+        <p>Void fill is the hidden weight most sellers do not count. A box that needs paper, air pillows, or foam to stop the product moving adds both weight and cost to every order, plus the expense of buying and storing the fill itself. A correctly sized mailer needs none, which removes a whole consumable from the operation. Buying in volume from our <a href="/products/">bubble mailer range</a> lowers the per-unit cost further on top of the postage saving.</p>`,
+      },
+      {
+        heading: "Right-sizing beats bulk-buying the wrong size",
+        html: `<p>The most common mistake is standardising on one large mailer because it fits everything. It does fit everything, and it overcharges you on most orders - you pay for space you are not using and often add fill to stop the product moving inside it. Two or three sizes matched to your actual order profile will beat one universal size on cost every time.</p>
+        <p>Work it out from your real data rather than intuition. Pull a month of orders, group them by what they contain, and find the two or three formats that cover the bulk of that volume. Most sellers discover that a mid-size format such as an <a href="/8-5-x-12-bubble-mailer/">8.5x12 bubble mailer</a> handles a far larger share of orders than they expected, and that their largest size is being used for a handful of parcels a week.</p>`,
+      },
+      {
+        heading: "Do not save your way into damage claims",
+        html: `<p>The cheapest parcel is the one that arrives intact. A mailer that is genuinely too small for the product, or a mailer used for something that needed a box, converts a small postage saving into a replacement, a return shipment, and a customer who does not order again. Damage is far more expensive than the packaging decision that caused it.</p>
+        <p>Track your damage rate alongside your postage cost rather than looking at either in isolation, and treat a rising rate as a signal to revisit sizing before it becomes a pattern. If you are choosing between two formats, order a small quantity of each and pack real products before committing - our guide to <a href="/blog/how-to-choose-bubble-mailer-size/">choosing the right bubble mailer size</a> walks through that test in detail.</p>`,
+      },
+    ],
+    faq: [
+      ["Do bubble mailers really reduce shipping costs?", "Yes, in most cases. They weigh less than boxes, add far less depth, and need no void fill, which lowers both actual and dimensional weight. The saving is largest when the mailer is sized close to the product."],
+      ["What is dimensional weight?", "Dimensional weight is a figure carriers calculate from a parcel's length, width, and depth. You are billed on whichever is greater, actual or dimensional weight, which is why an oversized parcel costs more even when it is light."],
+      ["Does parcel thickness affect postage?", "Often, yes. Many postal services have thickness-based tiers where a parcel under a certain depth ships at a lower rate. A padded mailer frequently keeps a product inside a tier that a box would push it out of."],
+      ["Is it cheaper to buy one large mailer size for everything?", "No. A universal large size means paying for unused space on most orders and often adding void fill. Two or three sizes matched to your real order profile costs less overall despite the smaller per-size volume."],
+      ["How do I work out which mailer sizes to stock?", "Pull a month of real orders, group them by contents, and identify the two or three formats that cover most of that volume. Order small quantities of each and pack real products before committing to a bulk run."],
+      ["Can undersizing a mailer cost me money?", "Yes. A mailer that is too small strains the seams and seal, and a mailer used for a product that needed a box leads to damage. A replacement, return postage, and a lost customer far outweigh the postage saved."],
+    ],
+    related: ["how-to-choose-bubble-mailer-size", "buying-bubble-mailers-in-bulk"],
+  },
+  {
+    slug: "are-bubble-mailers-recyclable",
+    category: "Sustainability",
+    image: "generic",
+    imageIndex: 2,
+    date: "2026-07-24",
+    readTime: "7 min read",
+    title: "Are Bubble Mailers Recyclable? A Practical Guide",
+    metaTitle: "Are Bubble Mailers Recyclable | Eco Guide",
+    metaDescription:
+      "What can and cannot be recycled in a padded mailer, why mixed materials complicate it, and how to make your padded shipping more sustainable without losing protection.",
+    intro:
+      "Recyclability is one of the most common questions sellers get about padded mailers, and the honest answer is more nuanced than a yes or no. It depends on what the mailer is made of and on what your local facility accepts. Understanding the distinction lets you make a claim you can actually stand behind - and avoid the vague eco language that erodes trust when a customer looks into it.",
+    sections: [
+      {
+        heading: "Why mixed materials complicate recycling",
+        html: `<p>A traditional padded mailer combines a paper or poly outer with a plastic bubble lining bonded to it. Each material is recyclable in principle, but bonded together they are difficult to separate, and most kerbside paper streams will reject a mailer with plastic film attached. That is the core of the issue - not that the materials are unrecyclable, but that the combination is hard to process.</p>
+        <p>This is why blanket claims cause problems. A mailer described simply as recyclable may only be recyclable through a store drop-off scheme for soft plastics, or only after the customer separates the layers, which few will do. Being specific about which part goes where is more useful to customers and more defensible than a green label with nothing behind it.</p>`,
+      },
+      {
+        heading: "What customers can realistically do",
+        html: `<p>Give clear, short instructions rather than a general appeal to recycle. If your mailer has a paper outer with a plastic lining, tell customers whether the layers can be separated and where each part goes. If it is a poly mailer, point them to soft-plastic collection points rather than the kerbside bin, where it will simply be filtered out.</p>
+        <p>Reuse is worth mentioning too, and it is the option customers are most likely to act on. Padded mailers survive a second journey comfortably when the original seal is covered with tape, which makes them useful for returns and for customers who resell. A line on the mailer or the packing slip suggesting reuse costs nothing and lands better than a recycling symbol most people cannot act on.</p>`,
+      },
+      {
+        heading: "Choosing a more sustainable padded mailer",
+        html: `<p>If sustainability matters to your brand, the material decision is where it is settled - not the messaging. Paper-based padded mailers with a paper cushioning layer are the simplest for customers to recycle because there is no separation step, though they are typically less water-resistant than poly. Recycled-content mailers reduce virgin material without changing how the customer disposes of them.</p>
+        <p>Appearance and material are not the same thing, and this trips up a lot of brands. A natural brown finish signals eco-consciousness but does not by itself mean a mailer is more recyclable. Our <a href="/kraft-bubble-mailers/">kraft bubble mailers</a> deliver that natural look, and if a verified environmental claim matters to you, check the specific construction and lining rather than relying on the colour.</p>`,
+      },
+      {
+        heading: "Making claims you can defend",
+        html: `<p>Say what is true and be specific. Wording such as widely recyclable is easy to challenge and increasingly regulated in several markets. Naming the material and the disposal route - paper outer to kerbside, film lining to soft-plastic collection - is more credible, more useful, and far safer than a broad eco claim you would struggle to evidence.</p>
+        <p>Consistency also matters. If your mailer is sustainable but everything inside it is not, customers notice the gap. Aligning the mailer, the packing materials, and the messaging into one coherent choice is what actually reads as genuine, and the base you choose is part of that - our guide to <a href="/blog/kraft-vs-white-bubble-mailers/">kraft vs white bubble mailers</a> covers how each finish fits different brand positions.</p>`,
+      },
+    ],
+    faq: [
+      ["Can bubble mailers go in kerbside recycling?", "Usually not as a whole. Most kerbside paper streams reject mailers with a plastic bubble lining attached. Check whether your mailer is paper-based throughout, and otherwise direct customers to soft-plastic collection points."],
+      ["Are kraft bubble mailers more recyclable than white ones?", "Not automatically. Colour indicates appearance, not construction. What matters is whether the outer and the lining are the same material and whether the layers can be separated - check the product specification."],
+      ["What makes a padded mailer hard to recycle?", "The bonding of two different materials. A paper outer with a plastic bubble lining is difficult to separate mechanically, so facilities that process one stream will typically reject the combined item."],
+      ["Are paper-based padded mailers as protective as plastic-lined ones?", "They protect well against impact and scuffs, but they are generally less water-resistant than poly-lined mailers. If your goods are moisture-sensitive or ship in wet conditions, weigh that trade-off carefully."],
+      ["Can customers reuse bubble mailers?", "Yes, and it is the option they are most likely to act on. A padded mailer handles a second journey comfortably if the original seal is covered with tape, which makes it useful for returns and resale."],
+      ["How should I word an eco claim on my packaging?", "Be specific about the material and the disposal route rather than using broad terms like widely recyclable. Naming where each part goes is more credible with customers and safer as claim regulations tighten."],
+    ],
+    related: ["kraft-vs-white-bubble-mailers", "bubble-mailers-vs-boxes"],
+  },
+  {
+    slug: "best-bubble-mailers-for-clothing",
+    category: "Industry Guide",
+    image: "generic",
+    imageIndex: 3,
+    date: "2026-07-31",
+    readTime: "7 min read",
+    title: "The Best Bubble Mailers for Shipping Clothing and Apparel",
+    metaTitle: "Bubble Mailers for Clothing | Apparel Shipping",
+    metaDescription:
+      "Which padded mailer sizes suit apparel, how folding affects the format you need, and how to ship clothing without creasing, bulging seams, or moisture damage.",
+    intro:
+      "Apparel is one of the best categories for padded mailers - soft, unbreakable, and happy to be compressed. But it is also the category where sizing goes wrong most often, because a folded garment behaves nothing like a rigid product. Fabric expands, seams bulge, and a mailer that looked right with a flat sample splits when a real order goes in. Here is how to get apparel shipping right.",
+    sections: [
+      {
+        heading: "Fold first, then size",
+        html: `<p>Never size an apparel mailer from a garment's flat dimensions. Fold the item exactly the way your packers will fold it, then measure the folded block at its widest and thickest points. A folded hoodie can be three or four times the depth of a folded t-shirt in the same size, and depth is what determines whether the mailer seals cleanly or strains at the flap.</p>
+        <p>Standardise the fold as well as the mailer. If one packer folds in thirds and another in quarters, the same garment needs different formats on different days, and your sizing decisions stop being reliable. Document the fold per product type alongside the mailer size and the whole packing bench becomes consistent - our full <a href="/products/">bubble mailer range</a> makes it easy to match formats once your folds are settled.</p>`,
+      },
+      {
+        heading: "Sizes that suit most apparel orders",
+        html: `<p>Fabric compresses, so apparel usually needs width more than it needs depth - a mailer that is generous across but not overly deep gives the folded block room to settle without letting it slide. Most apparel businesses cover the large majority of orders with two formats, adding a third only for bulk or multi-item orders.</p>`,
+        bullets: [
+          "Accessories, socks, and underwear: small formats around 6x9 handle these comfortably.",
+          "Single t-shirts and lightweight tops: mid-size formats in the 9x12 to 10x13 range.",
+          `Hoodies, knitwear, and two-item orders: larger formats such as our <a href="/10-5-x-15-bubble-mailer/">10.5x15 bubble mailer</a>.`,
+          "Multi-item and bulk apparel orders: the largest formats, or a box if items need separating.",
+        ],
+      },
+      {
+        heading: "Protecting fabric in transit",
+        html: `<p>Apparel's risks are different from those of hard goods. Fabric does not break, but it stains, absorbs moisture, and picks up odours, and a damp parcel left on a doorstep can ruin an order that survived the journey perfectly well. A poly liner or an inner bag inside the mailer solves this cheaply and is standard practice for most apparel sellers.</p>
+        <p>Watch for snagging with delicate fabrics. Knitwear, lace, and loose weaves can catch on a rough interior or on any staple or tape edge that intrudes into the mailer, so bag those items rather than placing them against the lining. Light-coloured garments are also worth bagging, since the interior surface can transfer marks over a long journey.</p>`,
+      },
+      {
+        heading: "Presentation for a category built on returns",
+        html: `<p>Apparel has the highest return rate in eCommerce, which makes the mailer part of the returns experience rather than just the delivery. A mailer that opens cleanly and could plausibly be resealed makes a return easier for the customer and cheaper for you - a customer who has to find their own packaging is a customer more likely to contact support.</p>
+        <p>Presentation earns its keep here too, because apparel customers photograph their orders more than most. A branded mailer turns an unboxing into visible marketing at almost no incremental cost, and for high-volume operations <a href="/bubble-mailer-bags/">bubble mailer bags</a> keep packing fast while still carrying your branding on every parcel.</p>`,
+      },
+    ],
+    faq: [
+      ["What size bubble mailer is best for a t-shirt?", "A mid-size format in the 9x12 to 10x13 range suits most single folded t-shirts. Measure your own folded garment rather than relying on the size chart, since fold style changes the block significantly."],
+      ["What size bubble mailer do I need for a hoodie?", "Hoodies and knitwear generally need a larger format such as 10.5x15, because a folded hoodie can be three to four times the depth of a folded t-shirt. Measure the folded block before committing to a size."],
+      ["Should I bag clothing before putting it in a bubble mailer?", "Yes, for most apparel. A poly liner or inner bag protects against moisture, prevents marks transferring from the lining, and stops delicate fabrics like knitwear and lace from snagging."],
+      ["Do bubble mailers crease clothing?", "Some creasing from folding is unavoidable in any mailer, but it is not made worse by the padded lining. Consistent folding and a snug fit that stops the garment shifting keep creasing to a minimum."],
+      ["Can I fit two garments in one bubble mailer?", "Often yes, if both are soft and can be bundled together. Size from the combined folded block, and use a box instead if the items are mixed or hard enough to rub against each other."],
+      ["Are bubble mailers good for apparel returns?", "They work well for returns because they open cleanly and can be resealed with tape. Making the return easy reduces support contacts and improves the customer experience in a category with high return rates."],
+    ],
+    related: ["how-to-choose-bubble-mailer-size", "how-to-pack-a-bubble-mailer"],
+  },
+  {
+    slug: "shipping-electronics-in-bubble-mailers",
+    category: "Industry Guide",
+    image: "generic",
+    imageIndex: 4,
+    date: "2026-08-05",
+    readTime: "7 min read",
+    title: "Shipping Electronics and Accessories in Bubble Mailers",
+    metaTitle: "Bubble Mailers for Electronics | Shipping Guide",
+    metaDescription:
+      "Which electronics suit padded mailers and which need a box, plus how to handle static, moisture, and the sizing that keeps accessories safe in transit.",
+    intro:
+      "Electronics accessories are ideal padded-mailer cargo - small, flat, valuable relative to their size, and expensive to replace when they arrive damaged. But the category also contains items that should never go in a mailer, and the line between the two is not always obvious. Getting it right protects both your margin and your seller ratings.",
+    sections: [
+      {
+        heading: "What belongs in a mailer and what does not",
+        html: `<p>The test is whether the item can take pressure across its surface without harm. Phone cases, cables, chargers, adapters, memory cards, screen protectors in rigid sleeves, and most small accessories pass comfortably. Anything with an exposed screen, a delicate connector sticking out, or internal moving parts does not - those need a box with cushioning, regardless of how small they are.</p>
+        <p>Value should influence the decision even when the item would technically survive. A high-value device in a padded mailer is a bigger loss when the exception happens, and a mailer also signals low value to anyone handling it, which is not always what you want. For small, sturdy accessories a snug format such as a <a href="/4x7-bubble-mailer/">4x7 bubble mailer</a> keeps the parcel tight and the postage low.</p>`,
+      },
+      {
+        heading: "Static, moisture, and what padding does not cover",
+        html: `<p>Bubble lining protects against impact and scuffs. It does not protect against static, and bare circuit boards, memory modules, and exposed components need an antistatic bag before they go anywhere near a padded mailer. This is a step sellers new to the category miss regularly, and the resulting failures look like faulty stock rather than a packing error.</p>
+        <p>Moisture is the other gap. A padded mailer resists light damp but is not waterproof, and electronics are unforgiving about water. If parcels are left on doorsteps or shipped through wet conditions, add an inner poly bag - it costs very little and removes a failure mode that produces expensive, hard-to-diagnose returns. Seal the inner bag rather than just folding it closed.</p>`,
+      },
+      {
+        heading: "Sizing for cables, chargers, and mixed accessories",
+        html: `<p>Coiled cables and chargers are deceptive. Coiled tightly and secured with a tie, a cable is a compact block; loose, it sprawls and needs a much larger mailer while still shifting inside it. Secure the coil first, then size the mailer - this single habit removes most of the sizing inconsistency in accessory shipping.</p>
+        <p>For mixed accessory orders, bag each item separately so hard edges do not press against one another. Connectors and metal casings can mark a plastic housing over a long journey, and a customer who receives a scratched item treats it as damaged even when it works perfectly. Mid-size formats such as a <a href="/7x9-bubble-mailer/">7x9 bubble mailer</a> handle most multi-accessory orders without leaving excess room.</p>`,
+      },
+      {
+        heading: "Reducing disputes on higher-value parcels",
+        html: `<p>Electronics attract more not-as-described and not-received disputes than most categories, so packing that looks deliberate is worth something on its own. A snug, well-sealed, cleanly labelled parcel signals a professional operation and gives you a stronger position if a claim is raised.</p>
+        <p>Keep the mailer discreet as well. Printing the product type on the outside of a parcel containing electronics advertises its contents, which is worth avoiding on higher-value shipments - brand it without describing what is inside. If you are shipping a mix of accessories and larger items, our guide to <a href="/blog/bubble-mailers-vs-boxes/">bubble mailers vs boxes</a> covers where to draw the line between the two formats.</p>`,
+      },
+    ],
+    faq: [
+      ["Can I ship a phone in a bubble mailer?", "A phone in a rigid retail box may be acceptable, but a bare device with an exposed screen should go in a box with cushioning. Padded mailers resist scuffs and light impacts, not the crushing that cracks a screen."],
+      ["Do bubble mailers protect against static?", "No. Bubble lining protects against impact and abrasion but offers no antistatic protection. Bare circuit boards, memory modules, and exposed components need an antistatic bag before going into a mailer."],
+      ["Are bubble mailers waterproof?", "They resist light damp but are not waterproof. For electronics, add a sealed inner poly bag if parcels may be left outdoors or shipped through wet conditions."],
+      ["What size mailer do I need for cables and chargers?", "Coil the cable and secure it with a tie first, then size to the resulting block. A secured coil is compact and predictable, while a loose cable needs a much larger mailer and still shifts in transit."],
+      ["Should I write the contents on the outside of the mailer?", "Avoid naming electronics on the outside of a parcel, as it advertises the contents. Brand the mailer with your logo instead, and keep product details on the packing slip inside."],
+      ["How do I pack a multi-accessory electronics order?", "Bag each item separately so hard edges and connectors do not press against other items, then place them flat in a mid-size mailer. This prevents the surface marks customers report as damage."],
+    ],
+    related: ["bubble-mailers-vs-boxes", "how-to-pack-a-bubble-mailer"],
+  },
+  {
+    slug: "buying-bubble-mailers-in-bulk",
+    category: "Buying Guide",
+    image: "generic",
+    imageIndex: 5,
+    date: "2026-08-08",
+    readTime: "7 min read",
+    title: "Buying Bubble Mailers in Bulk: What to Know Before You Order",
+    metaTitle: "Buying Bubble Mailers in Bulk | Order Guide",
+    metaDescription:
+      "How to work out the right bulk quantity, what affects per-unit pricing, how to store mailers properly, and the ordering mistakes that tie up cash in packaging.",
+    intro:
+      "Bulk pricing on padded mailers is genuinely worth having - per-unit costs drop sharply with volume, and packaging is one of the few costs you can lower without renegotiating anything. But a bulk order is also cash converted into stock sitting on a shelf, and ordering the wrong size in quantity is an expensive mistake to unwind. Here is how to buy volume sensibly.",
+    sections: [
+      {
+        heading: "Work out your real usage first",
+        html: `<p>Base the quantity on measured usage, not on a target you hope to hit. Take your last three months of orders, split them by the mailer size each one used, and project forward with a modest allowance for growth. A common approach is to hold three to six months of stock per size - enough to earn a meaningful price break without committing a large amount of cash to a format you might change.</p>
+        <p>Seasonality is the adjustment most sellers miss. If a large share of your volume lands in a few weeks of the year, order against that peak rather than against your monthly average, and place it early enough that production and delivery are not competing with everyone else's peak orders. Running out of your core size in your busiest week costs far more than holding a few extra cases.</p>`,
+      },
+      {
+        heading: "What actually moves the per-unit price",
+        html: `<p>Quantity is the largest factor, but it is not the only one. Size, material, and whether the mailer is printed all affect the unit cost, and printed mailers carry a setup element that only makes sense spread across a reasonable run. Consolidating sizes matters more than most buyers expect - two sizes at higher volumes usually price better than four sizes at lower ones, even for the same total number of mailers.</p>
+        <p>Consider timing and consolidation as levers too. Combining sizes into a single order, or committing to a scheduled repeat order, often prices better than placing scattered small orders through the year. If you are adding branding, our <a href="/custom-bubble-mailers/">custom bubble mailers</a> are worth quoting alongside plain stock so you can see the real premium at your quantity rather than guessing at it.</p>`,
+      },
+      {
+        heading: "Storage is part of the decision",
+        html: `<p>Padded mailers are light but bulky, and a bulk order takes real space. Work out where the cases will physically go before ordering, and keep them off the floor, away from damp, and out of direct sunlight - moisture affects the adhesive strip, and prolonged sun can weaken and discolour the outer, particularly on lighter finishes.</p>
+        <p>Rotate stock so older mailers are used first. Adhesive performance degrades slowly over time, and a mailer that has sat at the back of a shelf for two years will not seal as reliably as fresh stock. First in, first out is a trivial habit that prevents seal failures nobody would otherwise think to diagnose.</p>`,
+      },
+      {
+        heading: "Sample before you commit",
+        html: `<p>Always test a small quantity before a large order, especially with a new supplier or a size you have not used. Pack your real products, seal them properly, and if you can, send a few through your actual carrier to see how they arrive. Specifications tell you the dimensions; only a real parcel tells you how the mailer performs in your operation.</p>
+        <p>Check the finish against your branding at the same time, since a base that looks right on screen can read differently in hand. Whichever way you go, keeping it consistent across your range is what builds recognition - our guide to <a href="/blog/kraft-vs-white-bubble-mailers/">kraft vs white bubble mailers</a> covers how each finish fits different brand positions before you commit to volume.</p>`,
+      },
+    ],
+    faq: [
+      ["How many bubble mailers should I order at once?", "Most sellers hold three to six months of stock per size, based on measured usage from the last three months plus a modest growth allowance. That earns a meaningful price break without tying up excessive cash."],
+      ["Do bubble mailers expire or degrade in storage?", "The mailer itself lasts, but the adhesive strip degrades slowly over time and with exposure to damp or heat. Rotate stock first in, first out so older mailers are used before their seal performance drops."],
+      ["What affects the per-unit price of bulk bubble mailers?", "Quantity is the biggest factor, followed by size, material, and whether the mailer is printed. Consolidating into fewer sizes at higher volumes usually prices better than spreading the same total across many sizes."],
+      ["How should I store bulk bubble mailers?", "Keep them off the floor, away from damp, and out of direct sunlight. Moisture affects the adhesive strip and prolonged sun can weaken and discolour the outer, particularly on lighter finishes."],
+      ["Should I order samples before a bulk run?", "Yes, always - especially with a new supplier or an untested size. Pack your real products and, if possible, ship a few through your actual carrier to see how they perform before committing to volume."],
+      ["Is it worth buying printed mailers in bulk?", "Printed mailers carry a setup cost that is best spread across a reasonable quantity. For a brand shipping steadily the per-unit premium is small, and the branding works on every order for months."],
+    ],
+    related: ["bubble-mailer-shipping-costs", "custom-printed-bubble-mailers-branding"],
+  },
+  {
+    slug: "bubble-mailer-vs-poly-mailer",
+    category: "Comparison",
+    image: "generic",
+    imageIndex: 6,
+    date: "2026-06-25",
+    readTime: "7 min read",
+    title: "Bubble Mailer vs Poly Mailer: When Do You Need Padding?",
+    metaTitle: "Bubble Mailer vs Poly Mailer | Which To Use",
+    metaDescription:
+      "Padded or unpadded? Compare bubble mailers and flat poly mailers on protection, cost, and weight so you only pay for cushioning where it earns its place.",
+    intro:
+      "A poly mailer is a flat plastic envelope with no cushioning. A bubble mailer is the same idea with a padded lining bonded inside. Poly costs less and weighs less; bubble protects more. Choosing between them for each product line is one of the quickest packaging wins available, because most sellers are using one format for everything and paying for it either in postage or in damage.",
+    sections: [
+      {
+        heading: "What the padding is actually doing",
+        html: `<p>The bubble lining does three jobs: it absorbs light impacts, it keeps the product away from the outer surface so knocks and pressure are spread rather than concentrated, and it adds a small amount of rigidity that stops thin items bending. A flat poly mailer does none of that. It is a barrier against dirt and moisture and nothing more.</p>
+        <p>That makes the decision simpler than it first appears. If the only risk to your product is getting wet or dirty, padding is money spent on a problem you do not have. If there is any chance of a knock, a scuff, or a bend causing a complaint, the padding is the cheapest insurance in the parcel.</p>`,
+      },
+      {
+        heading: "Products that are fine in a flat poly mailer",
+        html: `<p>Soft, unbreakable, unbendable goods travel perfectly well without cushioning. Folded apparel, towels, bedding, fabric offcuts, and most textile products can be compressed, dropped, and stacked without harm, which is why so much of the clothing industry ships flat. Anything where the worst realistic outcome is a crease rather than damage is a poly candidate.</p>
+        <p>The savings are real on those lines. Poly mailers cost less per unit, weigh less, and take up less depth, so they often sit in a cheaper postage band than the padded equivalent. Across a high-volume apparel operation that difference is significant, and it is the single most common place sellers overspend on padding they do not need.</p>`,
+      },
+      {
+        heading: "Products that need the padded lining",
+        html: `<p>Anything rigid, anything with a surface that scratches, and anything that bends is a bubble mailer product. Books and printed materials bend at the corners in a flat mailer. Cosmetics, phone cases, and hard accessories scuff against each other and against the outer film. Photographs, prints, and documents crease in ways that make them unsellable even though nothing broke.</p>
+        <p>Value should tip a borderline call towards padding. If a damaged item means a replacement, return postage, and a refunded customer, the small premium for a padded mailer is recovered by preventing a single claim. Sellers shipping mixed catalogues usually find their protective formats concentrated in the mid-range sizes, where <a href="/bubble-mailer-packaging/">padded mailer packaging for mixed retail goods</a> covers the widest span of products.</p>`,
+      },
+      {
+        heading: "Running both formats side by side",
+        html: `<p>Most established operations use both, and that is the efficient answer rather than a compromise. Split the catalogue once: soft and unbreakable goes poly, rigid or scratchable goes padded. Record the choice against each SKU so packers are not making a judgement call under time pressure, because that is where the expensive mistakes happen.</p>
+        <p>Review the split when your range changes, particularly if you add rigid lines to a previously soft catalogue. If you are also weighing whether some products should move up to a rigid format entirely, the trade-offs are set out in our comparison of <a href="/blog/bubble-mailers-vs-boxes/">when a padded mailer beats a box</a>.</p>`,
+      },
+    ],
+    faq: [
+      ["What is the difference between a poly mailer and a bubble mailer?", "A poly mailer is a flat plastic envelope with no cushioning, offering protection against dirt and moisture only. A bubble mailer adds a padded lining that absorbs light impacts and stops thin items bending."],
+      ["Are poly mailers strong enough for shipping?", "For soft, unbreakable goods like folded apparel and textiles, yes. They resist tearing and keep contents dry, but they provide no cushioning, so anything rigid or scratchable needs a padded mailer instead."],
+      ["Which is cheaper, a poly mailer or a bubble mailer?", "Poly mailers cost less per unit, weigh less, and add less depth, which often places the parcel in a lower postage band. The saving only makes sense if your product genuinely does not need cushioning."],
+      ["Can I ship books in a poly mailer?", "It is not recommended. Books bend and scuff at the corners in a flat mailer with no cushioning. A padded mailer sized close to the book keeps the corners protected and the covers flat."],
+      ["Should I use poly mailers for clothing?", "Usually yes. Folded apparel can be compressed and dropped without damage, so cushioning adds cost without adding protection. Add a padded mailer only if the order includes hard accessories or fragile items."],
+      ["Is it worth stocking both poly and bubble mailers?", "For most sellers with a mixed catalogue, yes. Splitting soft goods to poly and rigid goods to padded lowers cost on the lines that need no cushioning while protecting the ones that do."],
+    ],
+    related: ["bubble-mailers-vs-boxes", "best-bubble-mailers-for-clothing"],
+  },
+  {
+    slug: "reduce-shipping-damage-rates",
+    category: "Operations",
+    image: "generic",
+    imageIndex: 7,
+    date: "2026-08-09",
+    readTime: "7 min read",
+    title: "How to Reduce Shipping Damage Rates With Better Packing",
+    metaTitle: "Reduce Shipping Damage | Padded Mailer Tips",
+    metaDescription:
+      "Find out why parcels arrive damaged, how to measure your real damage rate, and the packing and sizing changes that cut claims without inflating packaging costs.",
+    intro:
+      "Damage is the most expensive packaging problem because you pay for it three times - the lost product, the return or replacement postage, and the customer who does not come back. Most sellers treat it as an unavoidable cost of shipping. It rarely is. A handful of measurable changes usually removes the majority of avoidable damage, and almost none of them involve spending more on materials.",
+    sections: [
+      {
+        heading: "Measure before you change anything",
+        html: `<p>You cannot fix a damage rate you are not tracking. Record every damage report against the product, the mailer size used, and the carrier, and within a few weeks the pattern usually announces itself. Damage is almost never evenly spread - it concentrates in one product line, one size, or one route, and that concentration is what tells you where the actual fault is.</p>
+        <p>Include near misses in what you log. A customer who mentions the parcel arrived scuffed but the product was fine is reporting the same underlying problem as one requesting a refund, just earlier. Those reports are the cheapest diagnostic signal you will get, and most operations throw them away.</p>`,
+      },
+      {
+        heading: "The three causes behind most avoidable damage",
+        html: `<p>Oversizing is the biggest. A product with room to move inside its mailer builds momentum every time the parcel is handled, and it arrives having knocked against the inside of its own packaging for days. It looks like a material failure and it is a sizing failure.</p>`,
+        bullets: [
+          "Oversizing - the product shifts inside the mailer and damages itself in transit.",
+          "Weak seals - a partially pressed adhesive strip opens in sorting machinery.",
+          "Wrong format - a rigid or fragile item sent in a mailer when it needed a box.",
+          "Unprepared contents - hard items packed together with nothing separating them.",
+        ],
+      },
+      {
+        heading: "Fix the sizing before you add material",
+        html: `<p>The instinct when damage rises is to add padding or upgrade to a heavier material. That is usually the expensive way round. Sizing down so the product sits snugly removes the movement causing the damage, and it lowers your postage at the same time - the opposite of what adding fill does to your cost per parcel.</p>
+        <p>Work from real orders rather than the size chart. Pack your actual products in two candidate sizes and shake each one gently; if the contents shift audibly, that parcel will arrive marked. Our walkthrough on <a href="/blog/how-to-choose-bubble-mailer-size/">matching bubble mailer sizes to your products</a> covers how to run that test properly before committing to a bulk order.</p>`,
+      },
+      {
+        heading: "Make good packing repeatable",
+        html: `<p>Most packing errors are consistency errors, not knowledge errors. If one packer presses the full length of the seal and another taps the middle, you have two different damage rates coming off the same bench. Write the routine down, keep it to a handful of steps, and make it part of training rather than something learned by watching.</p>
+        <p>Give packers the right size within reach as well, because a packer who has to walk for the correct mailer will use the wrong one that is closer. Keeping your core formats stocked at the bench is a layout problem with a packing consequence, and holding sensible quantities of each size is part of that - our guide to <a href="/blog/buying-bubble-mailers-in-bulk/">ordering padded mailers in bulk sensibly</a> covers how much of each format to keep on hand.</p>`,
+      },
+    ],
+    faq: [
+      ["What causes most shipping damage in padded mailers?", "Oversizing is the most common cause. A product with room to move knocks against the inside of its own packaging throughout the journey, which looks like a material failure but is a sizing failure."],
+      ["How do I measure my shipping damage rate?", "Log every damage report against the product, the mailer size used, and the carrier. Include near misses where the parcel was scuffed but the product survived, as they signal the same underlying problem earlier."],
+      ["Will adding more padding reduce damage?", "Not usually, and it raises your cost per parcel. If the product is moving inside an oversized mailer, sizing down removes the cause and lowers postage at the same time."],
+      ["What is a normal shipping damage rate?", "It varies widely by product category and carrier, which is why your own baseline matters more than a benchmark. Track your rate over time and treat any sustained rise as a signal to review sizing and packing."],
+      ["How can I stop mailers opening in transit?", "Press the full length of the adhesive strip rather than tapping the middle, and reinforce each end of the seal with tape on heavier parcels. Inconsistent sealing between packers is a common hidden cause."],
+      ["Should I switch to boxes if my damage rate is high?", "Only for products that genuinely need rigid protection, such as breakable or oddly shaped items. For everything else, correcting the mailer size and the sealing routine usually resolves the problem at lower cost."],
+    ],
+    related: ["how-to-pack-a-bubble-mailer", "how-to-choose-bubble-mailer-size"],
+  },
 ];
 
 const blogPostBySlug = new Map(blogPosts.map((post) => [post.slug, post]));
@@ -3239,7 +3660,7 @@ const blogPostingSchema = (post) => ({
   "@type": "BlogPosting",
   headline: post.title,
   description: post.metaDescription,
-  image: imageAbsoluteUrl(pickAsset(post.image, 0).url),
+  image: imageAbsoluteUrl(pickAsset(post.image, post.imageIndex ?? 0).url),
   datePublished: post.date,
   dateModified: post.date,
   author: { "@type": "Organization", name: site.brand },
@@ -3263,7 +3684,7 @@ const renderRelatedBlog = (post) => {
           ${items
             .map(
               (item) => `<article class="product-card">
-            <img src="${pickAsset(item.image, 0).url}" alt="${item.title}" loading="lazy" decoding="async" width="1080" height="1080">
+            <img src="${pickAsset(item.image, item.imageIndex ?? 0).url}" alt="${item.title}" loading="lazy" decoding="async" width="1080" height="1080">
             <div>
               <span class="eyebrow">${item.category}</span>
               <h3><a href="/blog/${item.slug}/">${item.title}</a></h3>
@@ -3292,7 +3713,7 @@ const renderBlogPost = (post) => {
       eyebrow: post.category,
       title: post.title,
       description: post.intro,
-      image: pickAsset(post.image, 0),
+      image: pickAsset(post.image, post.imageIndex ?? 0),
       ctas: [
         { href: "/custom-bubble-mailers/", label: "Get Free Quote", primary: true },
         { href: "/products/", label: "View Products" },
@@ -3320,7 +3741,7 @@ const renderBlogPost = (post) => {
     title: post.title,
     metaTitle: post.metaTitle,
     metaDescription: post.metaDescription,
-    heroImage: pickAsset(post.image, 0).url,
+    heroImage: pickAsset(post.image, post.imageIndex ?? 0).url,
     body,
     breadcrumbs,
     schemas: [faqSchema(post.faq), blogPostingSchema(post)],
@@ -3336,7 +3757,7 @@ const renderBlogIndex = () => {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map(
       (post) => `<article class="product-card">
-        <img src="${pickAsset(post.image, 0).url}" alt="${post.title}" loading="lazy" decoding="async" width="1080" height="1080">
+        <img src="${pickAsset(post.image, post.imageIndex ?? 0).url}" alt="${post.title}" loading="lazy" decoding="async" width="1080" height="1080">
         <div>
           <span class="eyebrow">${post.category}</span>
           <h3><a href="/blog/${post.slug}/">${post.title}</a></h3>
@@ -3352,7 +3773,7 @@ const renderBlogIndex = () => {
     ${renderStandardPageHero({
       eyebrow: "Bubble Mailer Blog",
       title: "Guides for packing and shipping smarter",
-      description: "Practical guides on choosing bubble mailer sizes, kraft vs white, and branding your shipping with custom printed mailers.",
+      description: "Practical guides on sizing, materials, packing, postage costs, and branding - so every parcel you send is protected and priced properly.",
       image: pickAsset("generic", 1),
       ctas: [
         { href: "/products/", label: "View Products", primary: true },
@@ -3369,7 +3790,7 @@ const renderBlogIndex = () => {
     routePath: "/blog/",
     title: "Bubble Mailer Blog",
     metaTitle: "Bubble Mailer Guides & Buying Advice",
-    metaDescription: "Practical bubble mailer guides — how to choose sizes, kraft vs white mailers, and custom printed mailers for branded shipping.",
+    metaDescription: "Practical bubble mailer guides — choosing sizes, kraft vs white, poly vs padded, packing, shipping costs, recycling, and custom printed mailers.",
     heroImage: pickAsset("generic", 1).url,
     body,
     breadcrumbs,
