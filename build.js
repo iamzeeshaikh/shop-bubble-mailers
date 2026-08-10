@@ -3382,7 +3382,7 @@ const blogPosts = [
     title: "Are Bubble Mailers Recyclable? A Practical Guide",
     metaTitle: "Are Bubble Mailers Recyclable | Eco Guide",
     metaDescription:
-      "What can and cannot be recycled in a padded mailer, why mixed materials complicate it, and how to make your padded shipping more sustainable without losing protection.",
+      "What can and cannot be recycled in a padded mailer, why mixed materials complicate it, and how to ship more sustainably without losing protection.",
     intro:
       "Recyclability is one of the most common questions sellers get about padded mailers, and the honest answer is more nuanced than a yes or no. It depends on what the mailer is made of and on what your local facility accepts. Understanding the distinction lets you make a claim you can actually stand behind - and avoid the vague eco language that erodes trust when a customer looks into it.",
     sections: [
