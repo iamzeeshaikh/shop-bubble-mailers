@@ -2881,6 +2881,12 @@ writeStaticAsset("styles.css", readText("styles.css"));
 writeStaticAsset("script.js", readText("script.js"));
 writeStaticAsset("favicon.svg", faviconSvg().trim());
 writeStaticAsset("apple-touch-icon.svg", faviconSvg().trim());
+// A PNG of the same mark, copied rather than generated: every mail client of
+// consequence refuses to render SVG (Gmail drops it outright), so the email
+// signature needs a raster version or it goes out with no logo at all. Copied
+// here so a rebuild cannot quietly drop it — dist/ is committed, and a file
+// that only ever existed in dist/ disappears the next time this runs.
+fs.copyFileSync(path.join(__dirname, "static", "apple-touch-icon.png"), path.join(distDir, "apple-touch-icon.png"));
 
 writeRoute("/", renderHomePage());
 writeRoute("/about-us/", renderAboutPage());
