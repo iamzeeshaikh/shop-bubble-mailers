@@ -1716,6 +1716,9 @@ const buildPage = ({
   <meta name="description" content="${metaDescription}">
   <meta name="google-site-verification" content="Yye2yzfBZUck9eU_lSGfv6b8-vShEzolCHPJprQ_HJo">
   <meta name="theme-color" content="#1f2c3b">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XD9YYJSZQZ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XD9YYJSZQZ');</script>
   <link rel="canonical" href="${canonical}">
   ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
