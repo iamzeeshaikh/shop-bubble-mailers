@@ -1719,6 +1719,7 @@ const buildPage = ({
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XD9YYJSZQZ"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XD9YYJSZQZ');</script>
+  <script defer src="/ga4-events.js"></script>
   <link rel="canonical" href="${canonical}">
   ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -2890,6 +2891,8 @@ writeStaticAsset("apple-touch-icon.svg", faviconSvg().trim());
 // here so a rebuild cannot quietly drop it — dist/ is committed, and a file
 // that only ever existed in dist/ disappears the next time this runs.
 fs.copyFileSync(path.join(__dirname, "static", "apple-touch-icon.png"), path.join(distDir, "apple-touch-icon.png"));
+// GA4 conversion-event listener, loaded after the gtag snippet in every head.
+fs.copyFileSync(path.join(__dirname, "static", "ga4-events.js"), path.join(distDir, "ga4-events.js"));
 
 writeRoute("/", renderHomePage());
 writeRoute("/about-us/", renderAboutPage());
