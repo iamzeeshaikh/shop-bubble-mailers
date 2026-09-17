@@ -1123,6 +1123,28 @@ const productUnitPrice = (product) =>
   product.material.toLowerCase().includes("kraft") ? "0.14" : "0.12";
 
 /**
+ * Visible starting-price block for product pages. It reads productUnitPrice,
+ * the SAME function Offer.price uses, so the figure a shopper sees and the
+ * figure in the structured data cannot drift apart. Google reads the landing
+ * page and the markup together: a priced Offer with no price anywhere on the
+ * page is a Merchant Center misrepresentation risk.
+ */
+const renderProductPrice = (product) => `
+          <div class="product-price">
+            <p class="product-price-line"><span class="product-price-amount">From $${productUnitPrice(product)}</span><span class="product-price-unit">per mailer</span></p>
+            <p class="product-price-note">Starting unit price at bulk quantity. Your final price depends on size, quantity, material, and printing - request a quote for a firm figure.</p>
+          </div>`;
+
+/**
+ * priceValidUntil is computed as build date + 1 year so a rebuild always ships
+ * a future date instead of a hard-coded one that quietly goes stale.
+ */
+const priceValidUntil = (() => {
+  const now = new Date();
+  return new Date(Date.UTC(now.getUTCFullYear() + 1, now.getUTCMonth(), now.getUTCDate())).toISOString().slice(0, 10);
+})();
+
+/**
  * Single shared Product JSON-LD builder used by every product page so each
  * page emits exactly one complete Product schema (Google Product snippets +
  * Merchant listing fields: brand, sku, image, offers with price/availability).
@@ -1144,7 +1166,7 @@ const buildProductSchema = (product, sizesValue) => ({
     url: absoluteUrl(`/${product.slug}/`),
     priceCurrency: "USD",
     price: productUnitPrice(product),
-    priceValidUntil: "2027-08-04",
+    priceValidUntil,
     availability: "https://schema.org/InStock",
     itemCondition: "https://schema.org/NewCondition",
     seller: { "@type": "Organization", name: site.brand },
@@ -2284,6 +2306,7 @@ const renderKraftProductPage = (product) => {
             <li>${iconSvg("quote", "row-icon")}<span>Bulk pricing support</span></li>
             <li>${iconSvg("truck", "row-icon")}<span>Fast USA delivery</span></li>
           </ul>
+${renderProductPrice(product)}
           <div class="button-row">
             <a class="button button-primary" href="#quote-form">Get Free Quote</a>
             <a class="button button-outline" href="#available-sizes">View Sizes</a>
@@ -2313,6 +2336,7 @@ const renderKraftProductPage = (product) => {
               <tr><td>Padding</td><td>Bubble cushioning interior</td></tr>
               <tr><td>Usage</td><td>Shipping, packaging, retail delivery</td></tr>
               <tr><td>Printing</td><td>Custom logo printing available</td></tr>
+              <tr><td>Starting Price</td><td>From $${productUnitPrice(product)} per mailer at bulk quantity</td></tr>
             </tbody>
           </table>
         </div>
@@ -2624,6 +2648,7 @@ const productSections = (product) => {
           <span class="eyebrow">${product.category}</span>
           <h1>${product.name}</h1>
           ${productIntroParagraphs(product).map(paragraph).join("")}
+${renderProductPrice(product)}
           <div class="button-row">
             <a class="button button-primary" href="#quote-form">Get Free Quote</a>
             <a class="button button-outline" href="#bulk-pricing">Request Bulk Pricing</a>
@@ -2698,6 +2723,7 @@ const productSections = (product) => {
               <tr><td>Available Sizes</td><td>${product.sizes.join(", ")}</td></tr>
               <tr><td>Material</td><td>${product.material}</td></tr>
               <tr><td>Use Cases</td><td>${product.idealFor.join(", ")}</td></tr>
+              <tr><td>Starting Price</td><td>From $${productUnitPrice(product)} per mailer at bulk quantity</td></tr>
               <tr><td>Quote Support</td><td>Standard stock, bulk pricing, custom printing, and mixed-size planning</td></tr>
             </tbody>
           </table>

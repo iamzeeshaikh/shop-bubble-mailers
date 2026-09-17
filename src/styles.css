@@ -1329,6 +1329,46 @@ textarea {
   margin: 0.3rem 0 0.6rem;
 }
 
+/* Visible starting price on product heroes. The figure is rendered from the
+   same value the Product Offer schema uses, so the two cannot drift apart. */
+.product-price {
+  margin: 1.1rem 0 0.2rem;
+  padding: 0.9rem 1.15rem;
+  max-width: 540px;
+  border: 1px solid var(--kraft-soft);
+  border-left: 4px solid var(--orange);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.product-price-line {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.product-price-amount {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--navy);
+}
+
+.product-price-unit {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy-soft);
+}
+
+.product-price-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--gray);
+}
+
 .hero-check-list {
   list-style: none;
   padding: 0;
