@@ -15,12 +15,11 @@
 - /sitemap/
 
 ## 2. All Product URLs
-- /kraft-bubble-mailer/
+- /kraft-bubble-mailers/
 - /4x6-bubble-mailer/
-- /bubble-mailer-white/
+- /white-bubble-mailers/
 - /8-5-x-12-bubble-mailer/
 - /4x7-bubble-mailer/
-- /4-x-6-bubble-mailer/
 - /2-bubble-mailer/
 - /5-bubble-mailer/
 - /bubble-mailer-bags/

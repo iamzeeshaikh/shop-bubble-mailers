@@ -2398,3 +2398,10 @@ input, select, textarea, button { max-width: 100%; box-sizing: border-box; }
 }
 .thankyou-contact { font-size: 0.9rem; color: var(--gray); }
 .thankyou-contact a { color: var(--kraft); font-weight: 700; }
+
+/* ── Product spec table + guide links (2026-10) ─────────────────────────── */
+.spec-table td:first-child { font-weight: 600; white-space: nowrap; width: 38%; }
+.guide-links { margin-top: 18px; padding: 18px 20px; border-radius: 14px; background: var(--color-bg-alt, #f4f6f8); }
+.guide-links h3 { margin: 0 0 8px; font-size: 1rem; }
+.guide-links ul { margin: 0; padding-left: 18px; }
+.guide-links li + li { margin-top: 6px; }

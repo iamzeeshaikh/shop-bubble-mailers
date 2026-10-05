@@ -57,7 +57,10 @@ module.exports = async (req, res) => {
   const message = body.Message || body.message || body.Notes || "";
   const company = body.Company || body.company || "";
   const configuration = body.Configuration || body.configuration || "";
-  const subject = body.form_subject || "Quote request from Shop Bubble Mailers";
+  const page = body.Page || body.page || "https://shopbubblemailers.com/";
+  const rawSubject = body.form_subject || "Quote request — Bubble Mailers";
+  // Always name the domain in the subject so the lead inbox can attribute it.
+  const subject = /shopbubblemailers\.com/i.test(rawSubject) ? rawSubject : `${rawSubject} — shopbubblemailers.com`;
   const attachmentName = body.attachmentName || "";
 
   if (!name || !email) {
@@ -94,6 +97,8 @@ module.exports = async (req, res) => {
     ["Quantity", quantity],
     ["Size", size],
     ["Configuration", configuration],
+    ["Submitted from", page],
+    ["Website", "shopbubblemailers.com"],
     ["Artwork Filename", attachmentName || "No file attached"],
     ["Message", message || "No additional message provided"]
   ].filter(([, value]) => String(value ?? "").trim() !== "");

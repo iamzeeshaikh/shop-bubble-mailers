@@ -25,7 +25,7 @@ const locationStates = [
       "Etsy, Poshmark, and marketplace sellers",
       "Third-party fulfillment and 3PL operations",
     ],
-    featuredProducts: ["bubble-mailer-white", "kraft-bubble-mailer", "8-5-x-12-bubble-mailer"],
+    featuredProducts: ["white-bubble-mailers", "kraft-bubble-mailers", "8-5-x-12-bubble-mailer"],
     stat: "The USA's #1 eCommerce shipping state",
     cities: [
       {
@@ -44,7 +44,7 @@ const locationStates = [
         signatureSector: "apparel and beauty DTC",
         deliveryNote:
           "We supply bubble mailers to businesses across Los Angeles County — from Downtown and the Valley to the Westside and South Bay — with bulk pricing and quote support built for high-volume LA shippers.",
-        featuredProducts: ["bubble-mailer-white", "kraft-bubble-mailer", "8-5-x-12-bubble-mailer"],
+        featuredProducts: ["white-bubble-mailers", "kraft-bubble-mailers", "8-5-x-12-bubble-mailer"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses throughout Los Angeles County, including the Fashion District, the San Fernando Valley, and the Westside. Request a quote with your size and quantity and we respond quickly.",
         stat: "Home to LA's DTC fashion scene",
@@ -65,7 +65,7 @@ const locationStates = [
         signatureSector: "startup and subscription DTC",
         deliveryNote:
           "We supply bubble mailers to businesses across San Francisco and the wider Bay Area, with bulk and custom options and quote support suited to fast-scaling brands.",
-        featuredProducts: ["bubble-mailer-packaging", "bubble-mailer-white", "7x9-bubble-mailer"],
+        featuredProducts: ["bubble-mailer-packaging", "white-bubble-mailers", "7x9-bubble-mailer"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses across San Francisco and the Bay Area, including SoMa, the Mission, and the East Bay. Send your requirements for a fast quote.",
         stat: "Built for Bay Area subscription brands",
@@ -86,7 +86,7 @@ const locationStates = [
         signatureSector: "wellness and craft goods",
         deliveryNote:
           "We supply bubble mailers to businesses across San Diego County, from Downtown and North Park to the coastal and border communities, with bulk pricing and quote support.",
-        featuredProducts: ["kraft-bubble-mailer", "4x6-bubble-mailer", "bubble-mailer-bags"],
+        featuredProducts: ["kraft-bubble-mailers", "4x6-bubble-mailer", "bubble-mailer-bags"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses throughout San Diego County, including North Park, Miramar, and Carlsbad. Request a quote for pricing and lead times.",
         stat: "Serving wellness and maker brands",
@@ -114,7 +114,7 @@ const locationStates = [
       "Apparel and accessories shippers",
       "Health, supplement, and wellness sellers",
     ],
-    featuredProducts: ["bubble-mailer-packaging", "kraft-bubble-mailer", "bubble-mailer-white"],
+    featuredProducts: ["bubble-mailer-packaging", "kraft-bubble-mailers", "white-bubble-mailers"],
     stat: "Central-US 2-day shipping reach",
     cities: [
       {
@@ -133,7 +133,7 @@ const locationStates = [
         signatureSector: "diverse eCommerce and distribution",
         deliveryNote:
           "We supply bubble mailers to businesses across the Houston metro, from Downtown and the Heights to Sugar Land and Katy, with bulk pricing and fast quote support.",
-        featuredProducts: ["bubble-mailer-packaging", "kraft-bubble-mailer", "8-5-x-12-bubble-mailer"],
+        featuredProducts: ["bubble-mailer-packaging", "kraft-bubble-mailers", "8-5-x-12-bubble-mailer"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses throughout the Houston metro, including Downtown, the Heights, and the surrounding suburbs. Request a quote for pricing and lead times.",
         stat: "Serving Houston's diverse sellers",
@@ -154,7 +154,7 @@ const locationStates = [
         signatureSector: "fulfillment and logistics",
         deliveryNote:
           "We supply bubble mailers to businesses across Dallas-Fort Worth, from the Design District and Deep Ellum to Plano, Arlington, and Fort Worth, with bulk pricing built for high-volume operations.",
-        featuredProducts: ["bubble-mailer-white", "bubble-mailer-bags", "kraft-bubble-mailer"],
+        featuredProducts: ["white-bubble-mailers", "bubble-mailer-bags", "kraft-bubble-mailers"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses across the Dallas-Fort Worth metroplex, including Plano, Arlington, and Fort Worth. Send your requirements for a fast quote.",
         stat: "Built for DFW fulfillment volume",
@@ -175,7 +175,7 @@ const locationStates = [
         signatureSector: "maker and indie DTC brands",
         deliveryNote:
           "We supply bubble mailers to businesses across Austin, from East Austin and South Congress to the Domain and Round Rock, with bulk and custom options and quick quote turnaround.",
-        featuredProducts: ["bubble-mailer-white", "7x9-bubble-mailer", "kraft-bubble-mailer"],
+        featuredProducts: ["white-bubble-mailers", "7x9-bubble-mailer", "kraft-bubble-mailers"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses throughout Austin, including East Austin, South Congress, and the Domain. Request a quote for pricing and lead times.",
         stat: "For Austin's indie maker scene",
@@ -203,7 +203,7 @@ const locationStates = [
       "Upstate distribution and 3PL",
       "Cross-border and import/export sellers",
     ],
-    featuredProducts: ["bubble-mailer-white", "4x6-bubble-mailer", "kraft-bubble-mailer"],
+    featuredProducts: ["white-bubble-mailers", "4x6-bubble-mailer", "kraft-bubble-mailers"],
     stat: "The densest small-parcel market in the US",
     cities: [
       {
@@ -222,7 +222,7 @@ const locationStates = [
         signatureSector: "jewelry and apparel",
         deliveryNote:
           "We supply bubble mailers to businesses across all five boroughs of New York City, from Manhattan's trade districts to Brooklyn and Queens, with bulk pricing and quick quote support.",
-        featuredProducts: ["bubble-mailer-white", "4x6-bubble-mailer", "kraft-bubble-mailer"],
+        featuredProducts: ["white-bubble-mailers", "4x6-bubble-mailer", "kraft-bubble-mailers"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses across all five boroughs of New York City, including the Diamond and Garment Districts, SoHo, and Brooklyn. Request a quote for pricing.",
         stat: "For NYC's jewelry & apparel trade",
@@ -243,7 +243,7 @@ const locationStates = [
         signatureSector: "craft and DTC makers",
         deliveryNote:
           "We supply bubble mailers to businesses across Brooklyn, from Williamsburg and Bushwick to DUMBO and Greenpoint, with kraft, custom, and bulk options.",
-        featuredProducts: ["kraft-bubble-mailer", "bubble-mailer-white", "7x9-bubble-mailer"],
+        featuredProducts: ["kraft-bubble-mailers", "white-bubble-mailers", "7x9-bubble-mailer"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses throughout Brooklyn, including Williamsburg, Bushwick, and DUMBO. Kraft and custom-printed options are available — request a quote.",
         stat: "For Brooklyn's maker culture",
@@ -271,7 +271,7 @@ const locationStates = [
       "Port and distribution operations",
       "Tourism retail and specialty goods",
     ],
-    featuredProducts: ["bubble-mailer-white", "kraft-bubble-mailer", "4x6-bubble-mailer"],
+    featuredProducts: ["white-bubble-mailers", "kraft-bubble-mailers", "4x6-bubble-mailer"],
     stat: "A fast-growing eCommerce & export state",
     cities: [
       {
@@ -290,7 +290,7 @@ const locationStates = [
         signatureSector: "beauty and export goods",
         deliveryNote:
           "We supply bubble mailers to businesses across the Miami metro, from Wynwood and the Design District to Doral and Brickell, with bulk and custom options.",
-        featuredProducts: ["bubble-mailer-white", "kraft-bubble-mailer", "4x6-bubble-mailer"],
+        featuredProducts: ["white-bubble-mailers", "kraft-bubble-mailers", "4x6-bubble-mailer"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses across the Miami metro, including Wynwood, the Design District, and Doral. Send your requirements for a fast quote.",
         stat: "Gateway to Latin American trade",
@@ -311,7 +311,7 @@ const locationStates = [
         signatureSector: "retail and eCommerce",
         deliveryNote:
           "We supply bubble mailers to businesses across the Orlando metro and Central Florida, from Downtown and Winter Park to Lake Nona and Kissimmee, with bulk pricing.",
-        featuredProducts: ["kraft-bubble-mailer", "bubble-mailer-bags", "bubble-mailer-white"],
+        featuredProducts: ["kraft-bubble-mailers", "bubble-mailer-bags", "white-bubble-mailers"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses throughout the Orlando metro and Central Florida, including Winter Park, Lake Nona, and Kissimmee. Request a quote for pricing.",
         stat: "Serving Central Florida sellers",
@@ -339,7 +339,7 @@ const locationStates = [
       "Print-on-demand and apparel sellers",
       "Health and supplement businesses",
     ],
-    featuredProducts: ["bubble-mailer-packaging", "kraft-bubble-mailer", "bubble-mailer-white"],
+    featuredProducts: ["bubble-mailer-packaging", "kraft-bubble-mailers", "white-bubble-mailers"],
     stat: "Based in Bloomington, IL",
     cities: [
       {
@@ -358,7 +358,7 @@ const locationStates = [
         signatureSector: "logistics and fulfillment",
         deliveryNote:
           "We supply bubble mailers to businesses across Chicago and the metro, from the Loop and West Loop to the suburbs, with in-state supply, bulk pricing, and quick quotes.",
-        featuredProducts: ["bubble-mailer-packaging", "bubble-mailer-white", "kraft-bubble-mailer"],
+        featuredProducts: ["bubble-mailer-packaging", "white-bubble-mailers", "kraft-bubble-mailers"],
         faqCityAnswer:
           "Yes — and as an Illinois-based supplier we're local to you. We supply bulk and custom bubble mailers to businesses across Chicago and the metro, including the Loop, Pilsen, and the suburbs. Request a quote.",
         stat: "In-state supply for Chicago",
@@ -379,7 +379,7 @@ const locationStates = [
         signatureSector: "local Central Illinois business",
         deliveryNote:
           "As a Bloomington-based supplier, we serve Bloomington-Normal and the wider Central Illinois region directly, with bulk and custom bubble mailers, short lead times, and easy reorders.",
-        featuredProducts: ["kraft-bubble-mailer", "bubble-mailer-bags", "8-5-x-12-bubble-mailer"],
+        featuredProducts: ["kraft-bubble-mailers", "bubble-mailer-bags", "8-5-x-12-bubble-mailer"],
         faqCityAnswer:
           "Yes — Bloomington is our home base, so we're your local supplier. We provide bulk and custom bubble mailers to Bloomington-Normal and Central Illinois businesses with short lead times. Request a quote today.",
         stat: "Our Bloomington headquarters",
@@ -407,7 +407,7 @@ const locationStates = [
       "Apparel and accessories shippers",
       "Port and import/export businesses",
     ],
-    featuredProducts: ["bubble-mailer-packaging", "bubble-mailer-white", "kraft-bubble-mailer"],
+    featuredProducts: ["bubble-mailer-packaging", "white-bubble-mailers", "kraft-bubble-mailers"],
     stat: "A national logistics powerhouse",
     cities: [
       {
@@ -426,7 +426,7 @@ const locationStates = [
         signatureSector: "logistics and creative merch",
         deliveryNote:
           "We supply bubble mailers to businesses across metro Atlanta, from Downtown and Midtown to Buckhead and the BeltLine, with bulk pricing and fast quotes.",
-        featuredProducts: ["bubble-mailer-packaging", "bubble-mailer-white", "kraft-bubble-mailer"],
+        featuredProducts: ["bubble-mailer-packaging", "white-bubble-mailers", "kraft-bubble-mailers"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses throughout metro Atlanta, including Midtown, West Midtown, and Buckhead. Request a quote for pricing and lead times.",
         stat: "For Atlanta's fulfillment economy",
@@ -447,7 +447,7 @@ const locationStates = [
         signatureSector: "port distribution and makers",
         deliveryNote:
           "We supply bubble mailers to businesses across the Savannah area, from the Historic District to Pooler and the port communities, with bulk and custom options.",
-        featuredProducts: ["bubble-mailer-bags", "bubble-mailer-packaging", "kraft-bubble-mailer"],
+        featuredProducts: ["bubble-mailer-bags", "bubble-mailer-packaging", "kraft-bubble-mailers"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses across the Savannah area, including the Historic District, Pooler, and the port communities. Send your requirements for a quote.",
         stat: "Serving a fast-growing port city",
@@ -475,7 +475,7 @@ const locationStates = [
       "Maker and craft brands",
       "Import/export and Pacific trade",
     ],
-    featuredProducts: ["bubble-mailer-white", "bubble-mailer-packaging", "kraft-bubble-mailer"],
+    featuredProducts: ["white-bubble-mailers", "bubble-mailer-packaging", "kraft-bubble-mailers"],
     stat: "The birthplace of modern eCommerce",
     cities: [
       {
@@ -494,7 +494,7 @@ const locationStates = [
         signatureSector: "tech, coffee, and outdoor DTC",
         deliveryNote:
           "We supply bubble mailers to businesses across the Seattle metro, from South Lake Union and Capitol Hill to Ballard and Bellevue, with bulk, kraft, and custom options.",
-        featuredProducts: ["bubble-mailer-white", "bubble-mailer-packaging", "kraft-bubble-mailer"],
+        featuredProducts: ["white-bubble-mailers", "bubble-mailer-packaging", "kraft-bubble-mailers"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses across the Seattle metro, including South Lake Union, Capitol Hill, and Bellevue. Request a quote for pricing and lead times.",
         stat: "For Seattle's DTC ecosystem",
@@ -515,7 +515,7 @@ const locationStates = [
         signatureSector: "regional makers and retail",
         deliveryNote:
           "We supply bubble mailers to businesses across Spokane and the Inland Northwest, from Downtown and Kendall Yards to Spokane Valley and Liberty Lake, with bulk pricing.",
-        featuredProducts: ["kraft-bubble-mailer", "bubble-mailer-bags", "4x6-bubble-mailer"],
+        featuredProducts: ["kraft-bubble-mailers", "bubble-mailer-bags", "4x6-bubble-mailer"],
         faqCityAnswer:
           "Yes. We supply bulk and custom bubble mailers to businesses across Spokane and the Inland Northwest, including Spokane Valley and Liberty Lake. Send your requirements for a fast quote.",
         stat: "Hub of the Inland Northwest",

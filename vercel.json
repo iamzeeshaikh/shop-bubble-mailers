@@ -1,5 +1,13 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "trailingSlash": true
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/4-x-6-bubble-mailer", "destination": "/4x6-bubble-mailer/", "permanent": true },
+    { "source": "/4-x-6-bubble-mailer/", "destination": "/4x6-bubble-mailer/", "permanent": true },
+    { "source": "/kraft-bubble-mailer", "destination": "/kraft-bubble-mailers/", "permanent": true },
+    { "source": "/kraft-bubble-mailer/", "destination": "/kraft-bubble-mailers/", "permanent": true },
+    { "source": "/bubble-mailer-white", "destination": "/white-bubble-mailers/", "permanent": true },
+    { "source": "/bubble-mailer-white/", "destination": "/white-bubble-mailers/", "permanent": true }
+  ]
 }

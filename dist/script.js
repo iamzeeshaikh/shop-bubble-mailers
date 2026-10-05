@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
+      // The full page URL (with domain) lets the lead inbox place the inquiry
+      // against this site; a bare path was not enough on sister sites.
+      payload.Page = window.location.href;
       const attachment = form.querySelector('input[type="file"][name="attachment"]');
 
       if (attachment && attachment.files && attachment.files[0]) {
@@ -169,7 +172,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!material || !count) return "";
       const scaleRow = QTY_SCALE.find((row) => count >= row[0]);
       const scale = scaleRow ? scaleRow[1] : 2.3;
-      const unit = (material + priceOf("closure") + priceOf("printing") + priceOf("addOn")) * scale;
+      const sizeNode = picks("size")[0];
+      const sizeFactor = sizeNode && sizeNode.dataset.factor ? Number(sizeNode.dataset.factor) : 1;
+      const unit = (material + priceOf("closure") + priceOf("printing") + priceOf("addOn")) * scale * sizeFactor;
       const total = unit * count;
       return money(total * 0.88) + " – " + money(total * 1.14);
     };
