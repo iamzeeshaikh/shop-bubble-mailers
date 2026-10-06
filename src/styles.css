@@ -276,6 +276,13 @@ main {
   height: 14px;
 }
 
+/* The last dropdown (Locations) sits near the right edge, so its panel opens
+   leftwards instead of running off the viewport. */
+.nav-item-dropdown:last-of-type .nav-dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
 .nav-dropdown-menu.is-open,
 .nav-item-dropdown:hover .nav-dropdown-menu,
 .nav-item-dropdown:focus-within .nav-dropdown-menu {

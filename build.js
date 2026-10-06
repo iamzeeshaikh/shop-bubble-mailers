@@ -1245,7 +1245,7 @@ const renderHeader = (currentPath) => `
                               <img class="nav-dropdown-thumb" src="${product.image.thumb}" alt="" loading="lazy" decoding="async" width="400" height="400">
                               <span class="nav-dropdown-text">
                                 <span class="nav-dropdown-title">${product.name}</span>
-                                <span class="nav-dropdown-meta">${product.category} · from ${product.price}</span>
+                                <span class="nav-dropdown-meta">${product.category} · from $${product.price}</span>
                               </span>
                             </a>
                           `
@@ -1919,7 +1919,7 @@ const renderHomePage = () => {
               ${sizeGuide
                 .map((row) => {
                   const product = productsBySlug.get(row.slug);
-                  return `<tr><td><a href="/${row.slug}/">${row.size}</a></td><td>${row.numbered}</td><td>${row.use}</td><td>${row.strength}</td><td>${product ? product.price : "—"}</td></tr>`;
+                  return `<tr><td><a href="/${row.slug}/">${row.size}</a></td><td>${row.numbered}</td><td>${row.use}</td><td>${row.strength}</td><td>$${product ? product.price : "—"}</td></tr>`;
                 })
                 .join("")}
             </tbody>
@@ -4219,7 +4219,7 @@ const renderLocationSizeTable = (seedText) => `
           <tbody>
             ${shufflePool(LOCATION_SIZE_ROWS, seedText).slice(0, 6).map(([label, slug, use]) => {
               const product = productsBySlug.get(slug);
-              return `<tr><td><a href="/${slug}/">${label}</a></td><td>${use}</td><td>${product ? product.price : "—"}</td></tr>`;
+              return `<tr><td><a href="/${slug}/">${label}</a></td><td>${use}</td><td>$${product ? product.price : "—"}</td></tr>`;
             }).join("")}
           </tbody>
         </table>`;
