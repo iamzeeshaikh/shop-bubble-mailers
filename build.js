@@ -1242,8 +1242,11 @@ const renderHeader = (currentPath) => `
                         .map(
                           (product) => `
                             <a href="/${product.slug}/"${currentPath === `/${product.slug}/` ? ' aria-current="page"' : ""}>
-                              <span class="nav-dropdown-title">${product.name}</span>
-                              <span class="nav-dropdown-meta">${product.category}</span>
+                              <img class="nav-dropdown-thumb" src="${product.image.thumb}" alt="" loading="lazy" decoding="async" width="400" height="400">
+                              <span class="nav-dropdown-text">
+                                <span class="nav-dropdown-title">${product.name}</span>
+                                <span class="nav-dropdown-meta">${product.category} · from ${product.price}</span>
+                              </span>
                             </a>
                           `
                         )
@@ -1265,10 +1268,13 @@ const renderHeader = (currentPath) => `
                     <div class="nav-dropdown-grid">
                       ${locationStates
                         .map(
-                          (state) => `
+                          (state, index) => `
                             <a href="/locations/${state.slug}/"${currentPath === `/locations/${state.slug}/` ? ' aria-current="page"' : ""}>
-                              <span class="nav-dropdown-title">${state.name}</span>
-                              <span class="nav-dropdown-meta">${state.cities.length} cities</span>
+                              <img class="nav-dropdown-thumb" src="${pickAsset("generic", index).thumb}" alt="" loading="lazy" decoding="async" width="400" height="400">
+                              <span class="nav-dropdown-text">
+                                <span class="nav-dropdown-title">${state.name}</span>
+                                <span class="nav-dropdown-meta">${state.cities.map((c) => c.name).join(", ")}</span>
+                              </span>
                             </a>
                           `
                         )

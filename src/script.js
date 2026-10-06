@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const navToggle = document.querySelector("[data-nav-toggle]");
   const nav = document.querySelector("[data-nav]");
-  const productsToggle = document.querySelector("[data-products-toggle]");
-  const productsMenu = document.querySelector("[data-products-menu]");
 
   if (navToggle && nav) {
     navToggle.addEventListener("click", () => {
@@ -11,20 +9,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (productsToggle && productsMenu) {
-    productsToggle.addEventListener("click", (event) => {
+  // Both dropdowns (Products, Locations) share the same toggle/menu hooks.
+  document.querySelectorAll("[data-products-toggle]").forEach((toggle) => {
+    const menu = toggle.parentElement && toggle.parentElement.querySelector("[data-products-menu]");
+    if (!menu) return;
+    toggle.addEventListener("click", (event) => {
       event.stopPropagation();
-      const isOpen = productsMenu.classList.toggle("is-open");
-      productsToggle.setAttribute("aria-expanded", String(isOpen));
+      const isOpen = menu.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
     });
-
     document.addEventListener("click", (event) => {
-      if (!productsMenu.contains(event.target) && !productsToggle.contains(event.target)) {
-        productsMenu.classList.remove("is-open");
-        productsToggle.setAttribute("aria-expanded", "false");
+      if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+        menu.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
       }
     });
-  }
+  });
 
   document.querySelectorAll("[data-quote-form]").forEach((form) => {
     const status = form.querySelector("[data-form-status]");

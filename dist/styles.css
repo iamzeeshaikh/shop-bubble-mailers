@@ -294,20 +294,37 @@ main {
 
 .nav-dropdown-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.45rem;
 }
 
 .nav-dropdown-grid a {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.22rem;
-  padding: 0.85rem 0.95rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.7rem;
   border-radius: 16px;
   border: 1px solid rgba(31, 44, 59, 0.05);
   background: rgba(248, 250, 252, 0.65);
   white-space: normal;
+}
+
+.nav-dropdown-thumb {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #fff;
+  border: 1px solid rgba(31, 44, 59, 0.08);
+}
+
+.nav-dropdown-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
 }
 
 .nav-dropdown-title {
@@ -1935,6 +1952,11 @@ textarea {
 
   .nav-dropdown-grid {
     grid-template-columns: 1fr;
+  }
+
+  .nav-dropdown-thumb {
+    width: 44px;
+    height: 44px;
   }
 
   .nav-dropdown-grid a,
