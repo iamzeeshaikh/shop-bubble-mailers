@@ -142,7 +142,7 @@ const homepageFaqs = [
   ["Do you offer plain and kraft finishes?", "Yes. We offer both plain and kraft-style bubble mailers, along with white mailers and custom branded options."],
   ["Can I request a sample or quote before placing a large order?", "Yes. You can contact us for a quote and discuss sample availability, production details, and size guidance before moving into a larger order."],
   ["How fast do you respond to quote requests?", "We aim to respond quickly with practical information about size, quantity, printing options, and lead time so buyers can move forward without delay."],
-  ["Do you ship across the United States?", "Yes. Shop Bubble Mailers serves businesses throughout the USA and supports orders for local operations, regional distributors, and national shipping programs."]
+  ["Do you ship across the United States?", "Yes, and shipping is free to any US address. Shop Bubble Mailers serves businesses throughout the USA and supports orders for local operations, regional distributors, and national shipping programs."]
 ];
 
 // Six standard-topic FAQs contextualized with each product's real sizes,
@@ -1034,7 +1034,8 @@ const globalSchemas = () => [
     "@type": "Organization",
     name: site.brand,
     url: site.domain,
-    logo: { "@type": "ImageObject", url: `${site.domain}/apple-touch-icon.svg` },
+    logo: { "@type": "ImageObject", url: `${site.domain}/apple-touch-icon.png` },
+    image: imageAbsoluteUrl(site.socialImage),
     email: site.email,
     telephone: site.phone,
     address: {
@@ -1063,6 +1064,7 @@ const globalSchemas = () => [
       addressCountry: site.country
     },
     areaServed: "United States",
+    priceRange: "$",
     description: "Bulk supplier of bubble mailers, kraft bubble mailers, white padded envelopes, and custom bubble mailer packaging."
   },
   {
@@ -1103,7 +1105,7 @@ const productUnitPrice = (product) => product.price;
 const renderProductPrice = (product) => `
           <div class="product-price">
             <p class="product-price-line"><span class="product-price-amount">From $${productUnitPrice(product)}</span><span class="product-price-unit">per mailer</span></p>
-            <p class="product-price-note">Starting unit price at bulk quantity. Your final price depends on size, quantity, material, and printing - request a quote for a firm figure.</p>
+            <p class="product-price-note">Starting unit price at bulk quantity, with free shipping to any US address. Your final price depends on size, quantity, material, and printing - request a quote for a firm figure.</p>
           </div>`;
 
 /**
@@ -1141,17 +1143,20 @@ const buildProductSchema = (product, sizesValue) => ({
     availability: "https://schema.org/InStock",
     itemCondition: "https://schema.org/NewCondition",
     seller: { "@type": "Organization", name: site.brand },
+    // Free shipping to any US address (owner decision 2026-10-06); the same
+    // statement is printed on every product page and on /custom-order-policy/.
     shippingDetails: {
       "@type": "OfferShippingDetails",
+      shippingRate: { "@type": "MonetaryAmount", value: "0", currency: "USD" },
       shippingDestination: { "@type": "DefinedRegion", addressCountry: "US" }
     },
-    // The site sells via negotiated bulk quotes; freight and any return terms
-    // are confirmed per order (see /terms-and-conditions/), so the policy is
-    // declared as unspecified rather than inventing a blanket return window.
+    // Made-to-order supply: no change-of-mind returns, errors made right.
+    // Same policy and category as the sister site thepolymailers.com.
     hasMerchantReturnPolicy: {
       "@type": "MerchantReturnPolicy",
       applicableCountry: "US",
-      returnPolicyCategory: "https://schema.org/MerchantReturnUnspecified"
+      returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+      merchantReturnLink: absoluteUrl("/custom-order-policy/")
     }
   }
 });
@@ -1335,7 +1340,7 @@ const renderFooter = () => `
       </div>
       <div class="footer-bottom">
         <span>&copy; <span data-current-year></span> ${site.brand}. All rights reserved.</span>
-        <span><a href="/privacy-policy/">Privacy Policy</a> | <a href="/terms-and-conditions/">Terms and Conditions</a></span>
+        <span><a href="/privacy-policy/">Privacy Policy</a> | <a href="/terms-and-conditions/">Terms and Conditions</a> | <a href="/custom-order-policy/">Custom Order Policy</a></span>
       </div>
     </div>
   </footer>
@@ -1823,7 +1828,7 @@ const renderHomePage = () => {
           <div class="hero-trust">
             <div class="trust-item">${iconSvg("package", "trust-icon")}<div><strong>Bulk Orders</strong><span>Competitive pricing</span></div></div>
             <div class="trust-item">${iconSvg("printer", "trust-icon")}<div><strong>Custom Printing</strong><span>Add your brand</span></div></div>
-            <div class="trust-item">${iconSvg("truck", "trust-icon")}<div><strong>USA Service</strong><span>Fast and reliable</span></div></div>
+            <div class="trust-item">${iconSvg("truck", "trust-icon")}<div><strong>Free USA Shipping</strong><span>Every order, every state</span></div></div>
           </div>
         </div>
         <div class="hero-panel">
@@ -2142,7 +2147,7 @@ const productsFaqs = [
   ["What bubble mailer sizes do you stock?", "Every standard size: inch sizes 4x6, 4x7, 6x9 (9x6), 7x9, 8.5x12, 10.5x15, 12x12 and 12x15, and the numbered range #000 through #7. Each has its own page with usable dimensions, what fits and a bulk starting price."],
   ["What is the difference between numbered and inch bubble mailer sizes?", "They describe the same mailers two ways. A #2 is 8.5 x 12 in outside, a #5 is 10.5 x 16, a #7 is 14.25 x 20. Inch sizes are the outer dimension; usable inside space is about an inch shorter because of the seal flap. Our comparison table lists both so you can order by either name."],
   ["Which bubble mailer size should I start with?", "Most online stores cover 80% of orders with two sizes: a 4x7 or 6x9 for small items and an 8.5x12 (#2) for folded apparel and multi-item orders. Add a 10.5x15 (#5) if you ship hoodies, denim or kits. Send us three or four typical products and we will suggest the spread."],
-  ["How are bubble mailers sold in bulk?", "By the case, typically 100 to 500 mailers depending on size, and by the pallet for 10,000 units and up. Case quantities ship from stock; pallet programs are quoted with scheduled releases if you want them."],
+  ["How are bubble mailers sold in bulk?", "By the case, typically 100 to 500 mailers depending on size, and by the pallet for 10,000 units and up. Both ship free to any US address; pallet programs are quoted with scheduled releases if you want them."],
   ["What are the starting prices on this page based on?", "Plain stock at 5,000 units in the standard material for that size, before printing. Smaller quantities cost more per unit and larger ones less; custom print and specialty materials add to the figure. Every quote is confirmed in writing before anything ships."],
   ["Do kraft and white bubble mailers come in the same sizes?", "Kraft runs the full #000 to #7 range. White poly runs #000 to #5 as stock, with larger white sizes available on program orders. Both can be printed."],
   ["Can I mix sizes in one order?", "Yes. Mixed-size orders are the norm for stores shipping more than one product type. They ship together on one invoice, and the price break is based on the combined quantity on most programs."],
@@ -2796,6 +2801,8 @@ ${renderProductPrice(product)}
               <tr><td>Material</td><td>${product.material}</td></tr>
               <tr><td>Use Cases</td><td>${product.idealFor.join(", ")}</td></tr>
               <tr><td>Starting Price</td><td>From $${productUnitPrice(product)} per mailer at bulk quantity</td></tr>
+              <tr><td>Shipping</td><td>Free shipping across the USA</td></tr>
+              <tr><td>Returns</td><td>Made to order; errors made right, no change-of-mind returns (<a href="/custom-order-policy/">custom order policy</a>)</td></tr>
               <tr><td>Quote Support</td><td>Standard stock, bulk pricing, custom printing, and mixed-size planning</td></tr>
             </tbody>
           </table>
@@ -2856,7 +2863,7 @@ const customFaqs = [
   ["How long do custom bubble mailers take?", "Plain stock ships in a few business days. Because printed mailers are made to order, the lead time depends on quantity and the number of colors; as a planning figure allow a few weeks after proof approval. Express production is available as an add-on when a launch date is fixed, and we confirm the exact lead time on your quote."],
   ["Can I print on kraft and white bubble mailers?", "Both. Kraft takes dark one- and two-color print well and gives a natural, recycled look. White poly is the better base for light colors, fine detail and full-color print. Metallic and recyclable paper stocks can also be printed."],
   ["Can custom mailers be made in a non-standard size?", "Yes. If none of the eleven stock sizes fits, give us the packed dimensions of your product and we will quote a custom size. Custom sizes carry a higher minimum than printed stock sizes; we confirm it on the quote."],
-  ["Do custom printed bubble mailers cost more to ship?", "Printing adds nothing to the weight, so postage is the same as a plain mailer of that size. A printed 4x7 still ships at the lowest parcel tier, and a printed 12x15 is still far lighter than a box."],
+  ["Do custom printed bubble mailers cost more to ship?", "No. Delivery of your order is free anywhere in the USA, printed or plain. And once you are shipping with them, printing adds nothing to the weight, so postage is the same as a plain mailer of that size."],
   ["Can you store my printed mailers and release them over time?", "For pallet-quantity programs, yes. Many brands print 10,000 or 25,000 at the lower unit price and take scheduled releases so they are not holding a full pallet in a small warehouse. Ask about release schedules when you request your quote."]
 ];
 
@@ -2976,7 +2983,7 @@ const contactFaqs = [
   ["Can I call instead of using the form?", "Yes: (503) 461-4788. If you reach voicemail, leave the size and quantity and we will call back with a figure."],
   ["Do you reply by email or phone?", "By email with a written quote unless you ask for a call. Written quotes make it easier to compare sizes and quantities and to forward to whoever approves purchasing."],
   ["Can I send artwork through the form?", "Yes. The form accepts PDF, AI, EPS, PNG and JPG. If the file is over 10 MB, send the form without it and reply to our confirmation email with the file attached."],
-  ["Where do orders ship from?", "From US stock for plain mailers and from the printer for custom runs, delivered to any US address. Freight is quoted alongside the mailers so the total is clear before you order."],
+  ["Where do orders ship from?", "From US stock for plain mailers and from the printer for custom runs, delivered free to any US address, so the quoted mailer price is the delivered price."],
   ["Is there a minimum for a quote?", "No. We quote single cases as readily as pallets. Pricing simply improves as the quantity rises."],
   ["Can I visit or collect?", "We are a supply operation rather than a retail counter, so orders ship rather than being collected. Our business address is listed above for correspondence."],
   ["Do you quote for sizes not listed on the site?", "Yes. Give us the packed dimensions of your product and we will quote the closest stock size or a custom size if nothing standard fits."],
@@ -3041,7 +3048,7 @@ const renderContactPage = () => {
   });
 };
 
-const renderPolicyPage = ({ routePath, title, metaTitle, metaDescription, paragraphs, content }) => {
+const renderPolicyPage = ({ routePath, title, metaTitle, metaDescription, paragraphs, content }, schemas = []) => {
   const breadcrumbs = [
     { href: "/", label: "Home" },
     { href: routePath, label: title }
@@ -3071,7 +3078,8 @@ const renderPolicyPage = ({ routePath, title, metaTitle, metaDescription, paragr
     metaDescription,
     heroImage: pickAsset("generic", 0).url,
     body,
-    breadcrumbs
+    breadcrumbs,
+    schemas
   });
 };
 
@@ -3142,7 +3150,76 @@ fs.copyFileSync(path.join(__dirname, "static", "ga4-events.js"), path.join(distD
 writeRoute("/", renderHomePage());
 writeRoute("/about-us/", renderAboutPage());
 writeRoute("/products/", renderProductsPage());
+const customOrderPolicyFaqs = [
+  ["Can I return custom printed bubble mailers?", "Not as a change of mind, because printed material produced to your artwork cannot be resold or restocked. Where an order does not match the approved proof or the written specification, or has a manufacturing defect, we make it right."],
+  ["Can I return plain, unprinted bubble mailers?", "Plain stock is supplied against a written specification too, so change-of-mind returns are not accepted. If the size, finish or count is not what was specified, or the mailers are defective, we replace or credit them."],
+  ["Is shipping really free?", "Yes. Every order ships free to any address in the United States, whether it is one case or several pallets, plain or printed. The quoted price is the delivered price."],
+  ["What if I approve a proof and then spot a mistake?", "Tell us immediately. If production has not started, we reproof at no charge. Once material is committed the run cannot be recovered, which is why we ask for approval in writing and encourage as many proof rounds as you want beforehand."],
+  ["Will I receive exactly the quantity I ordered?", "Manufactured runs carry a tolerance either side of the ordered quantity, stated on your quotation along with how any variation is charged. If an exact count matters for your operation, tell us when you request the quote."],
+  ["How quickly do I need to report a problem?", "As soon as you find it, and while the stock is still available to inspect. The specific window that applies to your order is stated on your quotation."],
+  ["What happens if the carrier damages my order?", "We arrange every shipment, so transit damage is ours to sort out. Send photographs of the cartons and the affected mailers as they arrived and we replace the damaged quantity."],
+  ["Can I cancel an order?", "Before the quotation is confirmed, freely. After confirmation and before the proof, yes, and the quotation is simply withdrawn. After proof approval, production is scheduled and material committed, so cancellation is treated as a change after production."],
+  ["Can I change the quantity after confirming?", "Up to proof approval, yes; we reissue the quotation with the new quantity and price break. After approval the run is scheduled at the agreed quantity."],
+  ["Do samples count toward the policy?", "Samples are supplied so you can check fit and finish before committing, and they are the step that prevents most of the problems on this page. Order them before a bulk or printed run rather than after."]
+];
+
 writeRoute("/custom-bubble-mailers/", renderCustomPage());
+writeRoute(
+  "/custom-order-policy/",
+  renderPolicyPage({
+    routePath: "/custom-order-policy/",
+    title: "Custom Order Policy",
+    metaTitle: "Custom Order Policy: Changes, Returns & Shipping | Shop Bubble Mailers",
+    metaDescription: "What a bubble mailer order commits both sides to: where changes can be made, what we put right, what sits with you, free US shipping, and how to report a problem.",
+    content: `
+      <p>Made-to-order supply is not retail, and applying retail expectations to it causes most of the disputes in this industry. A printed run produced to your artwork cannot be restocked, resold or returned to a shelf, because there is no shelf it belongs on. This page sets out what that means in practice: what can be changed and at what point, what happens if an order is wrong, what shipping costs, and what a run of bubble mailers genuinely commits both sides to.</p>
+
+      <h2>Where changes can be made, and where they cannot</h2>
+      <p>An order passes through points after which a change costs a run rather than an email.</p>
+      <ul>
+        <li><strong>Before the quotation is confirmed.</strong> Anything can change: size, finish, print, quantity. This is the point to be undecided.</li>
+        <li><strong>After confirmation, before the proof.</strong> Specification changes are still possible. The quotation is reissued so what is agreed stays unambiguous.</li>
+        <li><strong>At proof stage.</strong> Artwork changes belong here. Ask for as many rounds as you need; a proof round costs far less than a reprint.</li>
+        <li><strong>After proof approval.</strong> Production is scheduled against the approved proof. Changes from this point mean a new proof and, once material is committed, a new run.</li>
+        <li><strong>After production.</strong> Custom printed mailers cannot be resold to anyone else. Changes at this point mean a fresh order.</li>
+      </ul>
+
+      <h2>What we are responsible for</h2>
+      <p>If any of these happens, tell us and we will resolve it.</p>
+      <ul>
+        <li><strong>The order does not match the approved proof.</strong> Wrong color, wrong placement, wrong artwork. The proof is the reference and we are held to it.</li>
+        <li><strong>The order does not match the written specification.</strong> Wrong size, wrong finish, wrong closure, wrong quantity band.</li>
+        <li><strong>A manufacturing defect.</strong> Failed seals, adhesive that does not release cleanly, split seams or print defects across the run.</li>
+        <li><strong>A short delivery.</strong> Counts are verified by carton before dispatch, and a genuine shortfall is ours to make good.</li>
+        <li><strong>Damage in transit.</strong> We arrange every shipment, so report transit damage promptly with photographs of the cartons as they arrived.</li>
+      </ul>
+
+      <h2>What sits with you</h2>
+      <p>These are the things we cannot check on your behalf, and they are why the proof and sample stages matter.</p>
+      <ul>
+        <li><strong>Errors in artwork you approved.</strong> A misspelled word, an old web address or a wrong handle on an approved proof cannot be caught by us, because we have no way to know what it should say.</li>
+        <li><strong>Choosing a size that turns out not to fit.</strong> This is why samples exist. A sample before a run costs almost nothing; a run in the wrong size costs the run.</li>
+        <li><strong>Ordering more than you can use.</strong> Particularly on seasonal work. We will quote a contingency quantity separately so you can see what it costs.</li>
+        <li><strong>Rights in the artwork you supply.</strong> Confirming you may reproduce it commercially is your responsibility.</li>
+      </ul>
+
+      <h2>Returns</h2>
+      <p>Because every order is supplied against a written specification, we do not accept change-of-mind returns on plain or printed stock. Where an order does not match the approved proof or the written specification, is short, or has a manufacturing defect, we make it right by replacement or credit at our cost. That commitment is the return policy, and it applies to every order shipped within the United States.</p>
+
+      <h2>Shipping</h2>
+      <p>Shipping is free to any address in the United States, for a single case or a full pallet, plain or printed. The price on your quotation is the delivered price. Pallet-quantity programs can be released on a schedule at no extra shipping cost, so you are not storing a full pallet at once.</p>
+
+      <h2>Quantity variation on a manufactured run</h2>
+      <p>Production runs do not stop at an exact unit, so a manufactured order may deliver slightly above or slightly below the quantity ordered. This is normal in the industry rather than a defect. The tolerance that applies to your order is stated on your quotation, along with how any variation is charged. If an exact quantity matters, a set number of units for a subscription drop for instance, say so when you ask for the quote so we can specify accordingly.</p>
+
+      <h2>Reporting a problem</h2>
+      <p>Contact us as soon as you find an issue, with the order reference, photographs of the cartons and the affected mailers as received, and the approximate proportion of the delivery affected. Keep the affected stock until the matter is resolved, because we may need to see it. The fastest route is the address and number on the <a href="/contact-us/">contact page</a>, and we confirm next steps in writing so both sides have a record.</p>
+
+      <h2>Questions about the custom order policy</h2>
+      ${renderFaqList(customOrderPolicyFaqs)}
+    `
+  }, [faqSchema(customOrderPolicyFaqs)])
+);
 
 const renderThankYouPage = () => {
   const body = `
@@ -4176,8 +4253,8 @@ const LOCATION_FAQ_POOL = [
   [(p) => `Can I mix sizes in one ${p} order?`, (p) => `Yes. Mixed-size orders are the norm for ${p} stores shipping more than one product type; they ship together on one invoice and the price break is based on the combined quantity.`],
   [(p) => `Do you ship pallet quantities to ${p}?`, (p) => `Yes. Pallets of 10,000 to 25,000 mailers ship by freight to ${p} warehouses and 3PLs, and can be released on a schedule so you are not storing a full pallet at once.`],
   [(p) => `Do you provide a proof for custom orders shipped to ${p}?`, (p) => `Yes. Every printed order gets a digital proof at scale on the actual mailer size. Nothing prints until you approve it, so ${p} brands see exactly how the logo sits before committing.`],
-  [(p) => `How fast do you quote for ${p} businesses?`, (p) => `Within 1-2 hours during US business hours, in writing. Send the size, quantity, plain or printed, and your ${p} ZIP code and the quote comes back with freight included.`],
-  [(p) => `Is pricing different for ${p} than elsewhere?`, (p) => `Mailer pricing is the same nationwide; only freight varies with distance and weight. ${p} orders are quoted with the delivered cost shown.`],
+  [(p) => `How fast do you quote for ${p} businesses?`, (p) => `Within 1-2 hours during US business hours, in writing. Send the size, quantity, plain or printed, and your ${p} ZIP code and the quote comes back as a delivered price, shipping included free.`],
+  [(p) => `Is pricing different for ${p} than elsewhere?`, (p) => `No. Mailer pricing is the same nationwide and shipping is free to any US address, so a ${p} order costs exactly what the quote says.`],
   [(p) => `Can a ${p} 3PL order for several brands at once?`, (p) => `Yes. Fulfillment centers in ${p} often stock printed mailers for one client and plain stock for another on a single invoice, with the quantity break applied across the whole order.`],
   [(p) => `Can I get samples before ordering in ${p}?`, (p) => `Yes. Ask for the two or three sizes you are considering, pack your real products, and then commit to a case or a printed run. It saves ${p} sellers from a case of mailers that is half an inch too small.`],
   [(p) => `Do bubble mailers lower shipping costs for ${p} sellers?`, (p, sec) => `Yes. A padded mailer weighs a few ounces less than the smallest box and avoids dimensional-weight pricing on small items, which for ${p} ${sec} orders typically saves $0.30 to $0.80 per parcel.`],
@@ -4193,7 +4270,7 @@ const BULK_CARD_POOL = [
   (p) => ["Consistent brand look", `Order the same size and print every time so every ${p} shipment arrives looking identical and on-brand.`],
   (p) => ["One supplier, one invoice", `Mixed-size bulk orders ship together, simplifying purchasing for ${p} sellers and 3PLs alike.`],
   (p) => ["Scheduled releases", `Print a pallet at the low unit price and take it in releases, so ${p} teams with small storage still get pallet pricing.`],
-  (p) => ["Freight that makes sense", `A pallet to ${p} costs little more to ship than ten cases, so the delivered cost per mailer falls further at volume.`],
+  (p) => ["Free shipping, any quantity", `A case or a pallet ships free to ${p}, so the per-mailer price you are quoted is the price you pay.`],
   (p) => ["Fewer reorders to manage", `One bulk order covers months of ${p} shipping, which is one less supplier to chase every few weeks.`],
   (p) => ["Samples before you commit", `Test two or three sizes with real ${p} orders first, then buy the case or pallet with confidence.`]
 ];
@@ -4534,14 +4611,14 @@ ${renderLocationSizeTable("state-" + state.slug)}
 };
 
 const locationsFaqs = [
-  ["Do you ship bubble mailers to every US state?", "Yes. The state and city pages cover the markets we serve most, but orders ship to any US address, including Alaska and Hawaii with freight quoted separately."],
+  ["Do you ship bubble mailers to every US state?", "Yes, with free shipping to any US address. The state and city pages cover the markets we serve most, but delivery works the same way everywhere."],
   ["Why do you have pages for individual states and cities?", "Because what sells in each market differs: LA ships apparel and beauty, Houston ships industrial parts and samples, Chicago ships books and 3PL volume. Each page lists the sizes those sellers order most and local delivery notes."],
-  ["Is pricing different by location?", "Mailer pricing is the same nationwide. Freight differs by distance and weight, and is quoted with the order so the delivered cost is clear."],
+  ["Is pricing different by location?", "No. Mailer pricing is the same nationwide and shipping is free to every US address, so the quoted price is the delivered price."],
   ["How long does delivery take within the USA?", "Plain stock usually arrives within a week of ordering across the contiguous US; printed runs follow their production lead time. We confirm an estimated delivery date on every quote."],
   ["Can a 3PL or fulfillment center order on behalf of a brand?", "Yes. Many of our orders are placed by 3PLs stocking several client brands. We can ship printed stock for one client and plain stock for another on one invoice."],
   ["Do you supply businesses outside the listed cities?", "Yes. The city pages are a starting point. If your city is not listed, request a quote and tell us where you are; delivery works the same way."],
   ["Can I split one order across warehouses in different states?", "Yes. Bulk and printed orders can be delivered to several addresses, with the price break based on the combined quantity."],
-  ["Do you offer local pickup anywhere?", "No. All orders ship by freight or parcel carrier to your address, which keeps pricing consistent across the country."],
+  ["Do you offer local pickup anywhere?", "No. All orders ship free by freight or parcel carrier to your address, which keeps pricing consistent across the country."],
   ["Which sizes are most popular nationally?", "The 8.5x12 (#2) for apparel and multi-item orders, the 4x7 (#000) for small goods, and the 10.5x15 (#5) for folded garments. Coastal apparel markets lean larger; marketplace sellers lean smaller."],
   ["How do I get a quote for my city?", "Use the form on your state or city page, or call (503) 461-4788 with your size, quantity and ZIP code. Quotes are returned in writing within 1-2 hours."]
 ];
@@ -4658,7 +4735,7 @@ writeStaticAsset(
       if (route === "/") {
         priority = "1.0";
         changefreq = "weekly";
-      } else if (slug === "privacy-policy" || slug === "terms-and-conditions") {
+      } else if (slug === "privacy-policy" || slug === "terms-and-conditions" || slug === "custom-order-policy") {
         priority = "0.3";
         changefreq = "yearly";
       } else if (productsBySlug.has(slug)) {
