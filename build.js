@@ -53,6 +53,14 @@ const cleanDir = (target) => {
 
 const readText = (fileName) => fs.readFileSync(path.join(srcDir, fileName), "utf8");
 
+// Short content hash appended to the stylesheet and script URLs. Vercel serves
+// both with a four-hour cache, so without this a deploy that changes markup
+// AND styles can leave a returning visitor with new HTML on old CSS.
+const assetVersion = (fileName) =>
+  require("crypto").createHash("sha1").update(readText(fileName)).digest("hex").slice(0, 8);
+const STYLES_URL = `/styles.css?v=${assetVersion("styles.css")}`;
+const SCRIPT_URL = `/script.js?v=${assetVersion("script.js")}`;
+
 cleanDir(distDir);
 ensureDir(distAssetsDir);
 
@@ -1747,7 +1755,7 @@ const buildPage = ({
   <meta name="twitter:title" content="${metaTitle}">
   <meta name="twitter:description" content="${metaDescription}">
   <meta name="twitter:image" content="${imageAbsoluteUrl(heroImage || site.socialImage)}">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="${STYLES_URL}">
   ${heroImage ? `<link rel="preload" as="image" href="${heroImage}"${heroImageThumb ? ` imagesrcset="${heroImageThumb} 400w, ${heroImage} 1000w" imagesizes="(max-width: 640px) 100vw, 420px"` : ""} fetchpriority="high">` : ""}
   ${renderSchemaScripts(pageSchemas)}
 </head>
@@ -1758,7 +1766,7 @@ const buildPage = ({
     ${body}
   </main>
   ${renderFooter()}
-  <script src="/script.js" defer></script>
+  <script src="${SCRIPT_URL}" defer></script>
   <!-- ZeeOps live chat (replaced Zendesk) — conversations land in the dashboard
        at chat.zeeops.dev under the shopbubblemailers site. -->
   <script>
