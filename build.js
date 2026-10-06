@@ -1688,6 +1688,7 @@ const buildPage = ({
   metaTitle,
   metaDescription,
   heroImage,
+  heroImageThumb = null,
   body,
   breadcrumbs = null,
   schemas = [],
@@ -1736,7 +1737,7 @@ const buildPage = ({
   <meta name="twitter:description" content="${metaDescription}">
   <meta name="twitter:image" content="${imageAbsoluteUrl(heroImage || site.socialImage)}">
   <link rel="stylesheet" href="/styles.css">
-  ${heroImage ? `<link rel="preload" as="image" href="${heroImage}" fetchpriority="high">` : ""}
+  ${heroImage ? `<link rel="preload" as="image" href="${heroImage}"${heroImageThumb ? ` imagesrcset="${heroImageThumb} 400w, ${heroImage} 1000w" imagesizes="(max-width: 640px) 100vw, 420px"` : ""} fetchpriority="high">` : ""}
   ${renderSchemaScripts(pageSchemas)}
 </head>
 <body>
@@ -1823,7 +1824,7 @@ const renderHomePage = () => {
           <div class="hero-showcase">
             <div class="hero-spotlight">
               <div class="hero-visual-stage">
-                <img class="hero-main-image hero-main-3d" src="${pickAsset("generic", 2).url}" alt="Bulk bubble mailers packaging for business shipping" width="1080" height="1080" loading="eager" fetchpriority="high" decoding="async">
+                <img class="hero-main-image hero-main-3d" src="${pickAsset("generic", 2).url}" srcset="${pickAsset("generic", 2).thumb} 400w, ${pickAsset("generic", 2).url} 1000w" sizes="(max-width: 640px) 100vw, 420px" alt="Bulk bubble mailers packaging for business shipping" width="1080" height="1080" loading="eager" fetchpriority="high" decoding="async">
               </div>
               <div class="hero-support-card">
                 ${iconSvg("package", "support-icon")}
@@ -2021,6 +2022,7 @@ const renderHomePage = () => {
     metaTitle: mainPages[0].metaTitle,
     metaDescription: mainPages[0].metaDescription,
     heroImage: pickAsset("generic", 2).url,
+    heroImageThumb: pickAsset("generic", 2).thumb,
     body,
     schemas: [faqSchema(homepageFaqs)]
   });
