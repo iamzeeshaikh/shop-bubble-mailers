@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { locationStates } = require("./locations-data.js");
 const sharp = require("sharp");
+const ORDER = require("./order-data.js");
 
 /** Image conversions run in parallel and are awaited before the build ends. */
 const imageJobs = [];
@@ -991,6 +992,12 @@ const productContent = {
 };
 
 const productsBySlug = new Map(products.map((product) => [product.slug, product]));
+// The checkout catalog (order-data.js) must carry exactly these products at exactly these prices.
+for (const product of products) {
+  const entry = ORDER.CATALOG[product.slug];
+  if (!entry || entry.name !== product.name || Number(entry.price) !== Number(product.price)) throw new Error(`order-data.js is out of step with products: ${product.slug} (${product.name}, ${product.price})`);
+}
+for (const slug of Object.keys(ORDER.CATALOG)) if (!productsBySlug.has(slug)) throw new Error(`order-data.js lists an unknown product: ${slug}`);
 
 const mainPages = [
   { slug: "", title: "Bubble Mailers in Bulk: Kraft, White and Custom Printed", metaTitle: "Bubble Mailers | Bulk & Wholesale Padded Mailers USA | Shop Bubble Mailers", metaDescription: "Bubble mailers in bulk for US businesses: kraft and white padded mailers from 4x6 to #7, plain or logo printed, by the case or pallet. Quote back in 1-2 hours." },
@@ -1013,7 +1020,7 @@ const navLinks = [
 ];
 
 /** Routes that carry a noindex tag and therefore stay out of the sitemap. */
-const NOINDEX_ROUTES = new Set(["/thank-you/"]);
+const NOINDEX_ROUTES = new Set(["/thank-you/", "/checkout/", "/order-confirmed/"]);
 
 const siteRoutes = [];
 const registerRoute = (route) => {
@@ -1115,6 +1122,57 @@ const renderProductPrice = (product) => `
             <p class="product-price-line"><span class="product-price-amount">From $${productUnitPrice(product)}</span><span class="product-price-unit">per mailer</span></p>
             <p class="product-price-note">Starting unit price at bulk quantity, with free shipping to any US address. Your final price depends on size, quantity, material, and printing - request a quote for a firm figure.</p>
           </div>`;
+
+
+/**
+ * Payment marks and order seals under every submit button (owner 2026-11-05). Every order is paid
+ * on a PayPal invoice, which takes PayPal, cards, Apple Pay and Google Pay; each seal restates a
+ * fact printed on the site (HTTPS, digital proof, free US shipping).
+ */
+const PAY_CARDS = [["visa", "Visa"], ["mastercard", "Mastercard"], ["amex", "American Express"], ["discover", "Discover"], ["apple-pay", "Apple Pay"], ["google-pay", "Google Pay"]];
+const renderPayBadges = () => `<div class="pay-badges"><span class="pay-badges-pp"><img src="/badges/paypal.svg" alt="" width="20" height="20" loading="lazy" decoding="async"><span>We accept <b>PayPal</b></span></span><span class="pay-badges-cards"><span class="pay-badges-logos">${PAY_CARDS.map(([file, name]) => `<img src="/badges/${file}.svg" alt="${name}" width="40" height="25" loading="lazy" decoding="async">`).join("")}</span><span>Pay by card through PayPal</span></span></div>`;
+const SEAL_ICONS = {
+  lock: '<rect x="4.5" y="10.5" width="15" height="10"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><path d="M12 14.5v2.5"/>',
+  proof: '<path d="M5.5 2.5h9l4 4v15h-13z"/><path d="M8.5 13.5l2.5 2.5 4.5-5"/>',
+  truck: '<path d="M1.5 5.5h12v11h-12zM13.5 9.5h4.5l3.5 3.5v3.5h-8"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+};
+const renderSeals = () => `<ul class="order-seals" aria-label="Ordering with ${site.brand}">${[["lock", "<b>SSL secure</b> checkout"], ["proof", "<b>Free digital</b> proof"], ["truck", "<b>Free shipping</b> any US address"]].map(([key, text]) => `<li><svg viewBox="0 0 24 24" aria-hidden="true">${SEAL_ICONS[key]}</svg><span>${text}</span></li>`).join("")}</ul>`;
+const renderFormSeals = () => `<div class="form-trust">${renderSeals()}${renderPayBadges()}</div>`;
+
+/**
+ * Product-page order box: the product's own starting price, in runs of 250. "Add to order" keeps
+ * the line in localStorage (src/script.js) and opens /checkout/; without JavaScript the form lands
+ * on /checkout/?add=<slug>&qty=<n>. Only the unit price shows here (owner 2026-11-02); the real
+ * total is on /checkout/. api/order.js re-prices every line from order-data.js.
+ */
+const renderOrderBox = (product) => {
+  const price = ORDER.unitPrice(product.slug);
+  const id = `order-${product.slug}`;
+  return `
+          <div class="order-box" id="order">
+            <h2 id="${id}-h">Order ${product.name.toLowerCase()}s</h2>
+            <p class="order-box-from"><strong>Starting from ${ORDER.money(price)} per ${ORDER.UNIT}</strong></p>
+            <p class="order-box-lede">Plain stock at the starting price, in runs of ${ORDER.PACK_QTY}. Free shipping to any US address. Printing is quoted on top; ask on the next page or in the quote form.</p>
+            <form method="get" action="/checkout/" data-order-box data-slug="${product.slug}" data-unit="${price}" aria-labelledby="${id}-h">
+              <input type="hidden" name="add" value="${product.slug}">
+              <div class="order-box-row">
+                <label>Quantity
+                  <select name="qty" data-order-qty>${ORDER.QUANTITIES.map((qty) => `<option value="${qty}"${qty === ORDER.DEFAULT_QTY ? " selected" : ""}>${qty.toLocaleString("en-US")} ${ORDER.UNITS}</option>`).join("")}</select>
+                </label>
+                <button type="submit" class="button button-primary" data-order-add>Add to order</button>
+              </div>
+              <p class="order-box-hint">Review your order and add the delivery address on the next page. No payment is taken online.</p>
+              <ol class="order-box-steps">
+                <li>Add the mailers you need, then check out with your US delivery address.</li>
+                <li>Printed orders get a digital proof by email. Nothing prints before you approve it.</li>
+                <li>${ORDER.PAYMENT_LINE}</li>
+                <li>Your order ships free and we email the tracking number when it leaves.</li>
+              </ol>
+              ${renderFormSeals()}
+              <p class="order-box-note">Made to order: errors, shortfalls and defects are made right under our <a href="/custom-order-policy/">shipping and custom order policy</a>. More than ${ORDER.MAX_QTY.toLocaleString("en-US")} mailers, mixed sizes or a pallet program? Use the quote form on this page.</p>
+            </form>
+          </div>`;
+};
 
 /**
  * priceValidUntil is computed as build date + 1 year so a rebuild always ships
@@ -1407,6 +1465,7 @@ const renderQuoteForm = (productName = "") => `
         <input type="file" name="attachment" accept=".jpg,.jpeg,.png,.pdf,.ai,.eps">
       </label>
       <button type="submit">${iconSvg("quote", "button-icon")}<span>Get Quote</span></button>
+      ${renderFormSeals()}
       <p class="response-note">We respond within 1-2 hours.</p>
       <p class="helper-text">Prefer direct contact? Email <a href="mailto:${site.email}">${site.email}</a> or call <a href="tel:${site.phoneHref}">${site.phone}</a>.</p>
       <p class="helper-text">If you attach artwork, we will include the filename in your request and you can send the file directly by email if needed.</p>
@@ -1590,6 +1649,7 @@ const renderConfigurator = (productName) => `
 
             <p class="form-status" data-form-status aria-live="polite"></p>
             <button type="submit" class="button button-primary cfg-submit">${iconSvg("quote", "button-icon")}<span>Send my spec</span></button>
+            ${renderFormSeals()}
             <a class="cfg-call" href="tel:${site.phoneHref}">Talk to a packaging expert</a>
           </div>
         </aside>
@@ -2071,12 +2131,12 @@ const aboutFaqs = [
   ["Where is Shop Bubble Mailers based?", "We operate from Bloomington, Illinois, and supply businesses in every US state. Orders ship from US stock, and custom printed runs are produced to order and shipped direct to your warehouse or 3PL."],
   ["Who buys from Shop Bubble Mailers?", "Online stores, subscription brands, Amazon and Etsy sellers, 3PLs and fulfillment centers, and the purchasing teams of retail and apparel companies. Order sizes run from a single case to scheduled pallet programs."],
   ["Do you sell to individuals or only businesses?", "Our pricing and case quantities are set up for businesses, but anyone who needs a case or more can order. We do not sell single mailers."],
-  ["What makes you different from a packaging marketplace?", "One product category, done properly. Every size has its own page with real dimensions and a starting price, a design tool for printed quotes, and a person who replies within 1-2 hours with a written figure instead of a catalog PDF."],
-  ["How do I get a quote?", "Use the form on any page, call (503) 461-4788, or email Info@shopbubblemailers.com with the size, quantity and whether you want plain or printed stock. Quotes come back in writing within 1-2 hours during US business hours."],
+  ["What makes you different from a packaging marketplace?", "One product category, done properly. Every size has its own page with real dimensions and a starting price, a Design Your Bubble Mailer section for printed quotes, and a person who replies within 1-2 hours with a written figure instead of a catalog PDF."],
+  ["How do I get a quote?", "Use the form on any page, call (503) 461-4788, or email Info@shopbubblemailers.com with the size, quantity and whether you want plain or printed stock. Quotes come back by email within 1-2 hours during US business hours."],
   ["Do you offer samples?", "Yes. Ask for the two or three sizes you are deciding between and pack your real products before committing to a case or a printed run."],
   ["Can you handle recurring orders?", "Yes. Many customers set a standing reorder for their core sizes, and pallet-quantity programs can be released on a schedule so you are not storing a full pallet at once."],
   ["Do you ship to multiple locations?", "Yes. Bulk and printed orders can be split across several US addresses, which 3PL clients and multi-warehouse brands use to keep every site stocked from one order."],
-  ["How do I pay?", "Payment options are confirmed on the written quote before you commit, so there are no surprises between the price you approve and the invoice you receive."],
+  ["How do I pay?", "Payment options are confirmed on your quote before you commit, so there are no surprises between the price you approve and the invoice you receive."],
   ["Who do I speak to if something arrives wrong?", "Reply to your order email or call us. We ask for a photo, log the issue against the batch, and replace or credit the affected mailers."]
 ];
 
@@ -2156,7 +2216,7 @@ const productsFaqs = [
   ["What is the difference between numbered and inch bubble mailer sizes?", "They describe the same mailers two ways. A #2 is 8.5 x 12 in outside, a #5 is 10.5 x 16, a #7 is 14.25 x 20. Inch sizes are the outer dimension; usable inside space is about an inch shorter because of the seal flap. Our comparison table lists both so you can order by either name."],
   ["Which bubble mailer size should I start with?", "Most online stores cover 80% of orders with two sizes: a 4x7 or 6x9 for small items and an 8.5x12 (#2) for folded apparel and multi-item orders. Add a 10.5x15 (#5) if you ship hoodies, denim or kits. Send us three or four typical products and we will suggest the spread."],
   ["How are bubble mailers sold in bulk?", "By the case, typically 100 to 500 mailers depending on size, and by the pallet for 10,000 units and up. Both ship free to any US address; pallet programs are quoted with scheduled releases if you want them."],
-  ["What are the starting prices on this page based on?", "Plain stock at 5,000 units in the standard material for that size, before printing. Smaller quantities cost more per unit and larger ones less; custom print and specialty materials add to the figure. Every quote is confirmed in writing before anything ships."],
+  ["What are the starting prices on this page based on?", "Plain stock at 5,000 units in the standard material for that size, before printing. Smaller quantities cost more per unit and larger ones less; custom print and specialty materials add to the figure. Every quote is confirmed by email before anything ships."],
   ["Do kraft and white bubble mailers come in the same sizes?", "Kraft runs the full #000 to #7 range. White poly runs #000 to #5 as stock, with larger white sizes available on program orders. Both can be printed."],
   ["Can I mix sizes in one order?", "Yes. Mixed-size orders are the norm for stores shipping more than one product type. They ship together on one invoice, and the price break is based on the combined quantity on most programs."],
   ["Can I get samples before buying a case?", "Yes. Ask for samples of the two or three sizes you are considering and pack your real products before committing. It is the quickest way to avoid a case of mailers that is half an inch too small."],
@@ -2213,7 +2273,7 @@ const renderProductsPage = () => {
           <ul>
             ${ranges.map((product) => `<li><strong><a href="/${product.slug}/">${product.name}</a></strong> — ${product.spec.usable}. ${product.spec.fits}.</li>`).join("")}
           </ul>
-          <p>Every size can be printed. Pricing for logo runs, artwork specifications and proofing are on the custom page, and the design tool on each product page gives an instant estimate for any combination.</p>
+          <p>Every size can be printed. Pricing for logo runs, artwork specifications and proofing are on the custom page, and the Design Your Bubble Mailer section on each product page gives an instant estimate for any combination.</p>
         </div>
         ${renderQuoteForm("")}
       </div>
@@ -2265,7 +2325,7 @@ const renderKraftProductPage = (product) => {
     ["Are kraft bubble mailers recyclable?", "Recycling depends on the specific material construction and local recycling rules. We can discuss practical disposal guidance during the quoting process if that is important for your program."],
     ["Are kraft bubble mailers good for retail brands?", "Yes. Many businesses choose kraft bubble mailers because the outer finish feels clean and more brand-ready while still giving padded protection inside."],
     ["Can I request mixed sizes in one program?", "Yes. Many buyers request a mixed-size plan so they can support different SKUs while keeping purchasing and fulfillment more organized."],
-    ["What do kraft bubble mailers cost in bulk?", "Plain kraft starts around $0.14 per mailer at 5,000 units in the smallest size and rises with size; a #2 (8.5 x 12) sits in the mid-twenties of cents and a #7 near fifty cents. Printing and smaller quantities add to the figure, and every quote is confirmed in writing."],
+    ["What do kraft bubble mailers cost in bulk?", "Plain kraft starts around $0.14 per mailer at 5,000 units in the smallest size and rises with size; a #2 (8.5 x 12) sits in the mid-twenties of cents and a #7 near fifty cents. Printing and smaller quantities add to the figure, and every quote is confirmed by email."],
     ["Kraft paper bubble mailers or white poly — which should I choose?", "Kraft for a natural, recycled look and dark one- or two-color logos; white poly for water resistance, full-color print and a clean retail finish. Both use the same 3/16 in bubble lining, so protection is equal."]
   ];
 
@@ -2307,6 +2367,7 @@ const renderKraftProductPage = (product) => {
             <li>${iconSvg("truck", "row-icon")}<span>Fast USA delivery</span></li>
           </ul>
 ${renderProductPrice(product)}
+${renderOrderBox(product)}
           <div class="button-row">
             <a class="button button-primary" href="#quote-form">Get Free Quote</a>
             <a class="button button-outline" href="#available-sizes">View Sizes</a>
@@ -2411,6 +2472,7 @@ ${renderProductPrice(product)}
               <textarea name="message" placeholder="Tell us the sizes, print needs, or delivery details you want us to review."></textarea>
             </label>
             <button type="submit">${iconSvg("quote", "button-icon")}<span>Get Quote</span></button>
+            ${renderFormSeals()}
             <p class="response-note">We respond within 1-2 hours.</p>
             <p class="helper-text">If you attach artwork, we will include the filename in your request and you can send the file directly by email if needed.</p>
             <p class="form-status" data-form-status aria-live="polite"></p>
@@ -2722,6 +2784,7 @@ const productSections = (product) => {
           <h1>${product.name}</h1>
           ${productIntroParagraphs(product).map(paragraph).join("")}
 ${renderProductPrice(product)}
+${renderOrderBox(product)}
           <div class="button-row">
             <a class="button button-primary" href="#quote-form">Get Free Quote</a>
             <a class="button button-outline" href="#bulk-pricing">Request Bulk Pricing</a>
@@ -2863,11 +2926,11 @@ ${renderProductPrice(product)}
 };
 
 const customFaqs = [
-  ["What is the minimum order for custom printed bubble mailers?", "Printed runs are quoted from 250 units, the lowest quantity in the design tool. Most brands print 1,000 or more because the plate and setup cost is spread across the run and the per-unit price drops sharply between 500 and 2,500."],
-  ["How much do custom bubble mailers cost?", "As a guide, a 7x9 kraft mailer with a one-color logo works out around $0.43 each at 1,000 units and about $0.29 at 10,000, before shipping. Size, material, number of colors and quantity all move the figure. The design tool on any product page gives an instant range; the written quote is firm."],
+  ["What is the minimum order for custom printed bubble mailers?", "Printed runs are quoted from 250 units, the lowest quantity in Design Your Bubble Mailer. Most brands print 1,000 or more because the plate and setup cost is spread across the run and the per-unit price drops sharply between 500 and 2,500."],
+  ["How much do custom bubble mailers cost?", "As a guide, a 7x9 kraft mailer with a one-color logo works out around $0.43 each at 1,000 units and about $0.29 at 10,000, before shipping. Size, material, number of colors and quantity all move the figure. The Design Your Bubble Mailer section on any product page gives an instant range; the emailed quote is firm."],
   ["How many colors can you print?", "One and two spot colors are the standard for logos and return panels. Full-color (CMYK) print is available for photographic or gradient artwork, and we can print both sides. Pantone references are matched as closely as the stock allows; white poly gives the truest color, kraft warms every ink slightly."],
   ["What artwork do you need?", "Vector files (PDF, AI or EPS) with text outlined are best. If you only have a PNG or JPG, send it at 300 dpi or higher at print size and we will tell you whether it is usable. Spot colors should be named as Pantone references; CMYK is fine for full-color work."],
-  ["Will I see a proof before printing?", "Yes. Every custom order gets a digital proof showing the artwork positioned on the actual mailer size. Nothing prints until you approve it in writing, and revisions before approval are free."],
+  ["Will I see a proof before printing?", "Yes. Every custom order gets a digital proof showing the artwork positioned on the actual mailer size. Nothing prints until you approve it by email, and revisions before approval are free."],
   ["How long do custom bubble mailers take?", "Plain stock ships in a few business days. Because printed mailers are made to order, the lead time depends on quantity and the number of colors; as a planning figure allow a few weeks after proof approval. Express production is available as an add-on when a launch date is fixed, and we confirm the exact lead time on your quote."],
   ["Can I print on kraft and white bubble mailers?", "Both. Kraft takes dark one- and two-color print well and gives a natural, recycled look. White poly is the better base for light colors, fine detail and full-color print. Metallic and recyclable paper stocks can also be printed."],
   ["Can custom mailers be made in a non-standard size?", "Yes. If none of the eleven stock sizes fits, give us the packed dimensions of your product and we will quote a custom size. Custom sizes carry a higher minimum than printed stock sizes; we confirm it on the quote."],
@@ -2918,7 +2981,7 @@ const renderCustomPage = () => {
       <div class="container split-grid">
         <div class="content-card content-flow">
           <h2>Custom bubble mailer pricing by quantity</h2>
-          <p>Printing is priced per unit on top of the plain mailer, and the per-unit figure falls as the run grows because plate and setup costs are fixed. The table shows an indicative ladder for a 7x9 kraft mailer with a one-color logo, taken from the same rates the design tool on each product page uses. Larger sizes, more colors and specialty stocks move the figures up; the written quote is the firm number.</p>
+          <p>Printing is priced per unit on top of the plain mailer, and the per-unit figure falls as the run grows because plate and setup costs are fixed. The table shows an indicative ladder for a 7x9 kraft mailer with a one-color logo, taken from the same rates the Design Your Bubble Mailer section on each product page uses. Larger sizes, more colors and specialty stocks move the figures up; the written quote is the firm number.</p>
           <p>A useful rule: if you ship more than 300 orders a month, printing at 2,500 or 5,000 units almost always beats reordering 500 at a time, even after storage.</p>
         </div>
         <div class="table-card">
@@ -2935,7 +2998,7 @@ const renderCustomPage = () => {
       <div class="container split-grid">
         <div class="content-card content-flow">
           <h2>Artwork, proofing and lead time</h2>
-          <p>Send vector artwork (PDF, AI or EPS) with text outlined, or a 300 dpi raster file at print size if that is all you have. Name spot colors as Pantone references. We place the artwork on a template of the exact mailer size and send a digital proof; you approve it in writing before anything prints, and revisions before approval are free.</p>
+          <p>Send vector artwork (PDF, AI or EPS) with text outlined, or a 300 dpi raster file at print size if that is all you have. Name spot colors as Pantone references. We place the artwork on a template of the exact mailer size and send a digital proof; you approve it by email before anything prints, and revisions before approval are free.</p>
           <p>Plain stock leaves within a few business days. Printed runs are made to order, so allow a few weeks after proof approval as a planning figure, longer for full-color or custom sizes; an express production add-on is available when a launch date is fixed. We confirm the lead time on your quote so you can plan the launch around it.</p>
         </div>
         <div class="content-card content-flow content-soft">
@@ -2989,7 +3052,7 @@ const contactFaqs = [
   ["How quickly will I hear back?", "Within 1-2 hours during US business hours. Requests sent in the evening or at the weekend are answered first thing the next business day."],
   ["What should I include in a quote request?", "Size (or the dimensions of your packed product), quantity, plain or printed, and the delivery ZIP code. If you want printing, attach your artwork or a rough sketch; we will tell you what is possible before quoting."],
   ["Can I call instead of using the form?", "Yes: (503) 461-4788. If you reach voicemail, leave the size and quantity and we will call back with a figure."],
-  ["Do you reply by email or phone?", "By email with a written quote unless you ask for a call. Written quotes make it easier to compare sizes and quantities and to forward to whoever approves purchasing."],
+  ["Do you reply by email or phone?", "By email with your quote unless you ask for a call. Emailed quotes make it easier to compare sizes and quantities and to forward to whoever approves purchasing."],
   ["Can I send artwork through the form?", "Yes. The form accepts PDF, AI, EPS, PNG and JPG. If the file is over 10 MB, send the form without it and reply to our confirmation email with the file attached."],
   ["Where do orders ship from?", "From US stock for plain mailers and from the printer for custom runs, delivered free to any US address, so the quoted mailer price is the delivered price."],
   ["Is there a minimum for a quote?", "No. We quote single cases as readily as pallets. Pricing simply improves as the quantity rises."],
@@ -3142,6 +3205,8 @@ const renderSitemapPage = () => {
 
 writeStaticAsset("styles.css", readText("styles.css"));
 writeStaticAsset("script.js", readText("script.js"));
+writeStaticAsset("checkout.js", readText("checkout.js"));
+fs.cpSync(path.join(__dirname, "static", "badges"), path.join(distDir, "badges"), { recursive: true });
 writeStaticAsset("favicon.svg", faviconSvg().trim());
 writeStaticAsset("apple-touch-icon.svg", faviconSvg().trim());
 // A PNG of the same mark, copied rather than generated: every mail client of
@@ -3242,7 +3307,7 @@ const renderThankYouPage = () => {
           </p>
           <ol class="thankyou-steps">
             <li><span>1</span> We review your size, quantity and any artwork.</li>
-            <li><span>2</span> You get a written price with material and print options.</li>
+            <li><span>2</span> You get a price with material and print options.</li>
             <li><span>3</span> We confirm lead time and shipping before anything runs.</li>
           </ol>
           <div class="thankyou-actions">
@@ -3271,6 +3336,132 @@ const renderThankYouPage = () => {
 
 writeRoute("/contact-us/", renderContactPage());
 writeRoute("/thank-you/", renderThankYouPage());
+
+/**
+ * Checkout and order confirmation (owner 2026-11-05). No card is taken here: the order is emailed
+ * to the office and paid by PayPal invoice or bank transfer after the digital proof, or cash on
+ * delivery at a US address. Lines live in localStorage (src/checkout.js); api/order.js re-prices
+ * every line from order-data.js. Both pages are noindex,follow and stay out of the sitemap.
+ */
+const checkoutField = (id, label, inner) => `<label data-field>${label}${inner}<small class="field-error" data-err hidden></small></label>`;
+const renderCheckoutPage = () => {
+  const cfg = JSON.stringify({
+    key: "sbm-cart", catalog: Object.fromEntries(Object.entries(ORDER.CATALOG).map(([slug, entry]) => [slug, entry.name])),
+    prices: Object.fromEntries(Object.entries(ORDER.CATALOG).map(([slug, entry]) => [slug, entry.price])),
+    unit: 0, pack: ORDER.PACK_QTY, max: ORDER.MAX_QTY, cod: ORDER.COD_COUNTRIES, unitName: ORDER.UNIT, unitsName: ORDER.UNITS,
+    phone: site.phone, currency: "USD", allUrl: "/products/", confirmUrl: "/order-confirmed/",
+  }).replace(/</g, "\\u003c");
+  const body = `
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow">Checkout</span>
+        <h1>Your order</h1>
+        <p>Plain stock at each size's starting price, in runs of ${ORDER.PACK_QTY}, with free shipping to any US address. Printed orders get a digital proof before anything prints, and nothing is paid before you approve it.</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <form class="checkout" id="checkout-form" method="post" action="/api/order/" novalidate data-checkout>
+          <div class="checkout-main">
+            <fieldset class="content-card checkout-card"><legend>Who is ordering</legend>
+              <div class="field-grid">${checkoutField("co-name", "Full name", `<input id="co-name" type="text" name="name" required maxlength="120" autocomplete="name">`)}${checkoutField("co-business", "Business name", `<input id="co-business" type="text" name="company" maxlength="140" autocomplete="organization">`)}</div>
+              <div class="field-grid">${checkoutField("co-email", "Email", `<input id="co-email" type="email" name="email" required maxlength="160" autocomplete="email">`)}${checkoutField("co-phone", "Phone", `<input id="co-phone" type="tel" name="phone" required maxlength="40" autocomplete="tel">`)}</div>
+            </fieldset>
+            <fieldset class="content-card checkout-card"><legend>Delivery address</legend>
+              <p class="checkout-sub">We ship to US addresses only, free of charge, and email the tracking number when the order leaves.</p>
+              ${checkoutField("co-country", "Country", `<select id="co-country" name="country" required autocomplete="country">${ORDER.SHIP_COUNTRIES.map((country) => `<option value="${country.code}">${country.name}</option>`).join("")}</select>`)}
+              ${checkoutField("co-address1", "Street address", `<input id="co-address1" type="text" name="address1" required maxlength="200" autocomplete="address-line1">`)}
+              ${checkoutField("co-address2", "Apartment, suite or unit", `<input id="co-address2" type="text" name="address2" maxlength="200" autocomplete="address-line2">`)}
+              <div class="field-grid">${checkoutField("co-city", "City", `<input id="co-city" type="text" name="city" required maxlength="100" autocomplete="address-level2">`)}${checkoutField("co-region", "State", `<input id="co-region" type="text" name="region" maxlength="60" autocomplete="address-level1">`)}</div>
+              <div class="field-grid">${checkoutField("co-postal", "ZIP code", `<input id="co-postal" type="text" name="postal" required maxlength="20" autocomplete="postal-code">`)}</div>
+            </fieldset>
+            <fieldset class="content-card checkout-card"><legend>How you will pay</legend>
+              <p class="checkout-sub">No card is taken on this site. Choose how we invoice you after the proof is approved.</p>
+              <div class="pay-choice">${ORDER.PAYMENT_METHODS.map((method, index) => `<label><input type="radio" name="payment" id="co-pay-${method.id}" value="${method.id}"${index ? "" : " checked"}><span><b>${method.name}</b><small>${method.detail}</small></span></label>`).join("")}</div>
+              ${renderPayBadges()}
+            </fieldset>
+            <fieldset class="content-card checkout-card"><legend>Artwork and notes</legend>
+              <p class="checkout-sub">Optional now. You can also email artwork after ordering; our team asks for anything missing before the proof.</p>
+              <label>Upload artwork (optional)
+                <input id="co-files" type="file" name="files" multiple accept=".pdf,.ai,.eps,.svg,.png,.jpg,.jpeg,.zip">
+              </label>
+              ${checkoutField("co-notes", "Size, plain or printed, print colors or deadline", `<textarea id="co-notes" name="notes" rows="4" maxlength="3000"></textarea>`)}
+            </fieldset>
+            <label class="checkout-trap" aria-hidden="true">Company website<input type="text" name="company_website" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <aside class="checkout-side">
+            <div class="content-card checkout-summary" data-order-summary>
+              <h2>Order summary</h2>
+              <p class="checkout-sub"><span data-order-count>0 ${ORDER.UNITS}</span> at each size's starting price</p>
+              <table class="order-lines"><tbody data-lines><tr><td colspan="2" data-empty>Your order is empty. <a href="/products/">Choose a size</a> to add it here.</td></tr></tbody></table>
+              <table class="order-sum"><tbody><tr><td>Shipping</td><td class="order-sum-free">Free</td></tr><tr><th scope="row">Total</th><td data-grand>$0.00</td></tr></tbody></table>
+              <p class="order-box-hint">Prices in US dollars at the plain-stock starting price. Printing, specialty materials and pallet programs are quoted separately.</p>
+              <p class="form-status checkout-status" data-status role="status" aria-live="polite"></p>
+              <button type="submit" class="button button-primary" data-place disabled>Place order</button>
+              ${renderFormSeals()}
+              <p class="order-box-note">By placing the order you agree to our <a href="/terms-and-conditions/">terms</a> and <a href="/custom-order-policy/">shipping and custom order policy</a>. Questions? Call <a href="tel:${site.phoneHref}">${site.phone}</a> or email <a href="mailto:${site.email}">${site.email}</a>.</p>
+            </div>
+          </aside>
+        </form>
+      </div>
+    </section>
+    <script type="application/json" id="checkout-config">${cfg}</script>
+    <script src="/checkout.js?v=${assetVersion("checkout.js")}" defer></script>
+  `;
+  return buildPage({
+    noindex: true,
+    routePath: "/checkout/",
+    title: "Checkout",
+    metaTitle: "Checkout | Shop Bubble Mailers",
+    metaDescription: "Order bubble mailers in runs of 250 at each size's starting price, with free shipping to any US address. Pay by invoice after your digital proof, or cash on delivery.",
+    breadcrumbs: [{ label: "Home", href: "/" }, { label: "Checkout", href: "/checkout/" }],
+    body
+  });
+};
+const renderOrderConfirmedPage = () => {
+  const pay = JSON.stringify(Object.fromEntries(ORDER.PAYMENT_METHODS.map((method) => [method.id, method.detail]))).replace(/</g, "\\u003c");
+  const body = `
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow">Order received</span>
+        <h1>Thank you, your order is in</h1>
+        <p>Your order is with our team and a copy is on its way to your inbox. Keep the order number below for any question about it.</p>
+        <p class="order-ref" data-ref hidden><span>Your order number</span><strong data-ref-value></strong></p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="content-card content-flow order-next">
+          <h2>What happens next</h2>
+          <ol class="order-box-steps order-next-steps">
+            <li><b>We check your order and artwork.</b> Printed orders get a digital proof by email, usually within one business day. If a file is missing we ask for it first.</li>
+            <li><b>You approve the proof, or ask for changes.</b> Nothing prints before you approve it.</li>
+            <li><b>Payment.</b> <span data-pay>${ORDER.PAYMENT_METHODS[0].detail}</span></li>
+            <li><b>Free shipping.</b> Your order ships free to your US address and we email the tracking number when it leaves. Errors, shortfalls and defects are made right under our <a href="/custom-order-policy/">custom order policy</a>.</li>
+          </ol>
+          <p>Questions? Call <a href="tel:${site.phoneHref}">${site.phone}</a> or email <a href="mailto:${site.email}">${site.email}</a> and quote your order number.</p>
+          <div class="button-row">
+            <a class="button button-primary" href="/products/">Browse all sizes</a>
+            <a class="button button-outline" href="/custom-bubble-mailers/">Custom printed mailers</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script type="application/json" id="pay-config">${pay}</script>
+    <script>(function(){var q=new URLSearchParams(location.search),r=q.get("ref"),m=q.get("pay"),pay=JSON.parse(document.getElementById("pay-config").textContent);if(r&&/^[A-Z0-9-]{6,32}$/.test(r)){var el=document.querySelector("[data-ref]");el.querySelector("[data-ref-value]").textContent=r;el.hidden=false}if(m&&pay[m])document.querySelector("[data-pay]").textContent=pay[m];try{localStorage.removeItem("sbm-cart")}catch(e){}})();</script>
+  `;
+  return buildPage({
+    noindex: true,
+    routePath: "/order-confirmed/",
+    title: "Order received",
+    metaTitle: "Order Received | Shop Bubble Mailers",
+    metaDescription: "Your bubble mailer order has reached Shop Bubble Mailers. Printed orders get a digital proof before anything prints, and every order ships free to any US address.",
+    breadcrumbs: [{ label: "Home", href: "/" }, { label: "Order received", href: "/order-confirmed/" }],
+    body
+  });
+};
+writeRoute("/checkout/", renderCheckoutPage());
+writeRoute("/order-confirmed/", renderOrderConfirmedPage());
 writeRoute(
   "/privacy-policy/",
   renderPolicyPage({
@@ -3537,7 +3728,7 @@ const blogPosts = [
       ["What file format should I send for custom printed mailers?", "A vector PDF, AI or EPS with text outlined and spot colors named as Pantone references. A 300 dpi PNG or JPG at print size works for full-color artwork; low-resolution logos pulled from a website will print blurry and we will flag them at proof."],
       ["Do printed bubble mailers cost more to ship?", "No. Ink adds no measurable weight, so a printed mailer ships at the same postage as a plain one of the same size."],
       ["Can I print a return address on bubble mailers?", "Yes, and it is one of the most common requests: a return-address block on the back or top-left front saves a label on every order. Pair it with a logo on the front for a complete branded mailer in one or two colors."],
-      ["Do I get a proof before the mailers are printed?", "Yes. A digital proof shows your artwork at scale on the actual mailer size, and nothing prints until you approve it in writing. Revisions before approval are free."],
+      ["Do I get a proof before the mailers are printed?", "Yes. A digital proof shows your artwork at scale on the actual mailer size, and nothing prints until you approve it by email. Revisions before approval are free."],
     ],
     related: ["how-to-choose-bubble-mailer-size", "kraft-vs-white-bubble-mailers"],
   },
@@ -4114,7 +4305,7 @@ const blogIndexFaqs = [
   ["Which is cheaper to ship, a bubble mailer or a box?", "A bubble mailer, almost always, because it weighs a few ounces less and avoids dimensional-weight pricing on small items. Our shipping-cost guide works through the numbers."],
   ["Can I print my logo on bubble mailers?", "Yes, in one, two or full color on kraft or white stock, with a digital proof before production. Printed runs start at 250 units."],
   ["How many bubble mailers should a small business keep in stock?", "A month's worth of your two core sizes, reordered when you drop to two weeks' supply. A case of 250 to 500 covers most small stores; busier ones buy by the pallet with scheduled releases."],
-  ["Where can I buy bubble mailers in bulk?", "Right here: every size on this site is sold by the case or pallet, plain or printed, with bulk pricing quoted in writing within 1-2 hours."]
+  ["Where can I buy bubble mailers in bulk?", "Right here: every size on this site is sold by the case or pallet, plain or printed, with bulk pricing quoted by email within 1-2 hours."]
 ];
 
 const renderBlogIndex = () => {
@@ -4261,7 +4452,7 @@ const LOCATION_FAQ_POOL = [
   [(p) => `Can I mix sizes in one ${p} order?`, (p) => `Yes. Mixed-size orders are the norm for ${p} stores shipping more than one product type; they ship together on one invoice and the price break is based on the combined quantity.`],
   [(p) => `Do you ship pallet quantities to ${p}?`, (p) => `Yes. Pallets of 10,000 to 25,000 mailers ship by freight to ${p} warehouses and 3PLs, and can be released on a schedule so you are not storing a full pallet at once.`],
   [(p) => `Do you provide a proof for custom orders shipped to ${p}?`, (p) => `Yes. Every printed order gets a digital proof at scale on the actual mailer size. Nothing prints until you approve it, so ${p} brands see exactly how the logo sits before committing.`],
-  [(p) => `How fast do you quote for ${p} businesses?`, (p) => `Within 1-2 hours during US business hours, in writing. Send the size, quantity, plain or printed, and your ${p} ZIP code and the quote comes back as a delivered price, shipping included free.`],
+  [(p) => `How fast do you quote for ${p} businesses?`, (p) => `Within 1-2 hours during US business hours, by email. Send the size, quantity, plain or printed, and your ${p} ZIP code and the quote comes back as a delivered price, shipping included free.`],
   [(p) => `Is pricing different for ${p} than elsewhere?`, (p) => `No. Mailer pricing is the same nationwide and shipping is free to any US address, so a ${p} order costs exactly what the quote says.`],
   [(p) => `Can a ${p} 3PL order for several brands at once?`, (p) => `Yes. Fulfillment centers in ${p} often stock printed mailers for one client and plain stock for another on a single invoice, with the quantity break applied across the whole order.`],
   [(p) => `Can I get samples before ordering in ${p}?`, (p) => `Yes. Ask for the two or three sizes you are considering, pack your real products, and then commit to a case or a printed run. It saves ${p} sellers from a case of mailers that is half an inch too small.`],
@@ -4628,7 +4819,7 @@ const locationsFaqs = [
   ["Can I split one order across warehouses in different states?", "Yes. Bulk and printed orders can be delivered to several addresses, with the price break based on the combined quantity."],
   ["Do you offer local pickup anywhere?", "No. All orders ship free by freight or parcel carrier to your address, which keeps pricing consistent across the country."],
   ["Which sizes are most popular nationally?", "The 8.5x12 (#2) for apparel and multi-item orders, the 4x7 (#000) for small goods, and the 10.5x15 (#5) for folded garments. Coastal apparel markets lean larger; marketplace sellers lean smaller."],
-  ["How do I get a quote for my city?", "Use the form on your state or city page, or call (503) 461-4788 with your size, quantity and ZIP code. Quotes are returned in writing within 1-2 hours."]
+  ["How do I get a quote for my city?", "Use the form on your state or city page, or call (503) 461-4788 with your size, quantity and ZIP code. Quotes are returned by email within 1-2 hours."]
 ];
 
 const renderLocationsHub = () => {

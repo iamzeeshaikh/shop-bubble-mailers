@@ -339,3 +339,25 @@ document.addEventListener("DOMContentLoaded", () => {
     yearTarget.textContent = String(new Date().getFullYear());
   }
 });
+
+// Product-page order box: "Add to order" keeps the line in localStorage and opens /checkout/.
+// Without JavaScript the form submits as a GET to /checkout/?add=<slug>&qty=<n>, which the checkout reads the same way.
+document.querySelectorAll("form[data-order-box]").forEach((form) => {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const slug = form.getAttribute("data-slug");
+    const unit = Number(form.getAttribute("data-unit")) || 0;
+    const select = form.querySelector("[data-order-qty]");
+    const qty = parseInt(select && select.value, 10) || 250;
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem("sbm-cart") || "[]"); if (!Array.isArray(cart)) cart = []; } catch (error) { cart = []; }
+    cart = cart.filter((line) => line && line.slug);
+    const line = cart.find((item) => item.slug === slug);
+    if (line) line.qty = qty; else cart.push({ slug, qty });
+    try { localStorage.setItem("sbm-cart", JSON.stringify(cart)); } catch (error) { /* private mode: the URL carries the line */ }
+    const button = form.querySelector("[data-order-add]");
+    if (button) { button.setAttribute("aria-disabled", "true"); button.textContent = "Added, opening checkout…"; }
+    if (window.gtag) window.gtag("event", "add_to_cart", { currency: "USD", value: Math.round(qty * unit * 100) / 100, items: [{ item_id: slug, quantity: qty, price: unit }] });
+    window.location.href = `${form.getAttribute("action")}?add=${encodeURIComponent(slug)}&qty=${qty}`;
+  });
+});
