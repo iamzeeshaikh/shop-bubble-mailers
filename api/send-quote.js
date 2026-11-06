@@ -33,6 +33,25 @@ const escapeHtml = (value = "") =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
+const MAX_ARTWORK_BYTES = 3.5 * 1024 * 1024;
+const ARTWORK_TYPES = /^(image\/(png|jpe?g|gif|webp|svg\+xml|tiff)|application\/(pdf|postscript|illustrator|vnd\.adobe\.illustrator|zip|x-zip-compressed|octet-stream)|text\/plain)$/;
+
+// Turns the base64 file the form sends into a nodemailer attachment.
+// Returns null when there is no usable file, so the email can say why.
+const artworkAttachment = (file, fallbackName) => {
+  if (!file || typeof file !== "object") return null;
+  const data = String(file.data || "").replace(/^data:[^,]*,/, "");
+  if (!data) return null;
+  const size = Math.floor((data.length * 3) / 4);
+  const type = String(file.type || "application/octet-stream").slice(0, 80);
+  if (size > MAX_ARTWORK_BYTES || !ARTWORK_TYPES.test(type)) return null;
+  const filename =
+    String(file.name || fallbackName || "artwork")
+      .slice(0, 120)
+      .replace(/[^\w.\- ()]+/g, "_") || "artwork";
+  return { filename, content: data, encoding: "base64", contentType: type };
+};
+
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -61,7 +80,9 @@ module.exports = async (req, res) => {
   const rawSubject = body.form_subject || "Quote request — Bubble Mailers";
   // Always name the domain in the subject so the lead inbox can attribute it.
   const subject = /shopbubblemailers\.com/i.test(rawSubject) ? rawSubject : `${rawSubject} — shopbubblemailers.com`;
-  const attachmentName = body.attachmentName || "";
+  const attachmentName = String(body.attachmentName || "").slice(0, 160);
+  const attachmentSize = Number(body.attachmentSize) || 0;
+  const artwork = artworkAttachment(body.attachment, attachmentName);
 
   if (!name || !email) {
     return res.status(400).json({ error: "Name and email are required." });
@@ -103,6 +124,12 @@ module.exports = async (req, res) => {
     ["Message", message || "No additional message provided"]
   ].filter(([, value]) => String(value ?? "").trim() !== "");
 
+  const artworkNote = !attachmentName
+    ? ""
+    : artwork
+      ? "The customer's artwork is attached to this email."
+      : `The customer selected an artwork file (${attachmentName}${attachmentSize ? `, ${(attachmentSize / 1048576).toFixed(1)} MB` : ""}) but it was too large or not a supported type to attach. Ask the customer to email it.`;
+
   const html = `
     <div style="font-family:Arial,sans-serif;color:#1f2c3b;line-height:1.6">
       <h2 style="margin:0 0 16px">New Quote Request</h2>
@@ -120,15 +147,11 @@ module.exports = async (req, res) => {
             .join("")}
         </tbody>
       </table>
-      ${
-        attachmentName
-          ? `<p style="margin-top:16px">Artwork file was selected in the form. Ask the customer to email the file directly if it was not included separately.</p>`
-          : ""
-      }
+      ${artworkNote ? `<p style="margin-top:16px">${escapeHtml(artworkNote)}</p>` : ""}
     </div>
   `;
 
-  const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
+  const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n") + (artworkNote ? `\n\n${artworkNote}` : "");
 
   try {
     console.log("Quote request SMTP verify start", {
@@ -148,13 +171,15 @@ module.exports = async (req, res) => {
       replyTo: email,
       subject,
       text,
-      html
+      html,
+      attachments: artwork ? [artwork] : []
     });
 
     console.log("Quote request SMTP send success", {
       smtpTo,
       product,
-      email
+      email,
+      artworkAttached: Boolean(artwork)
     });
 
     return res.status(200).json({

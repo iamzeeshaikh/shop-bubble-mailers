@@ -1,3 +1,17 @@
+const MAX_ARTWORK_BYTES = 3.3 * 1024 * 1024;
+const readAsBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () =>
+      resolve({
+        name: file.name,
+        type: file.type || "application/octet-stream",
+        data: String(reader.result).split(",")[1] || ""
+      });
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+
 document.addEventListener("DOMContentLoaded", () => {
   const navToggle = document.querySelector("[data-nav-toggle]");
   const nav = document.querySelector("[data-nav]");
@@ -34,14 +48,25 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
 
       const formData = new FormData(form);
-      const payload = Object.fromEntries(formData.entries());
+      const payload = {};
+      formData.forEach((value, key) => {
+        if (typeof value === "string") payload[key] = value;
+      });
       // The full page URL (with domain) lets the lead inbox place the inquiry
       // against this site; a bare path was not enough on sister sites.
       payload.Page = window.location.href;
       const attachment = form.querySelector('input[type="file"][name="attachment"]');
+      const file = attachment && attachment.files && attachment.files[0];
 
-      if (attachment && attachment.files && attachment.files[0]) {
-        payload.attachmentName = attachment.files[0].name;
+      if (file) {
+        payload.attachmentName = file.name;
+        payload.attachmentSize = file.size;
+        // The artwork itself travels as base64 so it reaches the inbox as a real
+        // attachment. Vercel caps a request near 4.5 MB, so larger files are
+        // flagged in the email instead of failing the whole quote.
+        if (file.size <= MAX_ARTWORK_BYTES) {
+          payload.attachment = await readAsBase64(file).catch(() => null);
+        }
       }
 
       if (status) {
