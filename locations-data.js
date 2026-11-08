@@ -33,7 +33,7 @@ const locationStates = [
         name: "Los Angeles",
         metaTitle: "Bubble Mailers in Los Angeles, CA | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Los Angeles apparel, beauty, and DTC sellers. Fast quote support and low minimums across LA County.",
+          "Bulk and custom bubble mailers for Los Angeles apparel, beauty, and DTC sellers. Fast quote support and a 250-mailer MOQ across LA County.",
         h1: "Bubble Mailers for Los Angeles Sellers",
         intro:
           "Los Angeles is the beating heart of American fashion and beauty eCommerce, and its sellers ship enormous volumes of small, high-value parcels every day. We supply bulk and custom bubble mailers to LA brands that need padded protection and a clean branded look.",
@@ -54,7 +54,7 @@ const locationStates = [
         name: "San Francisco",
         metaTitle: "Bubble Mailers in San Francisco, CA | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for San Francisco startups, subscription brands, and DTC sellers. Free quote and low minimums.",
+          "Bulk and custom bubble mailers for San Francisco startups, subscription brands, and DTC sellers. Free quote and a 250-mailer MOQ.",
         h1: "Bubble Mailers for San Francisco Brands",
         intro:
           "San Francisco's startup and subscription economy ships some of the most design-conscious parcels in the country. We supply bulk and custom bubble mailers to Bay Area brands that treat packaging as part of the product.",
@@ -75,7 +75,7 @@ const locationStates = [
         name: "San Diego",
         metaTitle: "Bubble Mailers in San Diego, CA | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for San Diego wellness, craft, and eCommerce sellers. Fast quote support and low minimums.",
+          "Bulk and custom bubble mailers for San Diego wellness, craft, and eCommerce sellers. Fast quote support and a 250-mailer MOQ.",
         h1: "Bubble Mailers for San Diego Businesses",
         intro:
           "San Diego's mix of biotech, wellness, craft, and cross-border commerce keeps its sellers shipping a steady stream of compact parcels. We supply bulk and custom bubble mailers to businesses across the county.",
@@ -99,7 +99,7 @@ const locationStates = [
     abbr: "TX",
     metaTitle: "Bubble Mailers in Texas | Shop Bubble Mailers",
     metaDescription:
-      "Bulk and custom bubble mailers for Texas businesses — from Houston to Austin. Fast quote support, low minimums, and reliable supply across the state.",
+      "Bulk and custom bubble mailers for Texas businesses — from Houston to Austin. Fast quote support, a 250-mailer MOQ, and reliable supply across the state.",
     h1: "Bubble Mailers for Texas Businesses",
     intro:
       "Texas has become one of the country's fastest-growing eCommerce and distribution states, with a central location that reaches most of the US in a day or two. We supply bulk and custom bubble mailers to Texas sellers, fulfillment operations, and makers statewide.",
@@ -122,7 +122,7 @@ const locationStates = [
         name: "Houston",
         metaTitle: "Bubble Mailers in Houston, TX | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Houston eCommerce, distribution, and maker businesses. Fast quote support and low minimums.",
+          "Bulk and custom bubble mailers for Houston eCommerce, distribution, and maker businesses. Fast quote support and a 250-mailer MOQ.",
         h1: "Bubble Mailers for Houston Businesses",
         intro:
           "Houston's vast, diverse economy ships everything from oilfield parts to beauty products, and its sellers need padded mailers they can rely on in volume. We supply bulk and custom bubble mailers across the metro.",
@@ -143,7 +143,7 @@ const locationStates = [
         name: "Dallas",
         metaTitle: "Bubble Mailers in Dallas, TX | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Dallas-Fort Worth eCommerce and fulfillment businesses. Fast quotes, low minimums, reliable supply.",
+          "Bulk and custom bubble mailers for Dallas-Fort Worth eCommerce and fulfillment businesses. Fast quotes, a 250-mailer MOQ, reliable supply.",
         h1: "Bubble Mailers for Dallas-Fort Worth",
         intro:
           "Dallas-Fort Worth is a national logistics and fulfillment hub, home to countless eCommerce operations and distribution centers. We supply bulk and custom bubble mailers to businesses across the metroplex.",
@@ -164,7 +164,7 @@ const locationStates = [
         name: "Austin",
         metaTitle: "Bubble Mailers in Austin, TX | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Austin makers, tech, and DTC brands. Fast quote support and low minimums.",
+          "Bulk and custom bubble mailers for Austin makers, tech, and DTC brands. Fast quote support and a 250-mailer MOQ.",
         h1: "Bubble Mailers for Austin Brands",
         intro:
           "Austin's blend of tech startups, makers, and independent DTC brands ships a steady flow of thoughtfully packaged parcels. We supply bulk and custom bubble mailers to businesses across the city.",
@@ -211,7 +211,7 @@ const locationStates = [
         name: "New York City",
         metaTitle: "Bubble Mailers in New York City, NY | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for NYC jewelry, apparel, and marketplace sellers. Fast quote support and low minimums across the five boroughs.",
+          "Bulk and custom bubble mailers for NYC jewelry, apparel, and marketplace sellers. Fast quote support and a 250-mailer MOQ across the five boroughs.",
         h1: "Bubble Mailers for New York City Sellers",
         intro:
           "New York City sellers ship some of the highest-value small parcels in the country — jewelry, apparel, and collectibles that need real protection. We supply bulk and custom bubble mailers across the five boroughs.",
@@ -232,7 +232,7 @@ const locationStates = [
         name: "Brooklyn",
         metaTitle: "Bubble Mailers in Brooklyn, NY | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Brooklyn makers and DTC brands. Kraft and custom-printed options with low minimums and fast quotes.",
+          "Bulk and custom bubble mailers for Brooklyn makers and DTC brands. Kraft and custom-printed options with a 250-mailer MOQ and fast quotes.",
         h1: "Bubble Mailers for Brooklyn Makers",
         intro:
           "Brooklyn's maker and DTC scene ships some of the most design-forward parcels in the country. We supply bulk and custom bubble mailers — including natural kraft — to the borough's independent brands.",
@@ -279,7 +279,7 @@ const locationStates = [
         name: "Miami",
         metaTitle: "Bubble Mailers in Miami, FL | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Miami beauty, jewelry, and export businesses. Fast quote support and low minimums.",
+          "Bulk and custom bubble mailers for Miami beauty, jewelry, and export businesses. Fast quote support and a 250-mailer MOQ.",
         h1: "Bubble Mailers for Miami Businesses",
         intro:
           "Miami's beauty brands, jewelry sellers, and Latin American export businesses ship compact, high-value parcels around the clock. We supply bulk and custom bubble mailers across the metro.",
@@ -300,7 +300,7 @@ const locationStates = [
         name: "Orlando",
         metaTitle: "Bubble Mailers in Orlando, FL | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Orlando eCommerce, makers, and retail sellers. Fast quotes and low minimums.",
+          "Bulk and custom bubble mailers for Orlando eCommerce, makers, and retail sellers. Fast quotes and a 250-mailer MOQ.",
         h1: "Bubble Mailers for Orlando Businesses",
         intro:
           "Orlando's tourism-fueled retail and its growing base of eCommerce sellers ship a steady stream of merchandise and small goods. We supply bulk and custom bubble mailers across Central Florida.",
@@ -347,7 +347,7 @@ const locationStates = [
         name: "Chicago",
         metaTitle: "Bubble Mailers in Chicago, IL | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Chicago eCommerce, fulfillment, and maker businesses. Fast quotes, low minimums, in-state supply.",
+          "Bulk and custom bubble mailers for Chicago eCommerce, fulfillment, and maker businesses. Fast quotes, a 250-mailer MOQ, in-state supply.",
         h1: "Bubble Mailers for Chicago Businesses",
         intro:
           "Chicago is one of the country's great logistics cities, home to fulfillment operations and a deep base of eCommerce and maker brands. As an in-state supplier, we keep Chicago businesses stocked with bulk and custom bubble mailers.",
@@ -392,7 +392,7 @@ const locationStates = [
     abbr: "GA",
     metaTitle: "Bubble Mailers in Georgia | Shop Bubble Mailers",
     metaDescription:
-      "Bulk and custom bubble mailers for Georgia businesses — Atlanta logistics, makers, and eCommerce sellers. Free quote and low minimums.",
+      "Bulk and custom bubble mailers for Georgia businesses — Atlanta logistics, makers, and eCommerce sellers. Free quote and a 250-mailer MOQ.",
     h1: "Bubble Mailers for Georgia Businesses",
     intro:
       "Georgia has become a national logistics powerhouse, anchored by Atlanta's air and freight networks and the fast-growing Port of Savannah. We supply bulk and custom bubble mailers to businesses across the state.",
@@ -415,7 +415,7 @@ const locationStates = [
         name: "Atlanta",
         metaTitle: "Bubble Mailers in Atlanta, GA | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Atlanta eCommerce, fulfillment, and maker businesses. Fast quote support and low minimums.",
+          "Bulk and custom bubble mailers for Atlanta eCommerce, fulfillment, and maker businesses. Fast quote support and a 250-mailer MOQ.",
         h1: "Bubble Mailers for Atlanta Businesses",
         intro:
           "Atlanta's status as a logistics capital and its booming creative economy keep its businesses shipping around the clock. We supply bulk and custom bubble mailers across the metro.",
@@ -436,7 +436,7 @@ const locationStates = [
         name: "Savannah",
         metaTitle: "Bubble Mailers in Savannah, GA | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Savannah port, distribution, and maker businesses. Fast quotes and low minimums.",
+          "Bulk and custom bubble mailers for Savannah port, distribution, and maker businesses. Fast quotes and a 250-mailer MOQ.",
         h1: "Bubble Mailers for Savannah Businesses",
         intro:
           "Savannah's booming port and its charming maker and retail scene give the city a distinctive shipping profile. We supply bulk and custom bubble mailers to businesses across the area.",
@@ -460,7 +460,7 @@ const locationStates = [
     abbr: "WA",
     metaTitle: "Bubble Mailers in Washington | Shop Bubble Mailers",
     metaDescription:
-      "Bulk and custom bubble mailers for Washington State businesses — Seattle eCommerce, tech, and outdoor brands. Free quote and low minimums.",
+      "Bulk and custom bubble mailers for Washington State businesses — Seattle eCommerce, tech, and outdoor brands. Free quote and a 250-mailer MOQ.",
     h1: "Bubble Mailers for Washington State Businesses",
     intro:
       "Washington State gave the world its biggest eCommerce company, and that shipping DNA runs deep. We supply bulk and custom bubble mailers to Seattle's tech, coffee, and outdoor brands and to businesses across the state.",
@@ -483,7 +483,7 @@ const locationStates = [
         name: "Seattle",
         metaTitle: "Bubble Mailers in Seattle, WA | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Seattle tech, coffee, and outdoor DTC brands. Fast quote support and low minimums.",
+          "Bulk and custom bubble mailers for Seattle tech, coffee, and outdoor DTC brands. Fast quote support and a 250-mailer MOQ.",
         h1: "Bubble Mailers for Seattle Brands",
         intro:
           "Seattle's eCommerce, coffee, and outdoor brands ship some of the most brand-conscious parcels in the country. We supply bulk and custom bubble mailers to businesses across the metro.",
@@ -504,7 +504,7 @@ const locationStates = [
         name: "Spokane",
         metaTitle: "Bubble Mailers in Spokane, WA | Shop Bubble Mailers",
         metaDescription:
-          "Bulk and custom bubble mailers for Spokane makers, retailers, and eCommerce sellers. Fast quotes and low minimums.",
+          "Bulk and custom bubble mailers for Spokane makers, retailers, and eCommerce sellers. Fast quotes and a 250-mailer MOQ.",
         h1: "Bubble Mailers for Spokane Businesses",
         intro:
           "Spokane anchors the Inland Northwest with a practical economy of makers, retailers, and growing eCommerce sellers. We supply bulk and custom bubble mailers to businesses across the region.",

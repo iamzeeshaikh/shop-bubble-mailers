@@ -165,7 +165,7 @@ const supplementaryFaqs = (product) => {
   const category = product.category.toLowerCase();
   const nameLower = product.name.toLowerCase();
   return [
-    [`What is the minimum order quantity for ${nameLower}?`, `The minimum for ${nameLower} depends on whether you want standard stock or custom print. We quote both small-business quantities and high-volume bulk programs — share your target quantity and we'll confirm the minimum and where price breaks fall.`],
+    [`What is the minimum order quantity for ${nameLower}?`, `The minimum order (MOQ) for ${nameLower} is 250 mailers, the smallest quantity the order box takes. Larger or custom runs are quoted per job — share your target quantity and we'll confirm where the price breaks fall.`],
     [`How quickly can I get ${nameLower} after ordering?`, `We respond to ${nameLower} quote requests quickly with size, quantity, print, and lead-time details. Standard stock moves faster than custom-printed orders; tell us your deadline and we'll confirm a realistic turnaround.`],
     [`Can I request a sample of ${nameLower} before a bulk order?`, `Yes. You can ask about sample availability for ${nameLower} before committing to a larger run, so you can check the fit and the ${material} against your own product first.`],
     [`Can ${nameLower} be custom printed with a logo?`, `Yes. ${product.name} can be quoted plain or custom printed with a logo, brand colors, and handling marks. As ${category}, it supports the branded packout many businesses want — send artwork with your quote for review.`],
@@ -1003,7 +1003,7 @@ const mainPages = [
   { slug: "", title: "Bubble Mailers in Bulk: Kraft, White and Custom Printed", metaTitle: "Bubble Mailers | Bulk & Wholesale Padded Mailers USA | Shop Bubble Mailers", metaDescription: "Bubble mailers in bulk for US businesses: kraft and white padded mailers from 4x6 to #7, plain or logo printed, by the case or pallet. Quote back in 1-2 hours." },
   { slug: "about-us", title: "About Shop Bubble Mailers", metaTitle: "About Shop Bubble Mailers | USA Bubble Mailer Supplier", metaDescription: "Learn about Shop Bubble Mailers, our product range, and how we support businesses across the USA with bulk bubble mailer supply." },
   { slug: "products", title: "Every Bubble Mailer Size We Stock", metaTitle: "Bubble Mailer Sizes & Types – Compare All Mailers | Shop Bubble Mailers", metaDescription: "Compare every bubble mailer size side by side: inch and numbered sizes, usable dimensions, what fits, and bulk starting prices. Kraft, white and printed." },
-  { slug: "custom-bubble-mailers", title: "Custom Printed Bubble Mailers", metaTitle: "Custom Bubble Mailers – Logo Printed Padded Mailers | Shop Bubble Mailers", metaDescription: "Custom bubble mailers printed with your logo in 1, 2 or full color on kraft or white stock. Proofed before production, runs from 250 units, shipped USA-wide." },
+  { slug: "custom-bubble-mailers", title: "Custom Printed Bubble Mailers", metaTitle: "Custom Bubble Mailers – Logo Printed Padded Mailers | Shop Bubble Mailers", metaDescription: "Custom bubble mailers printed with your logo in 1, 2 or full color on kraft or white stock. Proofed before production, MOQ 250 mailers, shipped USA-wide." },
   { slug: "contact-us", title: "Contact Us", metaTitle: "Contact Shop Bubble Mailers", metaDescription: "Contact Shop Bubble Mailers for quotes, product guidance, and bulk bubble mailer support in the USA." },
   { slug: "privacy-policy", title: "Privacy Policy", metaTitle: "Privacy Policy | Shop Bubble Mailers", metaDescription: "Read the Shop Bubble Mailers privacy policy covering website inquiries, quote requests, and contact information use." },
   { slug: "terms-and-conditions", title: "Terms and Conditions", metaTitle: "Terms and Conditions | Shop Bubble Mailers", metaDescription: "Read the Shop Bubble Mailers terms and conditions for website use, quote requests, and business communications." },
@@ -1119,7 +1119,7 @@ const productUnitPrice = (product) => product.price;
  */
 const renderProductPrice = (product) => `
           <div class="product-price">
-            <p class="product-price-line"><span class="product-price-amount">From $${productUnitPrice(product)}</span><span class="product-price-unit">per mailer</span></p>
+            <p class="product-price-line"><span class="product-price-amount">Starting from $${productUnitPrice(product)}</span><span class="product-price-unit">per mailer</span></p>
             <p class="product-price-note">Starting unit price at bulk quantity, with free shipping to any US address. Your final price depends on size, quantity, material, and printing - request a quote for a firm figure.</p>
           </div>`;
 
@@ -1140,7 +1140,7 @@ const renderSeals = () => `<ul class="order-seals" aria-label="Ordering with ${s
 const renderFormSeals = () => `<div class="form-trust">${renderSeals()}${renderPayBadges()}</div>`;
 
 /**
- * Product-page order box: the product's own starting price, in runs of 250. "Add to order" keeps
+ * Product-page order box: the product's own starting price, minimum order (MOQ) 250 mailers. "Add to order" keeps
  * the line in localStorage (src/script.js) and opens /checkout/; without JavaScript the form lands
  * on /checkout/?add=<slug>&qty=<n>. Only the unit price shows here (owner 2026-11-02); the real
  * total is on /checkout/. api/order.js re-prices every line from order-data.js.
@@ -1152,7 +1152,7 @@ const renderOrderBox = (product) => {
           <div class="order-box" id="order">
             <h2 id="${id}-h">Order ${product.name.toLowerCase()}s</h2>
             <p class="order-box-from"><strong>Starting from ${ORDER.money(price)} per ${ORDER.UNIT}</strong></p>
-            <p class="order-box-lede">Plain stock at the starting price, in runs of ${ORDER.PACK_QTY}. Free shipping to any US address. Printing is quoted on top; ask on the next page or in the quote form.</p>
+            <p class="order-box-lede">Plain stock at the starting price. Minimum order (MOQ) ${ORDER.PACK_QTY.toLocaleString("en-US")} ${ORDER.UNITS}. Free shipping to any US address. Printing is quoted on top; ask on the next page or in the quote form.</p>
             <form method="get" action="/checkout/" data-order-box data-slug="${product.slug}" data-unit="${price}" aria-labelledby="${id}-h">
               <input type="hidden" name="add" value="${product.slug}">
               <div class="order-box-row">
@@ -1316,7 +1316,7 @@ const renderHeader = (currentPath) => `
                               <img class="nav-dropdown-thumb" src="${product.image.thumb}" alt="" loading="lazy" decoding="async" width="400" height="400">
                               <span class="nav-dropdown-text">
                                 <span class="nav-dropdown-title">${product.name}</span>
-                                <span class="nav-dropdown-meta">${product.category} · from $${product.price}</span>
+                                <span class="nav-dropdown-meta">${product.category} · starting from $${product.price} per mailer</span>
                               </span>
                             </a>
                           `
@@ -2320,12 +2320,12 @@ const renderKraftProductPage = (product) => {
     ["What sizes are available for kraft bubble mailers?", "Common sizes include #000, #00, #0, #1, #2, and #3, along with dimension-based options such as 4x6, 6x9, 7x10, 8.5x12, and 10x13 depending on the packing program."],
     ["Are kraft bubble mailers waterproof?", "Kraft bubble mailers offer padded protection and good everyday shipping performance, but they are not the same as a fully waterproof mailer. If moisture exposure is a concern, we can discuss the right material direction for the shipment."],
     ["Can I print my logo on kraft bubble mailers?", "Yes. Custom bubble mailers on kraft stock can be planned with logo placement, simple branding, return details, and other print elements for retail-facing shipments."],
-    ["What is the minimum order for bulk pricing?", "Minimums depend on whether you need standard stock or a custom production run. The quote form is the best place to share size, quantity, and artwork requirements so we can advise clearly."],
+    ["What is the minimum order for bulk pricing?", "The minimum order (MOQ) is 250 mailers. Larger or custom runs are quoted per job, so use the quote form to share size, quantity, and artwork requirements and we will advise clearly."],
     ["How long does delivery take?", "Lead time depends on stock status, order size, and whether the project is plain stock or custom printed. Standard bulk orders usually move faster than custom production."],
     ["Are kraft bubble mailers recyclable?", "Recycling depends on the specific material construction and local recycling rules. We can discuss practical disposal guidance during the quoting process if that is important for your program."],
     ["Are kraft bubble mailers good for retail brands?", "Yes. Many businesses choose kraft bubble mailers because the outer finish feels clean and more brand-ready while still giving padded protection inside."],
     ["Can I request mixed sizes in one program?", "Yes. Many buyers request a mixed-size plan so they can support different SKUs while keeping purchasing and fulfillment more organized."],
-    ["What do kraft bubble mailers cost in bulk?", "Plain kraft starts around $0.14 per mailer at 5,000 units in the smallest size and rises with size; a #2 (8.5 x 12) sits in the mid-twenties of cents and a #7 near fifty cents. Printing and smaller quantities add to the figure, and every quote is confirmed by email."],
+    ["What do kraft bubble mailers cost in bulk?", "Plain kraft is starting from $0.14 per mailer in the smallest size and rises with size; a #2 (8.5 x 12) sits in the mid-twenties of cents and a #7 near fifty cents. Printing and smaller quantities add to the figure, and every quote is confirmed by email."],
     ["Kraft paper bubble mailers or white poly — which should I choose?", "Kraft for a natural, recycled look and dark one- or two-color logos; white poly for water resistance, full-color print and a clean retail finish. Both use the same 3/16 in bubble lining, so protection is equal."]
   ];
 
@@ -2927,7 +2927,7 @@ ${renderOrderBox(product)}
 
 const customFaqs = [
   ["What is the minimum order for custom printed bubble mailers?", "Printed runs are quoted from 250 units, the lowest quantity in Design Your Bubble Mailer. Most brands print 1,000 or more because the plate and setup cost is spread across the run and the per-unit price drops sharply between 500 and 2,500."],
-  ["How much do custom bubble mailers cost?", "As a guide, a 7x9 kraft mailer with a one-color logo works out around $0.43 each at 1,000 units and about $0.29 at 10,000, before shipping. Size, material, number of colors and quantity all move the figure. The Design Your Bubble Mailer section on any product page gives an instant range; the emailed quote is firm."],
+  ["How much do custom bubble mailers cost?", "As a guide, a 7x9 kraft mailer with a one-color logo is starting from $0.29 per mailer at 10,000 units, before shipping. Size, material, number of colors and quantity all move the figure. The Design Your Bubble Mailer section on any product page gives an instant range; the emailed quote is firm."],
   ["How many colors can you print?", "One and two spot colors are the standard for logos and return panels. Full-color (CMYK) print is available for photographic or gradient artwork, and we can print both sides. Pantone references are matched as closely as the stock allows; white poly gives the truest color, kraft warms every ink slightly."],
   ["What artwork do you need?", "Vector files (PDF, AI or EPS) with text outlined are best. If you only have a PNG or JPG, send it at 300 dpi or higher at print size and we will tell you whether it is usable. Spot colors should be named as Pantone references; CMYK is fine for full-color work."],
   ["Will I see a proof before printing?", "Yes. Every custom order gets a digital proof showing the artwork positioned on the actual mailer size. Nothing prints until you approve it by email, and revisions before approval are free."],
@@ -2954,7 +2954,7 @@ const renderCustomPage = () => {
     ${renderStandardPageHero({
       eyebrow: "Custom Printing",
       title: page.title,
-      description: "Your logo, return panel or full-color artwork printed on kraft or white bubble mailers in any of our eleven sizes. Digital proof before production, runs from 250 units, shipped to one or several US locations.",
+      description: "Your logo, return panel or full-color artwork printed on kraft or white bubble mailers in any of our eleven sizes. Digital proof before production, minimum order 250 mailers, shipped to one or several US locations.",
       image: pickAsset("halloween", 0),
       ctas: [
         { href: "#quote-form", label: "Get a Printed Quote", primary: true },
@@ -3055,7 +3055,7 @@ const contactFaqs = [
   ["Do you reply by email or phone?", "By email with your quote unless you ask for a call. Emailed quotes make it easier to compare sizes and quantities and to forward to whoever approves purchasing."],
   ["Can I send artwork through the form?", "Yes. The form accepts PDF, AI, EPS, PNG and JPG. If the file is over 10 MB, send the form without it and reply to our confirmation email with the file attached."],
   ["Where do orders ship from?", "From US stock for plain mailers and from the printer for custom runs, delivered free to any US address, so the quoted mailer price is the delivered price."],
-  ["Is there a minimum for a quote?", "No. We quote single cases as readily as pallets. Pricing simply improves as the quantity rises."],
+  ["Is there a minimum for a quote?", "No. We quote anything from the 250-mailer minimum order up to full pallets. Pricing simply improves as the quantity rises."],
   ["Can I visit or collect?", "We are a supply operation rather than a retail counter, so orders ship rather than being collected. Our business address is listed above for correspondence."],
   ["Do you quote for sizes not listed on the site?", "Yes. Give us the packed dimensions of your product and we will quote the closest stock size or a custom size if nothing standard fits."],
   ["What if I am not sure which size I need?", "Say so in the message and list two or three products with their dimensions. Recommending sizes is a normal part of the quote, and samples are available before you commit."]
@@ -3356,7 +3356,7 @@ const renderCheckoutPage = () => {
       <div class="container">
         <span class="eyebrow">Checkout</span>
         <h1>Your order</h1>
-        <p>Plain stock at each size's starting price, in runs of ${ORDER.PACK_QTY}, with free shipping to any US address. Printed orders get a digital proof before anything prints, and nothing is paid before you approve it.</p>
+        <p>Plain stock at each size's starting price, with a minimum order (MOQ) of ${ORDER.PACK_QTY} ${ORDER.UNITS} and free shipping to any US address. Printed orders get a digital proof before anything prints, and nothing is paid before you approve it.</p>
       </div>
     </section>
     <section class="section">
@@ -3413,7 +3413,7 @@ const renderCheckoutPage = () => {
     routePath: "/checkout/",
     title: "Checkout",
     metaTitle: "Checkout | Shop Bubble Mailers",
-    metaDescription: "Order bubble mailers in runs of 250 at each size's starting price, with free shipping to any US address. Pay by invoice after your digital proof, or cash on delivery.",
+    metaDescription: "Order bubble mailers from a minimum of 250 (MOQ) at each size's starting price, with free shipping to any US address. Pay by invoice after your digital proof, or cash on delivery.",
     breadcrumbs: [{ label: "Home", href: "/" }, { label: "Checkout", href: "/checkout/" }],
     body
   });
@@ -3719,7 +3719,7 @@ const blogPosts = [
       },
     ],
     faq: [
-      ["Is there a minimum order for custom printed bubble mailers?", "Custom printed mailers are typically produced as bulk programs, and minimums vary by size and print requirements. Request a quote with your size, quantity, and print details for exact pricing and lead times."],
+      ["Is there a minimum order for custom printed bubble mailers?", "Yes. The minimum order (MOQ) is 250 mailers. Larger or custom printed runs are quoted per job, so request a quote with your size, quantity, and print details for exact pricing and lead times."],
       ["Can I print on both kraft and white bubble mailers?", "Yes. Both kraft and white bubble mailers can be custom printed. White gives brighter, more accurate color reproduction, while kraft gives a natural look that suits eco and artisan branding."],
       ["How many print colors can I use on a bubble mailer?", "Most programs support one or more spot print colors, with more colors increasing the cost. Many brands get a strong result with a single bold color and a clean logo rather than full-color artwork."],
       ["Is custom printing worth it for a small brand?", "For a brand shipping steadily, the per-unit premium over plain mailers is small and the branding works on every order. For very low volumes, branded stickers or tape on a plain mailer can bridge the gap until printing pays off."],
@@ -4303,7 +4303,7 @@ const blogIndexFaqs = [
   ["Are bubble mailers waterproof?", "Poly bubble mailers are water-resistant; kraft ones resist light damp only. Neither is sealed watertight, so moisture-sensitive products should go in an inner poly bag."],
   ["Can bubble mailers be recycled?", "Mixed kraft-and-bubble mailers generally cannot go in curbside recycling. Single-material poly mailers can often go to store drop-off; all-paper padded mailers are curbside recyclable. Our recycling guide covers how to word claims honestly."],
   ["Which is cheaper to ship, a bubble mailer or a box?", "A bubble mailer, almost always, because it weighs a few ounces less and avoids dimensional-weight pricing on small items. Our shipping-cost guide works through the numbers."],
-  ["Can I print my logo on bubble mailers?", "Yes, in one, two or full color on kraft or white stock, with a digital proof before production. Printed runs start at 250 units."],
+  ["Can I print my logo on bubble mailers?", "Yes, in one, two or full color on kraft or white stock, with a digital proof before production. The minimum order (MOQ) is 250 mailers."],
   ["How many bubble mailers should a small business keep in stock?", "A month's worth of your two core sizes, reordered when you drop to two weeks' supply. A case of 250 to 500 covers most small stores; busier ones buy by the pallet with scheduled releases."],
   ["Where can I buy bubble mailers in bulk?", "Right here: every size on this site is sold by the case or pallet, plain or printed, with bulk pricing quoted by email within 1-2 hours."]
 ];
@@ -4443,8 +4443,8 @@ const industryList = (industries) => `
 // Pool of 16 location FAQs. Each state/city page draws nine in a seeded order,
 // so neighboring pages share some questions but never the same set or sequence.
 const LOCATION_FAQ_POOL = [
-  [(p) => `What is the minimum order for ${p} businesses?`, (p) => `A single case, which is 100 to 500 mailers depending on size. Bulk pricing applies from 5,000 units and pallet pricing from 10,000, so ${p} sellers can start small and scale without changing supplier.`],
-  [(p) => `Can I get custom printed bubble mailers in ${p}?`, (p, sec) => `Yes. Printed runs start at 250 units in one, two or full color on kraft or white stock, proofed before production. ${p} ${sec} brands most often print a one-color logo and a return panel.`],
+  [(p) => `What is the minimum order for ${p} businesses?`, (p) => `The minimum order (MOQ) is 250 mailers. Bulk pricing applies from 5,000 units and pallet pricing from 10,000, so ${p} sellers can start small and scale without changing supplier.`],
+  [(p) => `Can I get custom printed bubble mailers in ${p}?`, (p, sec) => `Yes. The minimum order (MOQ) is 250 mailers, printed in one, two or full color on kraft or white stock, proofed before production. ${p} ${sec} brands most often print a one-color logo and a return panel.`],
   [(p) => `Which bubble mailer sizes do ${p} sellers order most?`, (p, sec) => `The 8.5x12 (#2) and 4x7 (#000) lead almost everywhere; ${sec} sellers in ${p} also lean on the 10.5x15 (#5) for folded goods. Every size we stock is listed with usable dimensions on its own page.`],
   [(p) => `How long does delivery to ${p} take?`, (p) => `Plain stock usually reaches ${p} within a week of ordering; printed runs follow their production lead time, which we confirm with an estimated delivery date on the quote.`],
   [(p) => `Kraft or white bubble mailers for ${p} shipments?`, (p, sec) => `Kraft gives a natural paper look and prints well in dark colors; white poly is water-resistant and the better base for full-color print. For ${sec} products in ${p}, poly is the safer pick if parcels are left on doorsteps.`],
@@ -4574,7 +4574,7 @@ const renderCityPage = (state, city) => {
       <div class="container content-card content-flow">
         <h2>${answerHeading}</h2>
         <p>Shop Bubble Mailers supplies bulk and custom padded bubble mailers to businesses across ${city.name} and the wider ${state.name} market. Every order can be printed to your brand or shipped plain, protecting compact goods without adding freight weight. ${cAns}</p>
-        <p><strong>Why ${city.name} sellers order from us:</strong> low minimums, bulk pricing, custom print options, fast quote turnaround, and reliable supply for repeat orders.</p>
+        <p><strong>Why ${city.name} sellers order from us:</strong> a 250-mailer minimum order (MOQ), bulk pricing, custom print options, fast quote turnaround, and reliable supply for repeat orders.</p>
       </div>
     </section>
     <section class="section">
