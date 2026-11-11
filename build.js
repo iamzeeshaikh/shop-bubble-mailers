@@ -2141,13 +2141,13 @@ const aboutFaqs = [
   ["Where is Shop Bubble Mailers based?", "We operate from Bloomington, Illinois, and supply businesses in every US state. Orders ship from US stock, and custom printed runs are produced to order and shipped direct to your warehouse or 3PL."],
   ["Who buys from Shop Bubble Mailers?", "Online stores, subscription brands, Amazon and Etsy sellers, 3PLs and fulfillment centers, and the purchasing teams of retail and apparel companies. Order sizes run from a single case to scheduled pallet programs."],
   ["Do you sell to individuals or only businesses?", "Our pricing and case quantities are set up for businesses, but anyone who needs a case or more can order. We do not sell single mailers."],
-  ["What makes you different from a packaging marketplace?", "One product category, done properly. Every size has its own page with real dimensions and a starting price, a Design Your Bubble Mailer section for printed quotes, and a person who replies within 1-2 hours with a written figure instead of a catalog PDF."],
+  ["What makes you different from a packaging marketplace?", "One product category, done properly. Every size has its own page with real dimensions and a starting price, a Design Your Bubble Mailer section for printed quotes, and a person who replies within 1-2 hours with a clear price instead of a catalog PDF."],
   ["How do I get a quote?", "Use the form on any page, call (503) 461-4788, or email Info@shopbubblemailers.com with the size, quantity and whether you want plain or printed stock. Quotes come back by email within 1-2 hours during US business hours."],
   ["Do you offer samples?", "Yes. Ask for the two or three sizes you are deciding between and pack your real products before committing to a case or a printed run."],
   ["Can you handle recurring orders?", "Yes. Many customers set a standing reorder for their core sizes, and pallet-quantity programs can be released on a schedule so you are not storing a full pallet at once."],
   ["Do you ship to multiple locations?", "Yes. Bulk and printed orders can be split across several US addresses, which 3PL clients and multi-warehouse brands use to keep every site stocked from one order."],
   ["How do I pay?", "Payment options are confirmed on your quote before you commit, so there are no surprises between the price you approve and the invoice you receive."],
-  ["Who do I speak to if something arrives wrong?", "Reply to your order email or call us. We ask for a photo, log the issue against the batch, and replace or credit the affected mailers."]
+  ["Who do I speak to if something arrives wrong?", "Reply to your order email or call us. We ask for a photo, log the issue against the batch, and replace or refund the affected mailers."]
 ];
 
 const renderAboutPage = () => {
@@ -3236,12 +3236,12 @@ writeRoute("/", renderHomePage());
 writeRoute("/about-us/", renderAboutPage());
 writeRoute("/products/", renderProductsPage());
 const customOrderPolicyFaqs = [
-  ["Can I return custom printed bubble mailers?", "Not as a change of mind, because printed material produced to your artwork cannot be resold or restocked. Where an order does not match the approved proof or the written specification, or has a manufacturing defect, we make it right."],
-  ["Can I return plain, unprinted bubble mailers?", "Plain stock is supplied against a written specification too, so change-of-mind returns are not accepted. If the size, finish or count is not what was specified, or the mailers are defective, we replace or credit them."],
+  ["Can I return custom printed bubble mailers?", "Not as a change of mind, because printed material produced to your artwork cannot be resold or restocked. Where an order does not match the approved proof or the order specification, or has a manufacturing defect, we make it right with a free replacement or a refund. Report it within 14 days of delivery; our returns and refunds policy has the steps."],
+  ["Can I return plain, unprinted bubble mailers?", "Plain stock is supplied to the specification on your order too, so change-of-mind returns are not accepted. If the size, finish or count is not what was specified, or the mailers are defective, we replace them free or refund them."],
   ["Is shipping really free?", "Yes. Every order ships free to any address in the United States, whether it is one case or several pallets, plain or printed. The quoted price is the delivered price."],
-  ["What if I approve a proof and then spot a mistake?", "Tell us immediately. If production has not started, we reproof at no charge. Once material is committed the run cannot be recovered, which is why we ask for approval in writing and encourage as many proof rounds as you want beforehand."],
+  ["What if I approve a proof and then spot a mistake?", "Tell us immediately. If production has not started, we reproof at no charge. Once material is committed the run cannot be recovered, which is why we ask you to approve the proof before production and encourage as many proof rounds as you want beforehand."],
   ["Will I receive exactly the quantity I ordered?", "Manufactured runs carry a tolerance either side of the ordered quantity, stated on your quotation along with how any variation is charged. If an exact count matters for your operation, tell us when you request the quote."],
-  ["How quickly do I need to report a problem?", "As soon as you find it, and while the stock is still available to inspect. The specific window that applies to your order is stated on your quotation."],
+  ["How quickly do I need to report a problem?", "Within 14 days of delivery, and while the stock is still available to inspect. Send photos with your order reference and we arrange a free replacement or a refund."],
   ["What happens if the carrier damages my order?", "We arrange every shipment, so transit damage is ours to sort out. Send photographs of the cartons and the affected mailers as they arrived and we replace the damaged quantity."],
   ["Can I cancel an order?", "Before the quotation is confirmed, freely. After confirmation and before the proof, yes, and the quotation is simply withdrawn. After proof approval, production is scheduled and material committed, so cancellation is treated as a change after production."],
   ["Can I change the quantity after confirming?", "Up to proof approval, yes; we reissue the quotation with the new quantity and price break. After approval the run is scheduled at the agreed quantity."],
@@ -3273,7 +3273,7 @@ writeRoute(
       <p>If any of these happens, tell us and we will resolve it.</p>
       <ul>
         <li><strong>The order does not match the approved proof.</strong> Wrong color, wrong placement, wrong artwork. The proof is the reference and we are held to it.</li>
-        <li><strong>The order does not match the written specification.</strong> Wrong size, wrong finish, wrong closure, wrong quantity band.</li>
+        <li><strong>The order does not match the order specification.</strong> Wrong size, wrong finish, wrong closure, wrong quantity band.</li>
         <li><strong>A manufacturing defect.</strong> Failed seals, adhesive that does not release cleanly, split seams or print defects across the run.</li>
         <li><strong>A short delivery.</strong> Counts are verified by carton before dispatch, and a genuine shortfall is ours to make good.</li>
         <li><strong>Damage in transit.</strong> We arrange every shipment, so report transit damage promptly with photographs of the cartons as they arrived.</li>
@@ -3289,7 +3289,7 @@ writeRoute(
       </ul>
 
       <h2>Returns</h2>
-      <p>Because every order is supplied against a written specification, we do not accept change-of-mind returns on plain or printed stock. Where an order does not match the approved proof or the written specification, is short, or has a manufacturing defect, we make it right by replacement or credit at our cost. That commitment is the return policy, and it applies to every order shipped within the United States.</p>
+      <p>Because every order is supplied to an agreed specification, we do not accept change-of-mind returns on plain or printed stock. Where an order does not match the approved proof or the order specification, is short, or has a manufacturing defect, we make it right at our cost with a free replacement or a refund, paid within 10 business days to the original payment method. Report the problem within 14 days of delivery. Our <a href="/refund_returns/">returns and refunds policy</a> sets out each step. That commitment is the return policy, and it applies to every order shipped within the United States.</p>
 
       <h2>Shipping</h2>
       <p>Shipping is free to any address in the United States, for a single case or a full pallet, plain or printed. The price on your quotation is the delivered price. Pallet-quantity programs can be released on a schedule at no extra shipping cost, so you are not storing a full pallet at once.</p>
@@ -3298,7 +3298,7 @@ writeRoute(
       <p>Production runs do not stop at an exact unit, so a manufactured order may deliver slightly above or slightly below the quantity ordered. This is normal in the industry rather than a defect. The tolerance that applies to your order is stated on your quotation, along with how any variation is charged. If an exact quantity matters, a set number of units for a subscription drop for instance, say so when you ask for the quote so we can specify accordingly.</p>
 
       <h2>Reporting a problem</h2>
-      <p>Contact us as soon as you find an issue, with the order reference, photographs of the cartons and the affected mailers as received, and the approximate proportion of the delivery affected. Keep the affected stock until the matter is resolved, because we may need to see it. The fastest route is the address and number on the <a href="/contact-us/">contact page</a>, and we confirm next steps in writing so both sides have a record.</p>
+      <p>Contact us within 14 days of delivery, as soon as you find an issue, with the order reference, photographs of the cartons and the affected mailers as received, and the approximate proportion of the delivery affected. Keep the affected stock until the matter is resolved, because we may need to see it. The fastest route is the address and number on the <a href="/contact-us/">contact page</a>, and we confirm next steps by email so both sides have a record.</p>
 
       <h2>Questions about the custom order policy</h2>
       ${renderFaqList(customOrderPolicyFaqs)}
