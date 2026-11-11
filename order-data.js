@@ -53,9 +53,21 @@ const PAYMENT_METHODS = [
   { id: "bank", name: "Bank transfer", detail: "We email an invoice with our bank details once you approve your digital proof. Production starts when the transfer arrives." },
   { id: "cod", name: "Cash on delivery", detail: "Nothing is paid up front. You pay the order total when the mailers are delivered. Available for addresses in the United States." },
 ];
+// Merchant facts, one place for the shipping page, the returns page, every Offer's shippingDetails /
+// hasMerchantReturnPolicy and /merchant-feed.xml. No delivery days were ever stated on the site, so the
+// days are the sister-site defaults (thecustomfolders.com): plain stock leaves within 4-6 business days
+// of the order (printed runs: after proof approval, lead time on the quote), then 2-3 business days in
+// transit. Returns: defective / wrong orders only, reported within 14 days of delivery, refunds within
+// 10 business days to the original payment method.
+const HANDLING_DAYS = { min: 4, max: 6 };
+const TRANSIT_DAYS = { min: 2, max: 3 };
+const RETURN_DAYS = 14;
+const REFUND_DAYS = 10;
+const SHIPPING_COST = 0;
 const PAYMENT_LINE = "Pay by PayPal invoice or bank transfer after you approve your digital proof, or cash on delivery at any US address.";
 
 module.exports = {
   CATALOG, ORDER_PREFIX, CURRENCY, UNIT, UNITS, PACK_QTY, MIN_QTY, MAX_QTY, DEFAULT_QTY, QUANTITIES,
   money, unitPrice, normalizeQty, lineTotal, SHIP_COUNTRIES, SHIP_LINE, COD_COUNTRIES, PAYMENT_METHODS, PAYMENT_LINE,
+  HANDLING_DAYS, TRANSIT_DAYS, RETURN_DAYS, REFUND_DAYS, SHIPPING_COST,
 };

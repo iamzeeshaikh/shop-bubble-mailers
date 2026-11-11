@@ -7,7 +7,7 @@
 const nodemailer = require("nodemailer");
 const {
   CATALOG, ORDER_PREFIX, UNIT, UNITS, money, unitPrice, normalizeQty, lineTotal,
-  SHIP_COUNTRIES, COD_COUNTRIES, PAYMENT_METHODS,
+  SHIP_COUNTRIES, COD_COUNTRIES, PAYMENT_METHODS, HANDLING_DAYS, TRANSIT_DAYS, RETURN_DAYS,
 } = require("../order-data.js");
 
 const SITE = { name: "Shop Bubble Mailers", domain: "shopbubblemailers.com", url: "https://shopbubblemailers.com", phone: "(503) 461-4788", email: "Info@shopbubblemailers.com" };
@@ -132,7 +132,8 @@ module.exports = async (req, res) => {
   const steps = [
     "We check your order and artwork. Printed orders get a digital proof by email; nothing prints before you approve it.",
     method.detail,
-    `Your order ships free to ${country.name} and we email the tracking number when it leaves. Errors, shortfalls and defects are made right under our custom order policy.`,
+    `Your order ships free to ${country.name}: plain stock leaves us within ${HANDLING_DAYS.min}-${HANDLING_DAYS.max} business days (printed orders after production) and arrives ${TRANSIT_DAYS.min}-${TRANSIT_DAYS.max} business days later. We email the tracking number when it leaves (${SITE.url}/shipping-policy/).`,
+    `Damage, defects, shortfalls or printing that does not match your approved proof: tell us within ${RETURN_DAYS} days of delivery and we replace or refund it (${SITE.url}/refund_returns/).`,
   ];
   const buyerText = [
     `Hi ${v.name},`, "", `Thank you for your order ${ref} with ${SITE.name}.`, "", itemText, "Shipping: free", `Total: ${money(total)}`, `Payment: ${method.name}`, "",

@@ -1169,7 +1169,7 @@ const renderOrderBox = (product) => {
                 <li>Your order ships free and we email the tracking number when it leaves.</li>
               </ol>
               ${renderFormSeals()}
-              <p class="order-box-note">Made to order: errors, shortfalls and defects are made right under our <a href="/custom-order-policy/">shipping and custom order policy</a>. More than ${ORDER.MAX_QTY.toLocaleString("en-US")} mailers, mixed sizes or a pallet program? Use the quote form on this page.</p>
+              <p class="order-box-note">Made to order: damage, defects, shortfalls and orders that do not match the approved proof are replaced or refunded under our <a href="/refund_returns/">returns and refunds policy</a>. Ships free in ${ORDER.HANDLING_DAYS.min}-${ORDER.HANDLING_DAYS.max} business days plus ${ORDER.TRANSIT_DAYS.min}-${ORDER.TRANSIT_DAYS.max} in transit (<a href="/shipping-policy/">shipping policy</a>). More than ${ORDER.MAX_QTY.toLocaleString("en-US")} mailers, mixed sizes or a pallet program? Use the quote form on this page.</p>
             </form>
           </div>`;
 };
@@ -1209,20 +1209,30 @@ const buildProductSchema = (product, sizesValue) => ({
     availability: "https://schema.org/InStock",
     itemCondition: "https://schema.org/NewCondition",
     seller: { "@type": "Organization", name: site.brand },
-    // Free shipping to any US address (owner decision 2026-10-06); the same
-    // statement is printed on every product page and on /custom-order-policy/.
-    shippingDetails: {
+    // Free shipping to any US address (owner decision 2026-10-06), stated on every product page,
+    // /custom-order-policy/ and /shipping-policy/. Days come from order-data.js, the same figures
+    // the shipping page and /merchant-feed.xml print.
+    shippingDetails: ORDER.SHIP_COUNTRIES.map((country) => ({
       "@type": "OfferShippingDetails",
-      shippingRate: { "@type": "MonetaryAmount", value: "0", currency: "USD" },
-      shippingDestination: { "@type": "DefinedRegion", addressCountry: "US" }
-    },
-    // Made-to-order supply: no change-of-mind returns, errors made right.
-    // Same policy and category as the sister site thepolymailers.com.
+      shippingRate: { "@type": "MonetaryAmount", value: String(ORDER.SHIPPING_COST), currency: "USD" },
+      shippingDestination: { "@type": "DefinedRegion", addressCountry: country.code },
+      deliveryTime: {
+        "@type": "ShippingDeliveryTime",
+        handlingTime: { "@type": "QuantitativeValue", minValue: ORDER.HANDLING_DAYS.min, maxValue: ORDER.HANDLING_DAYS.max, unitCode: "DAY" },
+        transitTime: { "@type": "QuantitativeValue", minValue: ORDER.TRANSIT_DAYS.min, maxValue: ORDER.TRANSIT_DAYS.max, unitCode: "DAY" }
+      }
+    })),
+    // Made to order: no change-of-mind returns; an order that is defective, damaged, short or not
+    // as approved is reported within RETURN_DAYS of delivery and replaced or refunded (/refund_returns/).
     hasMerchantReturnPolicy: {
       "@type": "MerchantReturnPolicy",
-      applicableCountry: "US",
-      returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
-      merchantReturnLink: absoluteUrl("/custom-order-policy/")
+      applicableCountry: ORDER.SHIP_COUNTRIES.map((country) => country.code),
+      returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+      merchantReturnDays: ORDER.RETURN_DAYS,
+      returnMethod: "https://schema.org/ReturnByMail",
+      returnFees: "https://schema.org/FreeReturn",
+      refundType: "https://schema.org/FullRefund",
+      merchantReturnLink: absoluteUrl("/refund_returns/")
     }
   }
 });
@@ -1406,7 +1416,7 @@ const renderFooter = () => `
       </div>
       <div class="footer-bottom">
         <span>&copy; <span data-current-year></span> ${site.brand}. All rights reserved.</span>
-        <span><a href="/privacy-policy/">Privacy Policy</a> | <a href="/terms-and-conditions/">Terms and Conditions</a> | <a href="/custom-order-policy/">Custom Order Policy</a></span>
+        <span><a href="/privacy-policy/">Privacy Policy</a> | <a href="/terms-and-conditions/">Terms and Conditions</a> | <a href="/shipping-policy/">Shipping Policy</a> | <a href="/refund_returns/">Returns &amp; Refunds</a> | <a href="/custom-order-policy/">Custom Order Policy</a></span>
       </div>
     </div>
   </footer>
@@ -2872,8 +2882,8 @@ ${renderOrderBox(product)}
               <tr><td>Material</td><td>${product.material}</td></tr>
               <tr><td>Use Cases</td><td>${product.idealFor.join(", ")}</td></tr>
               <tr><td>Starting Price</td><td>From $${productUnitPrice(product)} per mailer at bulk quantity</td></tr>
-              <tr><td>Shipping</td><td>Free shipping across the USA</td></tr>
-              <tr><td>Returns</td><td>Made to order; errors made right, no change-of-mind returns (<a href="/custom-order-policy/">custom order policy</a>)</td></tr>
+              <tr><td>Shipping</td><td>Free shipping across the USA, ${ORDER.HANDLING_DAYS.min}-${ORDER.HANDLING_DAYS.max} business days to dispatch plus ${ORDER.TRANSIT_DAYS.min}-${ORDER.TRANSIT_DAYS.max} in transit</td></tr>
+              <tr><td>Returns</td><td>Made to order; no change-of-mind returns, defects and errors reported within ${ORDER.RETURN_DAYS} days are replaced or refunded (<a href="/refund_returns/">returns policy</a>)</td></tr>
               <tr><td>Quote Support</td><td>Standard stock, bulk pricing, custom printing, and mixed-size planning</td></tr>
             </tbody>
           </table>
@@ -3162,6 +3172,8 @@ const renderSitemapPage = () => {
 
   const contentLinks = [
     ...mainPages.filter((page) => page.slug && page.slug !== "sitemap").map((page) => ({ label: page.title, href: `/${page.slug}/` })),
+    { label: "Shipping Policy", href: "/shipping-policy/" },
+    { label: "Returns and Refunds", href: "/refund_returns/" },
     ...products.map((product) => ({ label: product.name, href: `/${product.slug}/` })),
     { label: "USA Locations", href: "/locations/" },
     ...locationStates.flatMap((state) => [
@@ -3294,6 +3306,147 @@ writeRoute(
   }, [faqSchema(customOrderPolicyFaqs)])
 );
 
+// /shipping-policy/ and /refund_returns/ (added 2026-11-11 for Merchant Center). Every figure comes
+// from order-data.js, the same constants the Offer schema, the order box and /merchant-feed.xml use.
+// They restate /custom-order-policy/ (free US shipping, no change-of-mind returns, errors made
+// right) and add the days that page leaves to the quotation.
+const H = ORDER.HANDLING_DAYS;
+const T = ORDER.TRANSIT_DAYS;
+const handlingText = `${H.min}-${H.max} business days`;
+const transitText = `${T.min}-${T.max} business days`;
+const contactBlock = `
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:${site.email}">${site.email}</a></li>
+        <li><strong>Phone:</strong> <a href="tel:${site.phoneHref}">${site.phone}</a></li>
+        <li><strong>Address:</strong> ${site.address}</li>
+      </ul>`;
+
+const shippingPolicyFaqs = [
+  ["How much does shipping cost?", "Nothing. Shipping is free to any address in the United States, whether you order one case of 250 mailers or a full pallet, plain or printed. The total you see at checkout is the delivered total."],
+  ["How long until my bubble mailers arrive?", `Plain stock orders leave us within ${handlingText} of the order, then spend ${transitText} in transit, so most US addresses receive them within ${H.min + T.min}-${H.max + T.max} business days of ordering.`],
+  ["When does the clock start on a printed order?", `When you approve the digital proof. Printed runs are produced to your artwork, so the production time depends on quantity and colors and is confirmed on your quote; once the run is packed it ships free and arrives in ${transitText}.`],
+  ["Do you ship outside the United States?", "No. Every order ships to a US address only. The checkout accepts United States delivery addresses and quotes are prepared for US delivery."],
+  ["Will I get a tracking number?", "Yes. We email the tracking number as soon as the order leaves, to the address you gave at checkout."],
+  ["Where do the mailers ship from?", "Plain mailers ship from US stock and custom printed runs ship from the printer once they are packed. Either way the delivery is free and arranged by us."],
+  ["What counts as a business day?", "Monday to Friday, excluding US federal holidays. Orders placed after the end of a business day, or at the weekend, start on the next business day."],
+  ["Can I split a pallet order into scheduled deliveries?", "Yes. Pallet-quantity programs can be released on a schedule at no extra shipping cost, so you do not have to store the whole run at once. Ask for the release plan on your quote."],
+  ["Can I change the delivery address after ordering?", "Yes, until the order ships. Email or call us with the order number and the new US address. Once a carrier has the parcel we can only ask them to redirect it."],
+  ["What if my order arrives damaged?", `Photograph the cartons as they arrived and the damaged mailers, then contact us within ${ORDER.RETURN_DAYS} days of delivery. Transit damage is ours to sort out, and we replace the damaged quantity or refund it under our <a href="/refund_returns/">returns and refunds policy</a>.`],
+  ["Is there an extra charge for remote or rural US addresses?", "No. Free shipping covers any address in the United States. If a delivery needs a liftgate or an appointment for pallet freight, tell us when you order so we can book it."]
+];
+
+writeRoute(
+  "/shipping-policy/",
+  renderPolicyPage({
+    routePath: "/shipping-policy/",
+    title: "Shipping Policy",
+    metaTitle: "Shipping Policy: Free US Delivery & Timelines | Shop Bubble Mailers",
+    metaDescription: `Free shipping on every bubble mailer order to any US address. Plain stock leaves within ${handlingText} and arrives ${transitText} later, with tracking by email.`,
+    content: `
+      <p>A bubble mailer order is only useful once it is on your packing bench, so this page sets out exactly how it gets there: what shipping costs, where we deliver, how long each stage takes, and what happens if a carton arrives in poor shape. The same figures appear on every product page, at checkout and on your order confirmation.</p>
+
+      <h2>What shipping costs</h2>
+      <p>Shipping is free on every order to any address in the United States. That covers a single case of 250 mailers and a full pallet alike, plain stock and custom printed runs alike. The total at checkout is the delivered total, and nothing is added when the order ships.</p>
+
+      <h2>Where we deliver</h2>
+      <p>We ship to US addresses only. Businesses, warehouses, fulfillment centers and home offices are all fine. We do not ship outside the United States.</p>
+
+      <h2>How long it takes</h2>
+      <ul>
+        <li><strong>Plain stock:</strong> leaves us within ${handlingText} of your order, then ${transitText} in transit. Shipping is free.</li>
+        <li><strong>Custom printed:</strong> production time is confirmed on your quote and counted from proof approval; the packed run then ships free and spends ${transitText} in transit.</li>
+      </ul>
+      <p>Business days run Monday to Friday and exclude US federal holidays. An order placed at the weekend starts on the next business day.</p>
+
+      <h2>Tracking</h2>
+      <p>When the order leaves, we email the tracking number to the address you used at checkout. If it has not reached you within two business days of dispatch, reply to that email or call us and we will chase the carrier.</p>
+
+      <h2>Pallet programs and scheduled releases</h2>
+      <p>Large printed runs can be released on a schedule at no extra shipping cost, so you can buy at the pallet price without storing the pallet. Agree the release plan on your quote and each release ships free on the same transit time.</p>
+
+      <h2>Address changes and missed deliveries</h2>
+      <p>You can change the delivery address free of charge until the order ships. After that we can only ask the carrier to redirect it. If a delivery is missed, the carrier leaves a notice; if the parcel comes back to us, we resend it to a corrected US address at no cost.</p>
+
+      <h2>Damaged or short deliveries</h2>
+      <p>Check the cartons when they arrive. If anything is damaged or short, photograph it and contact us within ${ORDER.RETURN_DAYS} days of delivery. We arranged the shipment, so putting it right is our job: see our <a href="/refund_returns/">returns and refunds policy</a> for how replacements and refunds work.</p>
+
+      <h2>Contact us about a delivery</h2>
+      ${contactBlock}
+
+      <h2>Shipping questions</h2>
+      ${renderFaqList(shippingPolicyFaqs)}
+    `
+  }, [faqSchema(shippingPolicyFaqs)])
+);
+
+const refundReturnsFaqs = [
+  ["Can I return bubble mailers I no longer need?", "No. Every order is made or picked to your specification, so we do not accept change-of-mind returns on plain or printed mailers. Returns cover orders that arrive damaged, defective, short or different from what you approved."],
+  ["How long do I have to report a problem?", `${ORDER.RETURN_DAYS} days from the day the order is delivered. Report it as soon as you find it, while the cartons and the affected mailers are still available to inspect.`],
+  ["What do I need to send?", "Your order number, photographs of the cartons as they arrived and of the affected mailers, and roughly how much of the delivery is affected. That is usually enough for us to approve a claim without seeing the stock."],
+  ["Do I pay to send anything back?", "No. Most claims are settled from photographs. If we need the stock back, we arrange the collection or send a prepaid label, so a return costs you nothing."],
+  ["How quickly will I get my money back?", `Within ${ORDER.REFUND_DAYS} business days of approving your claim, to the payment method you used. PayPal payments go back to PayPal and bank transfers to the account they came from.`],
+  ["I paid cash on delivery. How is that refunded?", `By bank transfer or PayPal to the account you name, within ${ORDER.REFUND_DAYS} business days of approving the claim.`],
+  ["Can I have a replacement instead of a refund?", "Yes. You choose: we remake or resend the affected quantity free of charge, shipping included, or refund it. Replacements ship on our standard free shipping."],
+  ["What if the printing does not match my approved proof?", "That is our error. Wrong color, wrong position or wrong artwork against the approved proof is replaced or refunded in full for the affected mailers."],
+  ["What is not covered?", "Mistakes in artwork you approved, a size that turns out not to fit your product, ordering more than you need, and quantity variation within the tolerance on your quote. Samples and proofs are there to catch these before a run."],
+  ["The carrier damaged my order. Who handles it?", "We do. We arrange every shipment, so you report transit damage to us, not the carrier, and we replace or refund the damaged quantity."],
+  ["Can I cancel an order?", "Yes, free of charge until you approve the proof, or for plain stock until the order ships. After proof approval a printed run is scheduled and the material is committed, so it can no longer be canceled."],
+  ["Does this policy apply to every size and finish?", "Yes. Kraft, white, numbered and inch sizes, plain or printed, ordered online or through a quote, all follow the same policy for deliveries within the United States."]
+];
+
+writeRoute(
+  "/refund_returns/",
+  renderPolicyPage({
+    routePath: "/refund_returns/",
+    title: "Returns and Refunds",
+    metaTitle: "Returns & Refunds Policy | Shop Bubble Mailers",
+    metaDescription: `Damaged, defective, short or not as approved? Report it within ${ORDER.RETURN_DAYS} days of delivery for a free replacement or a refund within ${ORDER.REFUND_DAYS} business days.`,
+    content: `
+      <p>Bubble mailers are made or picked to your order, so we do not take back stock that was simply ordered by mistake. What we do take responsibility for is everything that is our fault: a run that arrives damaged, a defect in the mailers, a short count, or printing that does not match the proof you approved. This page explains how to report it and what we do about it.</p>
+
+      <h2>What we put right</h2>
+      <ul>
+        <li><strong>Damage in transit.</strong> Crushed, torn or wet cartons and the mailers inside them.</li>
+        <li><strong>Manufacturing defects.</strong> Failed seals, adhesive that does not release, split seams, bubble lining that is not bonded, or print defects across the run.</li>
+        <li><strong>Not what you ordered or approved.</strong> Wrong size, wrong finish, or printing that differs from the approved digital proof.</li>
+        <li><strong>A short delivery.</strong> Fewer mailers than ordered, beyond the tolerance on your quote.</li>
+      </ul>
+
+      <h2>The ${ORDER.RETURN_DAYS}-day window</h2>
+      <p>Tell us within ${ORDER.RETURN_DAYS} days of delivery. Keep the affected mailers and their cartons until the claim is settled, because we may ask to see them.</p>
+
+      <h2>How to make a claim</h2>
+      <ol>
+        <li>Email <a href="mailto:${site.email}">${site.email}</a> or call <a href="tel:${site.phoneHref}">${site.phone}</a> with your order number.</li>
+        <li>Attach photographs of the cartons as they arrived and of the affected mailers.</li>
+        <li>Tell us roughly what share of the delivery is affected and whether you would like a replacement or a refund.</li>
+      </ol>
+      <p>Most claims are settled from the photographs alone. If we need the stock back, we arrange collection or send a prepaid label, so returning it costs you nothing.</p>
+
+      <h2>Replacement or refund</h2>
+      <p>Once a claim is approved you choose the remedy. We remake or resend the affected quantity free of charge with free shipping, or we refund it. Refunds are paid within ${ORDER.REFUND_DAYS} business days of approval to the original payment method: PayPal back to PayPal, bank transfer back to the sending account, and cash on delivery by bank transfer or PayPal to the account you name.</p>
+
+      <h2>What this policy does not cover</h2>
+      <ul>
+        <li>Change-of-mind returns on plain or printed mailers.</li>
+        <li>Errors in artwork you approved on the proof, such as a misspelled word or an old web address.</li>
+        <li>A size that turns out not to fit your product. Samples exist to settle this before a run.</li>
+        <li>Quantity variation within the tolerance stated on your quote.</li>
+      </ul>
+
+      <h2>Canceling an order</h2>
+      <p>You can cancel free of charge until you approve the proof, or for plain stock until the order ships. After proof approval a printed run is scheduled and its material committed, so it can no longer be canceled. Our <a href="/custom-order-policy/">custom order policy</a> walks through each stage of a printed order.</p>
+
+      <h2>Who to contact</h2>
+      ${contactBlock}
+      <p>This policy applies to every order delivered within the United States. Delivery times and costs are on our <a href="/shipping-policy/">shipping policy</a>.</p>
+
+      <h2>Returns and refunds questions</h2>
+      ${renderFaqList(refundReturnsFaqs)}
+    `
+  }, [faqSchema(refundReturnsFaqs)])
+);
+
 const renderThankYouPage = () => {
   const body = `
     <section class="section">
@@ -3399,7 +3552,7 @@ const renderCheckoutPage = () => {
               <p class="form-status checkout-status" data-status role="status" aria-live="polite"></p>
               <button type="submit" class="button button-primary" data-place disabled>Place order</button>
               ${renderFormSeals()}
-              <p class="order-box-note">By placing the order you agree to our <a href="/terms-and-conditions/">terms</a> and <a href="/custom-order-policy/">shipping and custom order policy</a>. Questions? Call <a href="tel:${site.phoneHref}">${site.phone}</a> or email <a href="mailto:${site.email}">${site.email}</a>.</p>
+              <p class="order-box-note">By placing the order you agree to our <a href="/terms-and-conditions/">terms</a>, <a href="/shipping-policy/">shipping policy</a>, <a href="/refund_returns/">returns and refunds policy</a> and <a href="/custom-order-policy/">custom order policy</a>. Questions? Call <a href="tel:${site.phoneHref}">${site.phone}</a> or email <a href="mailto:${site.email}">${site.email}</a>.</p>
             </div>
           </aside>
         </form>
@@ -3437,7 +3590,7 @@ const renderOrderConfirmedPage = () => {
             <li><b>We check your order and artwork.</b> Printed orders get a digital proof by email, usually within one business day. If a file is missing we ask for it first.</li>
             <li><b>You approve the proof, or ask for changes.</b> Nothing prints before you approve it.</li>
             <li><b>Payment.</b> <span data-pay>${ORDER.PAYMENT_METHODS[0].detail}</span></li>
-            <li><b>Free shipping.</b> Your order ships free to your US address and we email the tracking number when it leaves. Errors, shortfalls and defects are made right under our <a href="/custom-order-policy/">custom order policy</a>.</li>
+            <li><b>Free shipping.</b> Your order ships free to your US address and we email the tracking number when it leaves. Damage, defects and shortfalls reported within ${ORDER.RETURN_DAYS} days of delivery are replaced or refunded under our <a href="/refund_returns/">returns and refunds policy</a>.</li>
           </ol>
           <p>Questions? Call <a href="tel:${site.phoneHref}">${site.phone}</a> or email <a href="mailto:${site.email}">${site.email}</a> and quote your order number.</p>
           <div class="button-row">
@@ -4921,7 +5074,7 @@ writeStaticAsset(
 // Stable last-modified date for the sitemap. Bump this when content is
 // materially updated. A fixed date (rather than new Date() at build time) keeps
 // lastmod from resetting on every deploy, which Google would learn to distrust.
-const LASTMOD = "2026-10-06";
+const LASTMOD = "2026-11-11";
 
 writeStaticAsset(
   "sitemap.xml",
@@ -4934,7 +5087,7 @@ writeStaticAsset(
       if (route === "/") {
         priority = "1.0";
         changefreq = "weekly";
-      } else if (slug === "privacy-policy" || slug === "terms-and-conditions" || slug === "custom-order-policy") {
+      } else if (slug === "privacy-policy" || slug === "terms-and-conditions" || slug === "custom-order-policy" || slug === "shipping-policy" || slug === "refund_returns") {
         priority = "0.3";
         changefreq = "yearly";
       } else if (productsBySlug.has(slug)) {
@@ -4944,6 +5097,45 @@ writeStaticAsset(
       return `  <url><loc>${absoluteUrl(route)}</loc><lastmod>${LASTMOD}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
     })
     .join("\n")}\n</urlset>\n`
+);
+
+// Google Merchant Center feed (RSS 2.0 + g: namespace), built from the same products array and
+// order-data.js facts as the product pages: one item per product page with an Offer, price = the
+// page's per-mailer Offer price (never a pack total), free shipping + days per ship country.
+// Not in the sitemap and not disallowed in robots.txt.
+const FEED_EXCLUDED = new Set([]); // no restricted items (tobacco, vape, CBD, medical) on this site
+const xmlEscape = (value) => String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+const feedProducts = products.filter((product) => !FEED_EXCLUDED.has(product.slug));
+const feedItems = feedProducts.map((product) => {
+  const price = Number(productUnitPrice(product));
+  if (!(price > 0) || price !== Number(ORDER.unitPrice(product.slug))) throw new Error(`Feed price for ${product.slug} does not match its Offer/checkout price`);
+  const shipping = ORDER.SHIP_COUNTRIES.map((country) => `<g:shipping><g:country>${country.code}</g:country><g:service>Free shipping</g:service><g:price>${ORDER.SHIPPING_COST.toFixed(2)} USD</g:price><g:min_handling_time>${ORDER.HANDLING_DAYS.min}</g:min_handling_time><g:max_handling_time>${ORDER.HANDLING_DAYS.max}</g:max_handling_time><g:min_transit_time>${ORDER.TRANSIT_DAYS.min}</g:min_transit_time><g:max_transit_time>${ORDER.TRANSIT_DAYS.max}</g:max_transit_time></g:shipping>`).join("");
+  const description = `${product.metaDescription} Starting from ${ORDER.money(price)} per ${ORDER.UNIT}, minimum order (MOQ) ${ORDER.PACK_QTY.toLocaleString("en-US")} ${ORDER.UNITS}. Free shipping to any US address.`;
+  return `    <item>
+      <g:id>${xmlEscape(product.slug)}</g:id>
+      <g:title>${xmlEscape(product.name)}</g:title>
+      <g:description>${xmlEscape(description)}</g:description>
+      <g:link>${xmlEscape(absoluteUrl(`/${product.slug}/`))}</g:link>
+      <g:image_link>${xmlEscape(imageAbsoluteUrl(product.image.url))}</g:image_link>
+${product.accentImages.slice(0, 2).map((image) => `      <g:additional_image_link>${xmlEscape(imageAbsoluteUrl(image.url))}</g:additional_image_link>\n`).join("")}      <g:condition>new</g:condition>
+      <g:availability>in_stock</g:availability>
+      <g:price>${price.toFixed(2)} USD</g:price>
+      <g:brand>${xmlEscape(site.brand)}</g:brand>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:product_type>${xmlEscape(`Bubble Mailers > ${product.category}`)}</g:product_type>
+      <g:google_product_category>2636</g:google_product_category>
+      ${shipping}
+    </item>`;
+});
+// Build check: one feed item per product page (each carries an Offer) minus exclusions.
+if (feedItems.length !== products.length - FEED_EXCLUDED.size) throw new Error(`merchant-feed.xml has ${feedItems.length} items, expected ${products.length - FEED_EXCLUDED.size}`);
+for (const product of feedProducts) {
+  const html = fs.readFileSync(path.join(distDir, product.slug, "index.html"), "utf8");
+  if (!html.includes(`"price":"${productUnitPrice(product)}"`) || !html.includes("Add to order")) throw new Error(`Product page ${product.slug} lacks its Offer price or order box`);
+}
+writeStaticAsset(
+  "merchant-feed.xml",
+  `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n  <channel>\n    <title>${xmlEscape(site.brand)}</title>\n    <link>${site.domain}/</link>\n    <description>Bubble mailers for US businesses, starting from ${ORDER.money(Math.min(...feedProducts.map((p) => Number(productUnitPrice(p)))))} per ${ORDER.UNIT}, minimum order (MOQ) ${ORDER.PACK_QTY.toLocaleString("en-US")} ${ORDER.UNITS}, free shipping to any US address.</description>\n${feedItems.join("\n")}\n  </channel>\n</rss>\n`
 );
 
 const checklist = `# Shop Bubble Mailers Final Checklist
